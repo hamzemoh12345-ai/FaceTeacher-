@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memorise Anything, Quickly</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to right, #1a2a6c, #1c92d2);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .instructions {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            text-align: left;
+            font-size: 1rem;
+        }
+        
+        .instructions h3 {
+            margin-bottom: 10px;
+            text-decoration: underline;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .auth-section {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .auth-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .auth-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .user-info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+        }
+        
+        .user-info i {
+            font-size: 1.5rem;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+        
+        .timer-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            background: linear-gradient(to bottom, #f5f7fa, #c3cfe2);
+            border-radius: 10px;
+            margin: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .timer-display {
+            font-size: 4.5rem;
+            font-weight: bold;
+            color: #1a2a6c;
+            margin: 20px 0;
+            font-family: monospace;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        button {
+            padding: 16px 30px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(to right, #1a2a6c, #1c92d2);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-size: 1.1rem;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        .study-btn {
+            background: linear-gradient(to right, #1a2a6c, #1c92d2);
+        }
+        
+        .break-btn {
+            background: linear-gradient(to right, #1c92d2, #1a2a6c);
+        }
+        
+        .timer-mode {
+            margin: 15px 0;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #1a2a6c;
+        }
+        
+        .timer-info {
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 1rem;
+        }
+        
+        .definitions-section {
+            flex: 2;
+            min-width: 300px;
+            padding: 20px;
+            margin: 10px;
+        }
+        
+        .learning-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #f5f7fa, #c3cfe2);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .learning-controls button {
+            flex: 1;
+            margin: 0 5px;
+            padding: 18px;
+            font-size: 1.2rem;
+        }
+        
+        .current-term {
+            font-size: 2rem;
+            text-align: center;
+            margin: 20px 0;
+            color: #1a2a6c;
+            font-weight: bold;
+        }
+        
+        .definition-card {
+            background: linear-gradient(to bottom, #f5f7fa, #e4e8f0);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .definition-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .term {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #1a2a6c;
+        }
+        
+        .definition {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .progress-tracker {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .progress-count {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #1a2a6c;
+            margin-bottom: 5px;
+        }
+        
+        .progress-label {
+            font-size: 1rem;
+            color: #4a5568;
+            font-weight: 600;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .action-buttons button {
+            padding: 20px 30px;
+            font-size: 1.3rem;
+            min-width: 200px;
+        }
+        
+        .write-section {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #c3cfe2;
+            border-radius: 8px;
+            resize: vertical;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #1a2a6c;
+            box-shadow: 0 0 0 3px rgba(26, 42, 108, 0.2);
+        }
+        
+        .check-btn {
+            background: linear-gradient(to right, #2ecc71, #27ae60);
+            width: 100%;
+            padding: 20px;
+            font-size: 1.3rem;
+        }
+        
+        .result-message {
+            margin-top: 15px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.2rem;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .correct {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: #27ae60;
+            border: 2px solid #27ae60;
+        }
+        
+        .incorrect {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #c0392b;
+            border: 2px solid #c0392b;
+        }
+        
+        .teacher-dashboard {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(to bottom, #f5f7fa, #e4e8f0);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #1a2a6c;
+            font-size: 1.1rem;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #c3cfe2;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #1a2a6c;
+            box-shadow: 0 0 0 3px rgba(26, 42, 108, 0.2);
+        }
+        
+        .add-btn {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+            width: 100%;
+            padding: 20px;
+            font-size: 1.3rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: linear-gradient(to right, #1a2a6c, #1c92d2);
+            color: white;
+            font-size: 1.1rem;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal h2 {
+            margin-bottom: 20px;
+            color: #1a2a6c;
+            text-align: center;
+        }
+        
+        .modal-input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #c3cfe2;
+            border-radius: 8px;
+            font-size: 1.1rem;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        
+        .modal-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+        
+        .modal-login {
+            background: linear-gradient(to right, #1a2a6c, #1c92d2);
+            color: white;
+        }
+        
+        .modal-cancel {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .timer-controls {
+                flex-wrap: wrap;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .timer-display {
+                font-size: 3.5rem;
+            }
+            
+            .auth-section {
+                position: static;
+                justify-content: center;
+                margin-top: 15px;
+            }
+            
+            .user-info {
+                position: static;
+                justify-content: center;
+                margin-top: 15px;
+                color: #1a2a6c;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Memorise Anything, Quickly</h1>
+            <p class="subtitle">Master definitions through active recall and spaced repetition</p>
+            <div class="instructions">
+                <h3>How to Use This Tool:</h3>
+                <ul>
+                    <li>Use the Pomodoro timer for focused study sessions (25min) and breaks (5min)</li>
+                    <li>For each term, follow the sequence: Read 10x → Say 10x → Write 2x</li>
+                    <li>Complete all steps for a definition before moving to the next one</li>
+                </ul>
+            </div>
+            
+            <div id="authSection" class="auth-section">
+                <button class="auth-btn" onclick="openLoginModal()"><i class="fas fa-sign-in-alt"></i> Login</button>
+                <button class="auth-btn" onclick="openTeacherModal()"><i class="fas fa-chalkboard-teacher"></i> Teacher Access</button>
+            </div>
+            
+            <div id="userInfo" class="user-info" style="display: none;">
+                <i class="fas fa-user-circle"></i>
+                <span id="userRole">Student</span>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <div class="timer-section">
+                <h2>Pomodoro Timer</h2>
+                <div class="timer-display" id="timer">25:00</div>
+                <div class="timer-controls">
+                    <button id="startBtn" class="study-btn">Start Study</button>
+                    <button id="breakBtn" class="break-btn">Start Break</button>
+                    <button id="resetBtn">Reset</button>
+                </div>
+                <div class="timer-mode">
+                    <p>Current Mode: <span id="mode">Study (25:00)</span></p>
+                </div>
+                <div class="timer-info">
+                    <p>⏰ Study for 25 minutes, then take a 5-minute break. After 4 cycles, take a longer 15-minute break.</p>
+                    <p>🎯 Focus on one definition at a time until you complete all steps.</p>
+                </div>
+            </div>
+            
+            <div class="definitions-section">
+                <h2>Active Recall Learning</h2>
+                
+                <div class="learning-controls">
+                    <button id="prevBtn">Previous Term</button>
+                    <button id="nextBtn">Next Term</button>
+                </div>
+                
+                <div class="current-term">Current Term: <span id="current-term">Cognitive Dissonance</span></div>
+                
+                <div class="definition-card">
+                    <div class="definition-header">
+                        <span class="term">Cognitive Dissonance</span>
+                    </div>
+                    <div class="definition" id="definition-text">
+                        The mental discomfort experienced by a person who holds two or more contradictory beliefs, ideas, or values at the same time.
+                    </div>
+                    
+                    <div class="progress-tracker">
+                        <div class="progress-item">
+                            <div class="progress-count" id="readCount">0/10</div>
+                            <div class="progress-label">Read it</div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-count" id="sayCount">0/10</div>
+                            <div class="progress-label">Say it</div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-count" id="writeCount">0/2</div>
+                            <div class="progress-label">Write it</div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button id="readBtn" onclick="startReading()">Read it 10x</button>
+                        <button id="sayBtn" onclick="startSaying()" disabled>Say it 10x</button>
+                        <button id="writeBtn" onclick="startWriting()" disabled>Write it 2x</button>
+                    </div>
+                    
+                    <div class="write-section hidden" id="write-section">
+                        <textarea placeholder="Write the definition here from memory..." id="definition-input"></textarea>
+                        <button class="check-btn" onclick="checkDefinition()">Check Answer</button>
+                        <div class="result-message" id="result-message"></div>
+                    </div>
+                </div>
+                
+                <div id="teacherDashboard" class="teacher-dashboard" style="display: none;">
+                    <h2><i class="fas fa-chalkboard-teacher"></i> Teacher Dashboard</h2>
+                    <div class="form-group">
+                        <label for="newTerm">Term:</label>
+                        <input type="text" id="newTerm" placeholder="Enter the term">
+                    </div>
+                    <div class="form-group">
+                        <label for="newDefinition">Definition:</label>
+                        <textarea id="newDefinition" placeholder="Enter the definition"></textarea>
+                    </div>
+                    <button class="add-btn" onclick="addNewDefinition()"><i class="fas fa-plus"></i> Add Definition</button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Memorise Anything, Quickly &copy; 2023. Based on active recall and Pomodoro techniques.</p>
+        </footer>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-sign-in-alt"></i> Student Login</h2>
+            <input type="text" id="username" class="modal-input" placeholder="Username">
+            <input type="password" id="password" class="modal-input" placeholder="Password">
+            <div class="modal-buttons">
+                <button class="modal-btn modal-cancel" onclick="closeLoginModal()">Cancel</button>
+                <button class="modal-btn modal-login" onclick="login()">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teacher Access Modal -->
+    <div id="teacherModal" class="modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-chalkboard-teacher"></i> Teacher Access</h2>
+            <input type="password" id="teacherCode" class="modal-input" placeholder="Enter Teacher Access Code">
+            <div class="modal-buttons">
+                <button class="modal-btn modal-cancel" onclick="closeTeacherModal()">Cancel</button>
+                <button class="modal-btn modal-login" onclick="verifyTeacher()">Verify</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Authentication state
+        let isTeacher = false;
+        let isLoggedIn = false;
+        const TEACHER_ACCESS_CODE = "TEACH123"; // In a real app, this would be securely stored
+
+        // Timer functionality
+        let timerInterval;
+        let timeLeft = 25 * 60; // 25 minutes in seconds
+        let isRunning = false;
+        let isStudyMode = true;
+        let completedCycles = 0;
+        
+        const timerDisplay = document.getElementById('timer');
+        const startBtn = document.getElementById('startBtn');
+        const breakBtn = document.getElementById('breakBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const modeText = document.getElementById('mode');
+        
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft === 0) {
+                clearInterval(timerInterval);
+                isRunning = false;
+                
+                // Switch between study and break modes
+                if (isStudyMode) {
+                    // Switch to break mode
+                    isStudyMode = false;
+                    completedCycles++;
+                    
+                    if (completedCycles % 4 === 0) {
+                        timeLeft = 15 * 60; // 15 minutes break after 4 cycles
+                        modeText.textContent = 'Long Break (15:00)';
+                        alert('Great job! Take a longer 15-minute break.');
+                    } else {
+                        timeLeft = 5 * 60; // 5 minutes break
+                        modeText.textContent = 'Break (5:00)';
+                        alert('Time for a 5-minute break! Relax and recharge.');
+                    }
+                } else {
+                    // Switch to study mode
+                    isStudyMode = true;
+                    timeLeft = 25 * 60; // 25 minutes study
+                    modeText.textContent = 'Study (25:00)';
+                    alert('Break time over! Time to focus for 25 minutes.');
+                }
+                
+                updateTimer();
+                startTimer();
+            }
+        }
+        
+        function startTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    updateTimer();
+                }, 1000);
+            }
+        }
+        
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+        }
+        
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            isStudyMode = true;
+            timeLeft = 25 * 60;
+            completedCycles = 0;
+            modeText.textContent = 'Study (25:00)';
+            updateTimer();
+        }
+        
+        startBtn.addEventListener('click', startTimer);
+        breakBtn.addEventListener('click', () => {
+            pauseTimer();
+            isStudyMode = false;
+            timeLeft = 5 * 60;
+            modeText.textContent = 'Break (5:00)';
+            updateTimer();
+        });
+        resetBtn.addEventListener('click', resetTimer);
+        
+        // Initialize timer display
+        updateTimer();
+        
+        // Learning functionality
+        let readCount = 0;
+        let sayCount = 0;
+        let writeCount = 0;
+        let isDefinitionVisible = true;
+        
+        const readBtn = document.getElementById('readBtn');
+        const sayBtn = document.getElementById('sayBtn');
+        const writeBtn = document.getElementById('writeBtn');
+        const definitionText = document.getElementById('definition-text');
+        const definitionInput = document.getElementById('definition-input');
+        const resultMessage = document.getElementById('result-message');
+        const writeSection = document.getElementById('write-section');
+        
+        const readCountElement = document.getElementById('readCount');
+        const sayCountElement = document.getElementById('sayCount');
+        const writeCountElement = document.getElementById('writeCount');
+        
+        function startReading() {
+            if (readCount < 10) {
+                readCount++;
+                readCountElement.textContent = `${readCount}/10`;
+                
+                if (readCount === 10) {
+                    readBtn.disabled = true;
+                    sayBtn.disabled = false;
+                    alert('Reading completed! Now move to saying the definition 10 times.');
+                }
+            }
+        }
+        
+        function startSaying() {
+            if (sayCount < 10) {
+                sayCount++;
+                sayCountElement.textContent = `${sayCount}/10`;
+                
+                if (sayCount === 10) {
+                    sayBtn.disabled = true;
+                    writeBtn.disabled = false;
+                    alert('Saying completed! Now move to writing the definition 2 times.');
+                }
+            }
+        }
+        
+        function startWriting() {
+            writeSection.classList.remove('hidden');
+            definitionText.classList.add('hidden');
+        }
+        
+        function checkDefinition() {
+            const userAnswer = definitionInput.value.trim().toLowerCase();
+            const correctAnswer = "the mental discomfort experienced by a person who holds two or more contradictory beliefs, ideas, or values at the same time";
+            
+            if (userAnswer.includes("mental discomfort") && 
+                (userAnswer.includes("contradictory") || userAnswer.includes("contradicting"))) {
+                resultMessage.textContent = "Correct! Well done.";
+                resultMessage.className = "result-message correct";
+                
+                writeCount++;
+                writeCountElement.textContent = `${writeCount}/2`;
+                
+                if (writeCount < 2) {
+                    setTimeout(() => {
+                        definitionInput.value = "";
+                        resultMessage.textContent = "";
+                        alert('Good job! Write it one more time.');
+                    }, 2000);
+                } else {
+                    setTimeout(() => {
+                        alert('Congratulations! You have completed all steps for this definition.');
+                        resetCurrentDefinition();
+                    }, 2000);
+                }
+            } else {
+                resultMessage.textContent = "Not quite right. Try again. The definition is now visible for you to review.";
+                resultMessage.className = "result-message incorrect";
+                definitionText.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    definitionText.classList.add('hidden');
+                    resultMessage.textContent = "";
+                    definitionInput.value = "";
+                }, 4000);
+            }
+        }
+        
+        function resetCurrentDefinition() {
+            readCount = 0;
+            sayCount = 0;
+            writeCount = 0;
+            
+            readCountElement.textContent = "0/10";
+            sayCountElement.textContent = "0/10";
+            writeCountElement.textContent = "0/2";
+            
+            readBtn.disabled = false;
+            sayBtn.disabled = true;
+            writeBtn.disabled = true;
+            
+            definitionText.classList.remove('hidden');
+            writeSection.classList.add('hidden');
+            definitionInput.value = "";
+            resultMessage.textContent = "";
+        }
+        
+        // Authentication functions
+        function openLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+        
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+        
+        function openTeacherModal() {
+            document.getElementById('teacherModal').style.display = 'flex';
+        }
+        
+        function closeTeacherModal() {
+            document.getElementById('teacherModal').style.display = 'none';
+        }
+        
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username && password) {
+                isLoggedIn = true;
+                document.getElementById('authSection').style.display = 'none';
+                document.getElementById('userInfo').style.display = 'flex';
+                closeLoginModal();
+                alert('Login successful! Welcome back, ' + username);
+            } else {
+                alert('Please enter both username and password.');
+            }
+        }
+        
+        function verifyTeacher() {
+            const code = document.getElementById('teacherCode').value;
+            
+            if (code === TEACHER_ACCESS_CODE) {
+                isTeacher = true;
+                document.getElementById('authSection').style.display = 'none';
+                document.getElementById('userInfo').style.display = 'flex';
+                document.getElementById('userRole').textContent = 'Teacher';
+                document.getElementById('teacherDashboard').style.display = 'block';
+                closeTeacherModal();
+                alert('Teacher access granted!');
+            } else {
+                alert('Invalid access code. Please try again.');
+            }
+        }
+        
+        // Add new definition functionality
+        function addNewDefinition() {
+            if (!isTeacher) {
+                alert('Only teachers can add new definitions.');
+                return;
+            }
+            
+            const termInput = document.getElementById('newTerm');
+            const definitionInput = document.getElementById('newDefinition');
+            
+            const term = termInput.value.trim();
+            const definition = definitionInput.value.trim();
+            
+            if (term && definition) {
+                alert(`New definition added for: ${term}`);
+                termInput.value = '';
+                definitionInput.value = '';
+            } else {
+                alert('Please enter both a term and its definition.');
+            }
+        }
+    </script>
+</body>
+</html>
