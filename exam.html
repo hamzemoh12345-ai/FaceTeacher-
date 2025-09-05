@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Exam System</title>
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #166088;
+            --accent: #4cb5f5;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1, h2, h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: var(--success);
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        input[type="text"], 
+        input[type="number"], 
+        select, 
+        textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .question-container {
+            border-left: 4px solid var(--accent);
+            padding-left: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .options-container {
+            margin: 1rem 0;
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .option-item input[type="text"] {
+            margin-left: 10px;
+        }
+        
+        .exam-question {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .exam-options {
+            margin: 1rem 0;
+        }
+        
+        .exam-option {
+            margin-bottom: 0.75rem;
+            padding: 0.75rem;
+            background: var(--light);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .exam-option:hover {
+            background: #e9ecef;
+        }
+        
+        .exam-option.selected {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+        }
+        
+        .exam-option.correct {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .exam-option.incorrect {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .results-container {
+            text-align: center;
+        }
+        
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 1rem 0;
+        }
+        
+        .review-item {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .review-item.correct {
+            border-left: 4px solid var(--success);
+        }
+        
+        .review-item.incorrect {
+            border-left: 4px solid var(--danger);
+        }
+        
+        .tab-container {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab.active {
+            border-bottom: 3px solid var(--primary);
+            font-weight: 600;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .question-image {
+            max-width: 100%;
+            height: auto;
+            margin: 1rem 0;
+            border-radius: 5px;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 5px;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Interactive Exam System</h1>
+            <p>Test your knowledge and track your progress</p>
+        </header>
+        
+        <div class="tab-container">
+            <div class="tab active" data-tab="take-exam">Take Exam</div>
+            <div class="tab" data-tab="view-results">View Results</div>
+            <div class="tab" data-tab="teacher-view">Teacher View</div>
+        </div>
+        
+        <!-- Take Exam Tab -->
+        <div class="tab-content active" id="take-exam">
+            <div class="card">
+                <h2>Unit 1: Introduction to Web Development</h2>
+                <p>Answer the following questions to test your knowledge. You can navigate between questions and review your answers before submission.</p>
+                
+                <div class="progress-bar">
+                    <div class="progress" id="exam-progress" style="width: 10%;"></div>
+                </div>
+                
+                <div id="exam-container">
+                    <!-- Exam questions will be inserted here -->
+                </div>
+                
+                <div class="controls">
+                    <button class="btn" id="prev-btn">Previous</button>
+                    <button class="btn" id="next-btn">Next</button>
+                    <button class="btn btn-success" id="submit-exam">Submit Exam</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Results Tab -->
+        <div class="tab-content" id="view-results">
+            <div class="card results-container">
+                <h2>Exam Results</h2>
+                <p>Your performance on the exam</p>
+                
+                <div class="score-display">
+                    <span id="score">0</span>/<span id="total-questions">0</span>
+                </div>
+                
+                <div id="results-breakdown">
+                    <!-- Results will be inserted here -->
+                </div>
+                
+                <button class="btn" id="retry-exam">Retry Exam</button>
+            </div>
+        </div>
+        
+        <!-- Teacher View Tab -->
+        <div class="tab-content" id="teacher-view">
+            <div class="card">
+                <h2>Teacher Dashboard</h2>
+                <p>Create and manage exam questions</p>
+                
+                <div class="form-group">
+                    <label for="question-type">Question Type:</label>
+                    <select id="question-type">
+                        <option value="multiple-choice">Multiple Choice</option>
+                        <option value="true-false">True/False</option>
+                        <option value="fill-blank">Fill in the Blank</option>
+                        <option value="image-based">Image-Based Question</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="question-text">Question:</label>
+                    <textarea id="question-text" rows="3" placeholder="Enter your question here"></textarea>
+                </div>
+                
+                <div id="options-container" class="options-container">
+                    <label>Options:</label>
+                    <div class="option-item">
+                        <input type="radio" name="correct-option" value="0">
+                        <input type="text" placeholder="Option 1">
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="correct-option" value="1">
+                        <input type="text" placeholder="Option 2">
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="correct-option" value="2">
+                        <input type="text" placeholder="Option 3">
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" name="correct-option" value="3">
+                        <input type="text" placeholder="Option 4">
+                    </div>
+                </div>
+                
+                <div id="image-upload-container" class="form-group hidden">
+                    <label for="question-image">Upload Image:</label>
+                    <input type="file" id="question-image" accept="image/*">
+                </div>
+                
+                <div class="form-group">
+                    <label for="question-explanation">Explanation (optional):</label>
+                    <textarea id="question-explanation" rows="2" placeholder="Add explanation for the correct answer"></textarea>
+                </div>
+                
+                <button class="btn btn-success" id="add-question">Add Question</button>
+                
+                <h3 style="margin-top: 2rem;">Current Questions</h3>
+                <div id="questions-list">
+                    <!-- Added questions will be listed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample questions for demonstration
+        const sampleQuestions = [
+            {
+                id: 1,
+                type: "multiple-choice",
+                question: "What does HTML stand for?",
+                options: [
+                    "Hyper Text Markup Language",
+                    "High Tech Modern Language",
+                    "Hyper Transfer Markup Language",
+                    "Home Tool Markup Language"
+                ],
+                correctAnswer: 0,
+                explanation: "HTML stands for Hyper Text Markup Language, which is the standard markup language for creating web pages."
+            },
+            {
+                id: 2,
+                type: "true-false",
+                question: "JavaScript is the same as Java.",
+                options: [
+                    "True",
+                    "False"
+                ],
+                correctAnswer: 1,
+                explanation: "JavaScript and Java are completely different languages, both in concept and design."
+            },
+            {
+                id: 3,
+                type: "fill-blank",
+                question: "The CSS property for controlling the space between elements is called ______.",
+                correctAnswer: "margin",
+                explanation: "The margin property controls the space around elements outside of any defined borders."
+            },
+            {
+                id: 4,
+                type: "image-based",
+                question: "Which HTML tag represents the content inside this image?",
+                imageUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='100' viewBox='0 0 200 100'%3E%3Crect width='200' height='100' fill='%23f0f0f0'/%3E%3Ctext x='100' y='50' font-family='Arial' font-size='12' text-anchor='middle' dominant-baseline='middle'%3E%3Ctspan x='100' dy='-0.5em'%3E%26lt;div%26gt;%3C/tspan%3E%3Ctspan x='100' dy='1.5em'%3EContent here%3C/tspan%3E%3Ctspan x='100' dy='1.5em'%3E%26lt;/div%26gt;%3C/tspan%3E%3C/text%3E%3C/svg%3E",
+                options: [
+                    "&lt;div&gt;",
+                    "&lt;span&gt;",
+                    "&lt;section&gt;",
+                    "&lt;article&gt;"
+                ],
+                correctAnswer: 0,
+                explanation: "The image shows a div element with some content inside it."
+            }
+        ];
+
+        // Current exam state
+        let currentExam = {
+            questions: [],
+            currentQuestionIndex: 0,
+            answers: {},
+            score: 0
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load sample questions for demonstration
+            currentExam.questions = sampleQuestions;
+            
+            // Set up tab navigation
+            setupTabs();
+            
+            // Initialize exam
+            renderExamQuestion(0);
+            
+            // Set up event listeners
+            document.getElementById('next-btn').addEventListener('click', nextQuestion);
+            document.getElementById('prev-btn').addEventListener('click', previousQuestion);
+            document.getElementById('submit-exam').addEventListener('click', submitExam);
+            document.getElementById('retry-exam').addEventListener('click', retryExam);
+            
+            // Teacher view functionality
+            document.getElementById('question-type').addEventListener('change', toggleQuestionOptions);
+            document.getElementById('add-question').addEventListener('click', addQuestion);
+            
+            // Update progress bar
+            updateProgressBar();
+        });
+
+        // Tab navigation
+        function setupTabs() {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs and content
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    tab.classList.add('active');
+                    document.getElementById(tab.dataset.tab).classList.add('active');
+                });
+            });
+        }
+
+        // Render exam question based on index
+        function renderExamQuestion(index) {
+            const examContainer = document.getElementById('exam-container');
+            const question = currentExam.questions[index];
+            
+            if (!question) return;
+            
+            let questionHTML = `
+                <div class="exam-question">
+                    <h3>Question ${index + 1} of ${currentExam.questions.length}</h3>
+                    <p>${question.question}</p>
+            `;
+            
+            // Add image if it's an image-based question
+            if (question.type === 'image-based' && question.imageUrl) {
+                questionHTML += `<img src="${question.imageUrl}" alt="Question image" class="question-image">`;
+            }
+            
+            questionHTML += `</div><div class="exam-options">`;
+            
+            // Render options based on question type
+            if (question.type === 'multiple-choice' || question.type === 'image-based' || question.type === 'true-false') {
+                question.options.forEach((option, i) => {
+                    const isSelected = currentExam.answers[index] === i;
+                    questionHTML += `
+                        <div class="exam-option ${isSelected ? 'selected' : ''}" data-index="${i}">
+                            ${option}
+                        </div>
+                    `;
+                });
+            } else if (question.type === 'fill-blank') {
+                const answer = currentExam.answers[index] || '';
+                questionHTML += `
+                    <input type="text" value="${answer}" placeholder="Type your answer here" 
+                           class="fill-blank-input" id="blank-answer">
+                `;
+            }
+            
+            questionHTML += `</div>`;
+            
+            examContainer.innerHTML = questionHTML;
+            
+            // Add event listeners to options
+            if (question.type !== 'fill-blank') {
+                document.querySelectorAll('.exam-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        selectOption(index, parseInt(option.dataset.index));
+                    });
+                });
+            } else {
+                document.getElementById('blank-answer').addEventListener('input', (e) => {
+                    currentExam.answers[index] = e.target.value.trim().toLowerCase();
+                });
+            }
+            
+            // Update navigation buttons
+            document.getElementById('prev-btn').style.visibility = index === 0 ? 'hidden' : 'visible';
+            document.getElementById('next-btn').style.visibility = index === currentExam.questions.length - 1 ? 'hidden' : 'visible';
+            document.getElementById('submit-exam').style.visibility = index === currentExam.questions.length - 1 ? 'visible' : 'hidden';
+            
+            // Update progress bar
+            updateProgressBar();
+        }
+
+        // Select an option for multiple choice questions
+        function selectOption(questionIndex, optionIndex) {
+            currentExam.answers[questionIndex] = optionIndex;
+            
+            // Update UI to show selected option
+            document.querySelectorAll('.exam-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            document.querySelector(`.exam-option[data-index="${optionIndex}"]`).classList.add('selected');
+        }
+
+        // Navigate to next question
+        function nextQuestion() {
+            if (currentExam.currentQuestionIndex < currentExam.questions.length - 1) {
+                currentExam.currentQuestionIndex++;
+                renderExamQuestion(currentExam.currentQuestionIndex);
+            }
+        }
+
+        // Navigate to previous question
+        function previousQuestion() {
+            if (currentExam.currentQuestionIndex > 0) {
+                currentExam.currentQuestionIndex--;
+                renderExamQuestion(currentExam.currentQuestionIndex);
+            }
+        }
+
+        // Update progress bar
+        function updateProgressBar() {
+            const progress = ((currentExam.currentQuestionIndex + 1) / currentExam.questions.length) * 100;
+            document.getElementById('exam-progress').style.width = `${progress}%`;
+        }
+
+        // Submit exam and calculate score
+        function submitExam() {
+            let score = 0;
+            let resultsHTML = '';
+            
+            currentExam.questions.forEach((question, index) => {
+                const userAnswer = currentExam.answers[index];
+                let isCorrect = false;
+                
+                if (question.type === 'fill-blank') {
+                    isCorrect = userAnswer === question.correctAnswer.toLowerCase();
+                } else {
+                    isCorrect = userAnswer === question.correctAnswer;
+                }
+                
+                if (isCorrect) score++;
+                
+                // Generate result item HTML
+                resultsHTML += `
+                    <div class="review-item ${isCorrect ? 'correct' : 'incorrect'}">
+                        <h3>Question ${index + 1}: ${isCorrect ? 'Correct' : 'Incorrect'}</h3>
+                        <p>${question.question}</p>
+                `;
+                
+                if (question.type === 'image-based' && question.imageUrl) {
+                    resultsHTML += `<img src="${question.imageUrl}" alt="Question image" class="question-image">`;
+                }
+                
+                if (question.type !== 'fill-blank') {
+                    resultsHTML += `<p>Your answer: ${question.options[userAnswer] || 'Not answered'}</p>`;
+                    resultsHTML += `<p>Correct answer: ${question.options[question.correctAnswer]}</p>`;
+                } else {
+                    resultsHTML += `<p>Your answer: ${userAnswer || 'Not answered'}</p>`;
+                    resultsHTML += `<p>Correct answer: ${question.correctAnswer}</p>`;
+                }
+                
+                if (question.explanation) {
+                    resultsHTML += `<p><strong>Explanation:</strong> ${question.explanation}</p>`;
+                }
+                
+                resultsHTML += `</div>`;
+            });
+            
+            // Update results display
+            document.getElementById('score').textContent = score;
+            document.getElementById('total-questions').textContent = currentExam.questions.length;
+            document.getElementById('results-breakdown').innerHTML = resultsHTML;
+            
+            // Switch to results tab
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector('.tab[data-tab="view-results"]').classList.add('active');
+            document.getElementById('view-results').classList.add('active');
+            
+            // Update exam score
+            currentExam.score = score;
+        }
+
+        // Retry the exam
+        function retryExam() {
+            currentExam.answers = {};
+            currentExam.currentQuestionIndex = 0;
+            currentExam.score = 0;
+            
+            renderExamQuestion(0);
+            
+            // Switch back to exam tab
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector('.tab[data-tab="take-exam"]').classList.add('active');
+            document.getElementById('take-exam').classList.add('active');
+        }
+
+        // Teacher view functions
+        function toggleQuestionOptions() {
+            const questionType = document.getElementById('question-type').value;
+            const optionsContainer = document.getElementById('options-container');
+            const imageUploadContainer = document.getElementById('image-upload-container');
+            
+            if (questionType === 'fill-blank') {
+                optionsContainer.classList.add('hidden');
+                imageUploadContainer.classList.add('hidden');
+            } else if (questionType === 'image-based') {
+                optionsContainer.classList.remove('hidden');
+                imageUploadContainer.classList.remove('hidden');
+            } else {
+                optionsContainer.classList.remove('hidden');
+                imageUploadContainer.classList.add('hidden');
+            }
+        }
+
+        function addQuestion() {
+            const questionType = document.getElementById('question-type').value;
+            const questionText = document.getElementById('question-text').value;
+            const explanation = document.getElementById('question-explanation').value;
+            
+            if (!questionText) {
+                alert('Please enter a question');
+                return;
+            }
+            
+            const newQuestion = {
+                id: currentExam.questions.length + 1,
+                type: questionType,
+                question: questionText,
+                explanation: explanation
+            };
+            
+            if (questionType === 'fill-blank') {
+                const correctAnswer = document.querySelector('#options-container .option-item input[type="text"]').value;
+                if (!correctAnswer) {
+                    alert('Please enter the correct answer');
+                    return;
+                }
+                newQuestion.correctAnswer = correctAnswer.toLowerCase();
+            } else {
+                const options = [];
+                let correctAnswer = null;
+                
+                document.querySelectorAll('#options-container .option-item').forEach((item, index) => {
+                    const optionText = item.querySelector('input[type="text"]').value;
+                    if (optionText) {
+                        options.push(optionText);
+                        if (item.querySelector('input[type="radio"]').checked) {
+                            correctAnswer = index;
+                        }
+                    }
+                });
+                
+                if (options.length < 2) {
+                    alert('Please provide at least two options');
+                    return;
+                }
+                
+                if (correctAnswer === null) {
+                    alert('Please select the correct answer');
+                    return;
+                }
+                
+                newQuestion.options = options;
+                newQuestion.correctAnswer = correctAnswer;
+                
+                if (questionType === 'image-based') {
+                    // In a real application, you would upload the image to a server
+                    // For this demo, we'll just use a placeholder
+                    newQuestion.imageUrl = 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'200\' height=\'100\' viewBox=\'0 0 200 100\'%3E%3Crect width=\'200\' height=\'100\' fill=\'%23f0f0f0\'/%3E%3Ctext x=\'100\' y=\'50\' font-family=\'Arial\' font-size=\'12\' text-anchor=\'middle\' dominant-baseline=\'middle\'%3EImage placeholder%3C/text%3E%3C/svg%3E';
+                }
+            }
+            
+            // Add the new question to the exam
+            currentExam.questions.push(newQuestion);
+            
+            // Update questions list in teacher view
+            const questionsList = document.getElementById('questions-list');
+            const questionItem = document.createElement('div');
+            questionItem.className = 'question-container';
+            questionItem.innerHTML = `
+                <h3>Question ${newQuestion.id}: ${newQuestion.type.replace('-', ' ')}</h3>
+                <p>${newQuestion.question}</p>
+            `;
+            questionsList.appendChild(questionItem);
+            
+            // Clear the form
+            document.getElementById('question-text').value = '';
+            document.getElementById('question-explanation').value = '';
+            document.querySelectorAll('#options-container .option-item input[type="text"]').forEach(input => {
+                input.value = '';
+            });
+            document.querySelector('#options-container .option-item input[type="radio"]').checked = true;
+            
+            alert('Question added successfully!');
+        }
+    </script>
+</body>
+</html>
