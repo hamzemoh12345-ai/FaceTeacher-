@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Course: Video → Quiz (8 Modules)</title>
+  <style>
+    :root {
+      --brand: #2563eb;
+      --ok: #16a34a;
+      --warn: #f59e0b;
+      --bad: #dc2626;
+      --bg: #f8fafc;
+      --fg: #0f172a;
+      --muted: #64748b;
+      --card: #ffffff;
+      --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"; background: var(--bg); color: var(--fg); margin:0; }
+    header { background: var(--card); border-bottom: 1px solid var(--border); padding: 12px 20px; position: sticky; top:0; z-index: 10;}
+    h1 { font-size: 20px; margin: 0; }
+    .container { max-width: 1100px; margin: 20px auto; padding: 0 16px; }
+    .grid { display: grid; gap: 16px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+    .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+    .space { height: 8px; }
+    .btn { cursor: pointer; border: 1px solid var(--border); background: #fff; padding: 10px 14px; border-radius: 12px; font-weight: 600; }
+    .btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+    .btn.primary { background: var(--brand); color: white; border-color: transparent; }
+    .btn.ghost { background: transparent; }
+    .tag { display:inline-flex; align-items:center; gap:6px; padding: 4px 8px; border-radius: 999px; border:1px solid var(--border); background:#fff; font-size:12px; color: var(--muted); }
+    .progress-wrap { background: #e5e7eb; border-radius: 999px; height: 10px; overflow: hidden; }
+    .progress { height: 10px; background: var(--brand); width: 0%; }
+    .muted { color: var(--muted); }
+    .ok { color: var(--ok); }
+    .bad { color: var(--bad); }
+    .warn { color: var(--warn); }
+    .divider { height: 1px; background: var(--border); margin: 12px 0; }
+    .tabs { display:flex; gap:8px; }
+    .tab { padding: 8px 12px; border:1px solid var(--border); border-radius: 999px; background:#fff; cursor:pointer; font-weight:600; }
+    .tab.active { background: var(--brand); color:#fff; border-color: transparent; }
+    .hidden { display:none !important; }
+    .video-box { border-radius: 12px; overflow: hidden; border:1px solid var(--border); background:#000; }
+    .quiz-q { margin-bottom: 12px; padding: 12px; border:1px solid var(--border); border-radius: 12px; }
+    .quiz-q h4 { margin: 0 0 8px; font-size: 15px; }
+    .quiz-q label { display:block; margin: 6px 0; cursor:pointer; }
+    .pill { font-size:12px; padding:2px 8px; border-radius: 999px; border:1px solid var(--border); color: var(--muted);}
+    .kpi { display:grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap:12px; }
+    .kpi .card { text-align:center; }
+    .kpi .num { font-size: 22px; font-weight: 800; }
+    details[open] summary::marker, summary::marker { content: ""; }
+    summary { cursor: pointer; font-weight: 700; }
+    .small { font-size: 12px; }
+    @media (max-width: 720px){ .kpi{ grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  </style>
+</head>
+<body>
+  <header class="row" role="banner">
+    <h1>🎓 Video → Quiz Course (8 Modules)</h1>
+    <span class="tag" id="studentTag">No student</span>
+    <div style="margin-left:auto" class="row">
+      <button class="tab active" id="tabCourse">Course</button>
+      <button class="tab" id="tabTeacher">Teacher Dashboard</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Student Sign-in / Profile -->
+    <div class="card" id="signinCard">
+      <h2>👤 Student Sign‑in</h2>
+      <p class="muted">Enter your name or ID. Your progress is saved in this browser (localStorage).</p>
+      <div class="row">
+        <input id="studentId" placeholder="Your name or ID" style="padding:10px 12px; border:1px solid var(--border); border-radius:12px; min-width:260px;" />
+        <button class="btn primary" id="btnStart">Start / Continue</button>
+        <button class="btn ghost" id="btnSwitch" title="Switch to another student">Switch</button>
+      </div>
+      <div class="space"></div>
+      <div class="row small muted">
+        <span>Tip: Teacher can create multiple demo students and track each one separately.</span>
+      </div>
+    </div>
+
+    <!-- Course View -->
+    <div class="grid" id="courseView">
+      <div class="card">
+        <div class="row" style="justify-content: space-between; align-items: center;">
+          <div class="row">
+            <span class="pill">Module <span id="modIndex">1</span> / <span id="modTotal">8</span></span>
+            <span class="pill" id="videoStatus">Video: Not watched</span>
+            <span class="pill" id="quizStatus">Quiz: Not taken</span>
+          </div>
+          <div style="min-width: 220px;">
+            <div class="progress-wrap" title="Overall progress">
+              <div class="progress" id="overallProgress"></div>
+            </div>
+            <div class="small muted" id="overallLabel">0% complete</div>
+          </div>
+        </div>
+        <div class="divider"></div>
+
+        <!-- Video -->
+        <div class="video-box">
+          <video id="lessonVideo" width="100%" controls preload="metadata" poster=""  playsinline>
+            <!-- Video sources fixed to use body.mp4 -->
+            <source id="videoSource" src="body.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+
+
+        
+        <div class="row" style="justify-content: space-between; margin-top: 10px;">
+          <div class="small muted">You must watch the video to the end before the quiz unlocks.</div>
+          <button class="btn" id="btnResetWatch">Mark as not watched</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Quiz -->
+        <details id="quizPanel" open>
+          <summary>📝 Quiz (10 questions)</summary>
+          <form id="quizForm"></form>
+          <div class="row" style="justify-content: space-between;">
+            <div class="small muted" id="quizHint">Score at least <b>80%</b> to proceed. If you fail, re‑watch the video.</div>
+            <div>
+              <button class="btn" id="btnCheck">Check Answers</button>
+              <button class="btn ghost" id="btnRetake" disabled>Retake Quiz</button>
+            </div>
+          </div>
+        </details>
+
+        <div class="divider"></div>
+
+        <!-- Nav -->
+        <div class="row" style="justify-content: space-between;">
+          <button class="btn" id="btnPrev">← Previous</button>
+          <div class="row">
+            <button class="btn" id="btnSave">Save Progress</button>
+            <button class="btn primary" id="btnNext" disabled>Next →</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>ℹ️ How to use / Edit</h3>
+        <ul>
+          <li>Replace <code>body2.mp4</code> with your real video files.</li>
+          <li>Edit quiz questions in the <code>MODULES</code> array inside the script.</li>
+          <li>Rules enforced: <b>Video must be fully watched</b> + <b>Quiz ≥ 80%</b> to unlock Next.</li>
+          <li>If quiz &lt; 80%, the student is forced to re‑watch the video before retaking.</li>
+          <li>Progress is saved automatically and can be exported from Teacher Dashboard.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Teacher Dashboard -->
+    <div id="teacherView" class="hidden">
+      <div class="grid">
+        <div class="card">
+          <h2>👩‍🏫 Teacher Dashboard</h2>
+          <div class="row">
+            <button class="btn" id="btnRefresh">Refresh</button>
+            <button class="btn" id="btnExport">Export CSV</button>
+            <button class="btn bad" id="btnWipe">Wipe ALL local progress</button>
+          </div>
+          <div class="divider"></div>
+          <div class="kpi">
+            <div class="card"><div class="small muted">Students</div><div class="num" id="kpiStudents">0</div></div>
+            <div class="card"><div class="small muted">Avg Completion</div><div class="num" id="kpiAvg">0%</div></div>
+            <div class="card"><div class="small muted">Fully Completed</div><div class="num" id="kpiDone">0</div></div>
+            <div class="card"><div class="small muted">Quiz Pass Rate</div><div class="num" id="kpiPassRate">0%</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Students</h3>
+          <div class="small muted">Click a student to see detailed progress.</div>
+          <div id="studentsList"></div>
+        </div>
+        <div class="card">
+          <h3>Student Details</h3>
+          <div id="studentDetail" class="small muted">Select a student…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================
+    // 🔧 CONFIGURATION (EDIT ME)
+    // =========================
+
+    // 1) Define 8 modules with video sources and 10-question quizzes each.
+    //    👉 Replace video paths; edit questions as you like.
+    
+    const SAMPLE_QUIZ = [
+      { q: "Q1) Focused mode is for deep concentration.", options: ["True", "False"], answer: 0 },
+      { q: "Q2) Diffuse mode helps with big-picture thinking.", options: ["True", "False"], answer: 0 },
+      { q: "Q3) Taking breaks can improve learning.", options: ["True", "False"], answer: 0 },
+      { q: "Q4) Spaced repetition means cramming all at once.", options: ["True", "False"], answer: 1 },
+      { q: "Q5) Sleep supports memory consolidation.", options: ["True", "False"], answer: 0 },
+      { q: "Q6) Practice tests can boost retention.", options: ["True", "False"], answer: 0 },
+      { q: "Q7) Multitasking usually improves focus.", options: ["True", "False"], answer: 1 },
+      { q: "Q8) Active recall means retrieving info without looking.", options: ["True", "False"], answer: 0 },
+      { q: "Q9) Short study sessions are often better than one long session.", options: ["True", "False"], answer: 0 },
+      { q: "Q10) Reflection after learning is not useful.", options: ["True", "False"], answer: 1 },
+    ];
+  
+    const MODULES = [
+  {
+    title: "Module 1",
+    video: "body1.mp4",
+    quiz: [
+      { q: "Q1) Waa maxay xisaabta?", options: ["Tir", "Xayawaan"], answer: 0 },
+      { q: "Q2) Waa maxay programming?", options: ["Code", "Buug"], answer: 0 },
+      { q: "Q3) HTML muxuu yahay?", options: ["Language", "Cunto"], answer: 0 },
+      { q: "Q4) CSS muxuu yahay?", options: ["Style", "Game"], answer: 0 },
+      { q: "Q5) JavaScript muxuu yahay?", options: ["Code", "Qalin"], answer: 0 },
+      { q: "Q6) Function muxuu yahay?", options: ["Hawl", "Cunto"], answer: 0 },
+      { q: "Q7) Variable muxuu yahay?", options: ["Xog", "Guri"], answer: 0 },
+      { q: "Q8) Loop muxuu yahay?", options: ["Celcelis", "Buug"], answer: 0 },
+      { q: "Q9) Object muxuu yahay?", options: ["Shay", "Tir"], answer: 0 },
+      { q: "Q10) Array muxuu yahay?", options: ["Liis", "Xayawaan"], answer: 0 }
+    ]
+  },
+  {
+    title: "Module 2",
+    video: "body2.mp4",
+    quiz: JSON.parse(JSON.stringify(SAMPLE_QUIZ)),
+  },
+  {
+    title: "Module 3",
+    video: "body3.mp4",
+    quiz: JSON.parse(JSON.stringify(SAMPLE_QUIZ)),
+  },
+  {
+    title: "Module 4",
+    video: "body4.mp4",
+    quiz: JSON.parse(JSON.stringify(SAMPLE_QUIZ)),
+  },
+  {
+    title: "Module 5",
+    video: "body5.mp4",
+    quiz: JSON.parse(JSON.stringify(SAMPLE_QUIZ)),
+  },
+  {
+    title: "Module 6",
+    video: "body6.mp4",
+    quiz: JSON.parse(JSON.stringify(SAMPLE_QUIZ)),
+  },
+  {
+    title: "Module 7",
+    video: "body7.mp4",
+    quiz: JSON.parse(JSON.stringify(SAMPLE_QUIZ)),
+  },
+  {
+    title: "Module 8",
+    video: "body8.mp4",
+    quiz: JSON.parse(JSON.stringify(SAMPLE_QUIZ)),
+  },
+];
+
+    
+    const PASS_PERCENT = 80; // minimum score to proceed
+
+    // =========================
+    // 📦 STATE & STORAGE
+    // =========================
+
+    const STORAGE_KEY = "course_students_v1"; // holds dictionary of student profiles
+
+    function loadAllStudents() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+      catch { return {}; }
+    }
+    function saveAllStudents(students) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(students));
+    }
+
+    function defaultProfile(id) {
+      return {
+        id,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        currentIndex: 0,
+        modules: MODULES.map(() => ({ watched: false, score: null, passed: false, attempts: 0, lastAt: null })),
+      };
+    }
+
+    let students = loadAllStudents();
+    let profile = null; // active student
+
+    // =========================
+    // 🧠 HELPERS
+    // =========================
+
+    function $(id){ return document.getElementById(id); }
+
+    function setStudentTag() {
+      $("studentTag").textContent = profile ? `Student: ${profile.id}` : "No student";
+    }
+
+    function updateOverallProgressUI() {
+      const total = MODULES.length;
+      const passed = profile.modules.filter(m => m.passed).length;
+      const pct = Math.round((passed / total) * 100);
+      $("overallProgress").style.width = pct + "%";
+      $("overallLabel").textContent = `${pct}% complete`;
+    }
+
+    function fmtDate(iso) {
+      if (!iso) return "-";
+      const d = new Date(iso);
+      return d.toLocaleString();
+    }
+
+    // =========================
+    // 🎬 COURSE RENDERING
+    // =========================
+
+    const videoEl = $("lessonVideo");
+    const videoSourceEl = $("videoSource");
+    const quizForm = $("quizForm");
+    const quizPanel = $("quizPanel");
+
+    let currentIndex = 0;
+    let videoWatched = false;
+    let quizPassed = false;
+    let lastScore = null;
+
+    function loadModule(index){
+      currentIndex = index;
+      const m = MODULES[index];
+      $("modIndex").textContent = index + 1;
+      $("modTotal").textContent = MODULES.length;
+
+      // Video
+      videoEl.pause();
+      videoSourceEl.src = m.video;
+      videoEl.load();
+      videoWatched = !!profile.modules[index].watched; // restore if already watched
+      $("videoStatus").textContent = videoWatched ? "Video: Watched ✔" : "Video: Not watched";
+
+      // Quiz
+      renderQuiz(m.quiz, index);
+      quizPassed = !!profile.modules[index].passed;
+      lastScore = profile.modules[index].score;
+      $("quizStatus").textContent = lastScore == null ? "Quiz: Not taken" : `Quiz: ${lastScore}% ${quizPassed ? "✔" : "✖"}`;
+
+      // Controls
+      $("btnPrev").disabled = index === 0;
+      updateNextState();
+      updateOverallProgressUI();
+    }
+
+    function renderQuiz(questions, modIndex){
+      quizForm.innerHTML = "";
+      questions.forEach((item, i) => {
+        const div = document.createElement("div");
+        div.className = "quiz-q";
+        div.innerHTML = `
+          <h4>${item.q}</h4>
+          ${item.options.map((opt, j) => `
+            <label><input type="radio" name="q${i}" value="${j}"> ${opt}</label>
+          `).join("")}
+        `;
+        quizForm.appendChild(div);
+      });
+      $("btnRetake").disabled = true;
+    }
+
+    function updateNextState(){
+      const enabled = videoWatched && quizPassed;
+      $("btnNext").disabled = !enabled;
+    }
+
+    // =========================
+    // 🎥 VIDEO LOGIC
+    // =========================
+
+    videoEl.addEventListener("ended", () => {
+      videoWatched = true;
+      profile.modules[currentIndex].watched = true;
+      profile.modules[currentIndex].lastAt = new Date().toISOString();
+      profile.updatedAt = new Date().toISOString();
+      saveAllStudents(students);
+      $("videoStatus").textContent = "Video: Watched ✔";
+      quizPanel.open = true; // auto-open quiz
+      updateNextState();
+    });
+
+    $("btnResetWatch").addEventListener("click", () => {
+      videoWatched = false;
+      profile.modules[currentIndex].watched = false;
+      profile.modules[currentIndex].passed = false;
+      profile.modules[currentIndex].score = null;
+      profile.updatedAt = new Date().toISOString();
+      saveAllStudents(students);
+      $("videoStatus").textContent = "Video: Not watched";
+      $("quizStatus").textContent = "Quiz: Not taken";
+      $("btnNext").disabled = true;
+      lastScore = null; quizPassed = false;
+      videoEl.currentTime = 0;
+      videoEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    // =========================
+    // 📝 QUIZ LOGIC
+    // =========================
+
+    $("btnCheck").addEventListener("click", (e) => {
+      e.preventDefault();
+      const m = MODULES[currentIndex];
+
+      // Require video watched before checking
+      if (!videoWatched){
+        alert("Please watch the video completely before taking the quiz.");
+        return;
+      }
+
+      let correct = 0;
+      m.quiz.forEach((q, i) => {
+        const selected = quizForm.querySelector(`input[name="q${i}"]:checked`);
+        if (selected && Number(selected.value) === q.answer) correct++;
+      });
+      const score = Math.round((correct / m.quiz.length) * 100);
+      lastScore = score;
+
+      const passed = score >= PASS_PERCENT;
+      quizPassed = passed;
+
+      // Update profile
+      const pm = profile.modules[currentIndex];
+      pm.attempts += 1;
+      pm.score = score;
+      pm.passed = passed;
+      pm.lastAt = new Date().toISOString();
+      profile.updatedAt = new Date().toISOString();
+      saveAllStudents(students);
+
+      // UI
+      $("quizStatus").textContent = `Quiz: ${score}% ${passed ? "✔" : "✖"}`;
+      updateNextState();
+
+      if (!passed){
+        alert(`Score ${score}%. You need at least ${PASS_PERCENT}%. Re‑watching the video is required before retaking.`);
+        // Force re‑watch: lock quiz retake until video ends again
+        videoWatched = false;
+        pm.watched = false;
+        saveAllStudents(students);
+        $("videoStatus").textContent = "Video: Not watched";
+        $("btnRetake").disabled = true;
+        videoEl.currentTime = 0;
+        videoEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        videoEl.play();
+      } else {
+        alert(`Great! You passed with ${score}%. You can go Next.`);
+        $("btnRetake").disabled = false;
+      }
+    });
+
+    $("btnRetake").addEventListener("click", (e) => {
+      e.preventDefault();
+      // Allow retake only if already passed (for improving score) — otherwise forced rewatch handled above
+      const confirmRetake = confirm("Retake quiz? Your last score will be kept as the best.");
+      if (!confirmRetake) return;
+      // Clear radio selections
+      quizForm.querySelectorAll('input[type="radio"]').forEach(i => i.checked = false);
+    });
+
+    // =========================
+    // 🔀 NAVIGATION
+    // =========================
+
+    $("btnPrev").addEventListener("click", () => {
+      if (currentIndex > 0){ loadModule(currentIndex - 1); }
+    });
+
+    $("btnNext").addEventListener("click", () => {
+      if (currentIndex < MODULES.length - 1){
+        loadModule(currentIndex + 1);
+      } else {
+        alert("🎉 Course finished! Great job.");
+      }
+    });
+
+    $("btnSave").addEventListener("click", () => {
+      profile.currentIndex = currentIndex;
+      profile.updatedAt = new Date().toISOString();
+      saveAllStudents(students);
+      alert("Progress saved.");
+    });
+
+    // =========================
+    // 👤 SIGN-IN
+    // =========================
+
+    function activateProfile(id){
+      if (!students[id]) students[id] = defaultProfile(id);
+      profile = students[id];
+      profile.updatedAt = new Date().toISOString();
+      saveAllStudents(students);
+      setStudentTag();
+      $("signinCard").classList.add("hidden");
+      $("courseView").classList.remove("hidden");
+      $("teacherView").classList.add("hidden");
+      loadModule(profile.currentIndex || 0);
+    }
+
+    $("btnStart").addEventListener("click", () => {
+      const id = $("studentId").value.trim();
+      if (!id) return alert("Please enter your name or ID");
+      activateProfile(id);
+    });
+
+    $("btnSwitch").addEventListener("click", () => {
+      $("signinCard").classList.remove("hidden");
+      $("courseView").classList.add("hidden");
+      $("teacherView").classList.add("hidden");
+      profile = null;
+      setStudentTag();
+    });
+
+    // =========================
+    // 🧑‍🏫 TEACHER DASHBOARD
+    // =========================
+
+    function renderTeacher(){
+      const list = $("studentsList");
+      list.innerHTML = "";
+      const entries = Object.values(students).sort((a,b)=> (a.id > b.id ? 1 : -1));
+
+      // KPIs
+      $("kpiStudents").textContent = entries.length;
+      const compRates = entries.map(s => s.modules.filter(m=>m.passed).length / MODULES.length);
+      const avg = entries.length ? Math.round(100 * compRates.reduce((a,b)=>a+b,0)/entries.length) : 0;
+      $("kpiAvg").textContent = `${avg}%`;
+      const done = entries.filter(s => s.modules.every(m=>m.passed)).length;
+      $("kpiDone").textContent = done;
+      const allAttempts = entries.flatMap(s => s.modules.map(m => ({score:m.score, attempts:m.attempts})));
+      const passCount = allAttempts.filter(x => x.score != null && x.score >= PASS_PERCENT).length;
+      const takenCount = allAttempts.filter(x => x.score != null).length;
+      $("kpiPassRate").textContent = takenCount ? `${Math.round(100 * passCount / takenCount)}%` : "0%";
+
+      entries.forEach(s => {
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.style.cssText = 'justify-content: space-between; padding:10px 0; border-bottom:1px solid var(--border)';
+        const completed = s.modules.filter(m => m.passed).length;
+        row.innerHTML = `
+          <div><b>${s.id}</b><div class="small muted">Updated: ${fmtDate(s.updatedAt)}</div></div>
+          <div class="row" style="gap:6px;">
+            <span class="pill">${completed}/${MODULES.length} passed</span>
+            <button class="btn" data-id="${s.id}">View</button>
+          </div>
+        `;
+        row.querySelector('button').addEventListener('click', () => showStudentDetail(s.id));
+        list.appendChild(row);
+      });
+    }
+
+    function showStudentDetail(id){
+      const s = students[id];
+      if (!s){ $("studentDetail").textContent = "Not found."; return; }
+      const rows = s.modules.map((m, i) => `
+        <tr>
+          <td style="padding:6px 8px; border-bottom:1px solid var(--border);">Module ${i+1}</td>
+          <td style="padding:6px 8px; border-bottom:1px solid var(--border);">${m.watched ? 'Watched ✔' : 'Not watched'}</td>
+          <td style="padding:6px 8px; border-bottom:1px solid var(--border);">${m.score == null ? '-' : m.score + '%'}</td>
+          <td style="padding:6px 8px; border-bottom:1px solid var(--border);">${m.passed ? 'Passed ✔' : 'Pending ✖'}</td>
+          <td style="padding:6px 8px; border-bottom:1px solid var(--border);">Attempts: ${m.attempts || 0}</td>
+          <td style="padding:6px 8px; border-bottom:1px solid var(--border);">${fmtDate(m.lastAt)}</td>
+        </tr>
+      `).join('');
+      $("studentDetail").innerHTML = `
+        <div class="row" style="justify-content: space-between;">
+          <div>
+            <div><b>${s.id}</b></div>
+            <div class="small muted">Created: ${fmtDate(s.createdAt)} · Updated: ${fmtDate(s.updatedAt)}</div>
+          </div>
+          <button class="btn" id="btnImpersonate">Impersonate</button>
+        </div>
+        <div class="space"></div>
+        <div class极客 .progress-wrap"><div class="progress" style="width:${Math.round(100 * s.modules.filter(m=>m.passed).length / MODULES.length)}%"></div></div>
+        <div class="space"></div>
+        <table style="width:100%; border-collapse: collapse;">
+          <thead>
+            <tr>
+              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Module</th>
+              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Video</th>
+              <极客 th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Score</th>
+              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Status</极客>
+              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Attempts</th>
+              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Last Update</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+      $("btnImpersonate").addEventListener('click', () => {
+        activateProfile(s.id);
+        document.getElementById('tabCourse').click();
+      });
+    }
+
+    $("btnRefresh").addEventListener("click", () => { students = loadAllStudents(); renderTeacher(); });
+
+    $("btnExport").addEventListener("click", () => {
+      const entries = Object.values(students);
+      const header = ["student_id","module","watched","score","passed","attempts","lastAt","createdAt","updatedAt"];
+      const rows = [header.join(",")];
+      entries.forEach(s => {
+        s.modules.forEach((m, i) => {
+          rows.push([
+            JSON.stringify(s.id),
+            i+1,
+            m.watched,
+            m.score == null ? "" : m.score,
+            m.passed,
+            m.attempts || 0,
+            m极客.lastAt || "",
+            s.createdAt,
+            s.updatedAt,
+          ].join(","));
+        });
+      });
+      const blob = new Blob([rows.join("\n")], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'course_progress.csv'; a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    $("btnWipe").addEventListener("click", () => {
+      if (!confirm("This will delete ALL local progress for ALL students on this device. Continue?")) return;
+      localStorage.removeItem(STORAGE_KEY);
+      students = {}; profile = null;
+      $("studentsList").innerHTML = "";
+      $("studentDetail").textContent = "Select a student…";
+      $("signin极客").classList.remove("hidden");
+      $("courseView").classList.add("hidden");
+      $("teacherView").classList.add("hidden");
+      setStudentTag();
+    });
+
+    // Tabs
+    const tabCourse = $("tabCourse");
+    const tabTeacher = $("tabTeacher");
+    tabCourse.addEventListener('click', () => {
+      tabCourse.classList.add('active');
+      tabTeacher.classList.remove('active');
+      $("courseView").classList.remove('hidden');
+      $("teacherView").classList.add('hidden');
+    });
+    tabTeacher.addEventListener('click', () => {
+      tabTeacher.classList.add('active');
+      tabCourse.classList.remove('active');
+      $("courseView").classList.add('hidden');
+      $("teacherView").classList.remove('hidden');
+      renderTeacher();
+    });
+
+    // Boot
+    (function init(){
+      // Auto-activate last used student if any
+      const lastId = sessionStorage.getItem('lastStudentId');
+      if (lastId && loadAllStudents()[lastId]){
+        students = load极客Students();
+        profile = students[lastId];
+        setStudentTag();
+        $("signinCard").classList.add("hidden");
+        $("courseView").classList.remove("hidden");
+        loadModule(profile.currentIndex || 0);
+      } else {
+        $("courseView").classList.remove("hidden");
+      }
+
+      $("btnStart").addEventListener('click', () => {
+        const id = $("studentId").value.trim();
+        if (id){ sessionStorage.setItem('lastStudentId', id); }
+      });
+    })();
+  </script>
+</body>
+</html>
