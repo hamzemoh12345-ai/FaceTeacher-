@@ -143,10 +143,24 @@
       </div>
 
       <div class="card">
-        <h3>ℹ️ How to use / Edit</h3>
+          
+
+
+        <H3>All list PDF</H3>
+               
+                 <br><a href="Transmitted disease.pdf" target="_blank"> 1. Transmitted disease</a>
+                 <br><a href="sexully disese.pdf" target="_blank"> 2. Sexully transmitted diseses STD's</a>
+                 <br><a href="body disese ans immunite .pdf" target="_blank"> 3. Body immunization system</a>
+                 <br><a href="drug.pdf" target="_blank"> 4. Drugs</a>
+                 <br><a href="The Skeletal System.pdf" target="_blank"> 5.Skeletal System</a>
+                 <br><a href="reproduction.pdf" target="_blank"> 6. Reproduction</a>
+                 <br><a href="Metamorphosis.pdf" target="_blank"> 7. Metamorphosis</a>
+
+
+        <h3>ℹ️ How to use</h3>
         <ul>
-          <li>Replace <code>body2.mp4</code> with your real video files.</li>
-          <li>Edit quiz questions in the <code>MODULES</code> array inside the script.</li>
+          
+          
           <li>Rules enforced: <b>Video must be fully watched</b> + <b>Quiz ≥ 80%</b> to unlock Next.</li>
           <li>If quiz &lt; 80%, the student is forced to re‑watch the video before retaking.</li>
           <li>Progress is saved automatically and can be exported from Teacher Dashboard.</li>
@@ -204,6 +218,8 @@
       { q: "Q8) Active recall means retrieving info without looking.", options: ["True", "False"], answer: 0 },
       { q: "Q9) Short study sessions are often better than one long session.", options: ["True", "False"], answer: 0 },
       { q: "Q10) Reflection after learning is not useful.", options: ["True", "False"], answer: 1 },
+      { q: "Q11) Reflection after learning is not useful.", options: ["True", "False"], answer: 1 },
+      { q: "12) Reflection after learning is not useful.", options: ["True", "False"], answer: 1 },
     ];
   
     const MODULES = [
@@ -211,22 +227,33 @@
     title: "Module 1",
     video: "body1.mp4",
     quiz: [
-      { q: "Q1) Waa maxay xisaabta?", options: ["Tir", "Xayawaan"], answer: 0 },
-      { q: "Q2) Waa maxay programming?", options: ["Code", "Buug"], answer: 0 },
-      { q: "Q3) HTML muxuu yahay?", options: ["Language", "Cunto"], answer: 0 },
-      { q: "Q4) CSS muxuu yahay?", options: ["Style", "Game"], answer: 0 },
-      { q: "Q5) JavaScript muxuu yahay?", options: ["Code", "Qalin"], answer: 0 },
-      { q: "Q6) Function muxuu yahay?", options: ["Hawl", "Cunto"], answer: 0 },
-      { q: "Q7) Variable muxuu yahay?", options: ["Xog", "Guri"], answer: 0 },
-      { q: "Q8) Loop muxuu yahay?", options: ["Celcelis", "Buug"], answer: 0 },
-      { q: "Q9) Object muxuu yahay?", options: ["Shay", "Tir"], answer: 0 },
-      { q: "Q10) Array muxuu yahay?", options: ["Liis", "Xayawaan"], answer: 0 }
+      { q: "Q1) A disease is defined as an illness that prevents the body or mind from working normally.", options:["True", "False"], answer: 0 },
+      { q: "Q2) Infectious diseases are also known as communicable diseases.", options:["True", "False"], answer: 0 },
+      { q: "Q3) All germs are bacteria.", options: ["True", "False"], answer: 1 },
+      { q: "Q4) Bacteria are so small that one million can fit on the head of a pin.", options:["True", "False"], answer: 0 },
+      { q: "Q5) Bacteria reproduce very slowly, with a single cell dividing only once per day.", options: ["True", "False"], answer: 1 },
+      { q: "Q6) All bacteria are harmful and cause disease.", options: ["True", "False"], answer: 0 },
+      { q: "Q7) The misuse of antibiotics has led to some diseases becoming resistant to them.", options: ["True", "False"], answer: 0 },
+      { q: "Q8) Viruses are larger than bacteria.", options: ["True", "False"], answer: 1 },
+      { q: "Q9) Viruses can be easily grown and cultured in a lab just like bacteria.", options: ["True", "False"], answer: 1 },
+      { q: "Q10) New viruses are formed inside a living cell, causing it to eventually burst.", options: ["True", "False"], answer: 0 }
     ]
   },
   {
     title: "Module 2",
     video: "body2.mp4",
-    quiz: JSON.parse(JSON.stringify(SAMPLE_QUIZ)),
+    quiz: [
+      { q: "Q1) Gonorrhea, syphilis, and AIDS are all spread primarily through sexual contact.", options:["True", "False"], answer: 0 },
+      { q: "Q2) The bacterium Neisseria gonorrhoeae causes syphilis.", options:["True", "False"], answer: 1 },
+      { q: "Q3) A common early symptom of gonorrhea is a painless sore called a chancre.", options: ["True", "False"], answer: 1 },
+      { q: "Q4) A complication of untreated gonorrhea in women can be an ectopic pregnancy.", options:["True", "False"], answer: 0 },
+      { q: "Q5) Both gonorrhea and syphilis can be effectively treated with a course of penicillin injections.", options: ["True", "False"], answer: 0 },
+      { q: "Q6) All bacteria are harmful and cause disease.", options: ["True", "False"], answer: 1 },
+      { q: "Q7) IV can be transmitted from an infected mother to her baby through breastfeeding.", options: ["True", "False"], answer: 0 },
+      { q: "Q8) The text states that Zina (fornication) is encouraged in Islam as a way to prevent STDs.", options: ["True", "False"], answer: 1 },
+      { q: "Q9) One of the factors aiding the spread of HIV is high public awareness and excellent healthcare centers.", options: ["True", "False"], answer: 1 },
+      { q: "Q10) The text suggests that early diagnosis and correct drugs can allow an HIV-positive person to live an almost normal lifespan.", options: ["True", "False"], answer: 0 }
+    ],
   },
   {
     title: "Module 3",
@@ -588,8 +615,8 @@
             <tr>
               <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Module</th>
               <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Video</th>
-              <极客 th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Score</th>
-              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Status</极客>
+              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Score</th>
+              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Status</th>
               <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Attempts</th>
               <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Last Update</th>
             </tr>
