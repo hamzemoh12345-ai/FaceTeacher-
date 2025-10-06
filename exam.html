@@ -1,741 +1,3148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Exam System</title>
-    <style>
-        :root {
-            --primary: #4a6fa5;
-            --secondary: #166088;
-            --accent: #4cb5f5;
-            --light: #f8f9fa;
-            --dark: #343a40;
-            --success: #28a745;
-            --danger: #dc3545;
-            --warning: #ffc107;
-        }
-        
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #f5f7f9;
-            color: var(--dark);
-            line-height: 1.6;
-        }
-        
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        
-        h1, h2, h3 {
-            margin-bottom: 1rem;
-        }
-        
-        .card {
-            background: white;
-            border-radius: 10px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-        }
-        
-        .btn {
-            display: inline-block;
-            background: var(--primary);
-            color: white;
-            padding: 0.7rem 1.5rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
-        
-        .btn:hover {
-            background: var(--secondary);
-            transform: translateY(-2px);
-        }
-        
-        .btn-success {
-            background: var(--success);
-        }
-        
-        .btn-success:hover {
-            background: #218838;
-        }
-        
-        .btn-danger {
-            background: var(--danger);
-        }
-        
-        .btn-danger:hover {
-            background: #c82333;
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-        
-        input[type="text"], 
-        input[type="number"], 
-        select, 
-        textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-        
-        .question-container {
-            border-left: 4px solid var(--accent);
-            padding-left: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .options-container {
-            margin: 1rem 0;
-        }
-        
-        .option-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-        
-        .option-item input[type="text"] {
-            margin-left: 10px;
-        }
-        
-        .exam-question {
-            margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .exam-options {
-            margin: 1rem 0;
-        }
-        
-        .exam-option {
-            margin-bottom: 0.75rem;
-            padding: 0.75rem;
-            background: var(--light);
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .exam-option:hover {
-            background: #e9ecef;
-        }
-        
-        .exam-option.selected {
-            background: #d1ecf1;
-            border: 1px solid #bee5eb;
-        }
-        
-        .exam-option.correct {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .exam-option.incorrect {
-            background: #f8d7da;
-            border: 1px solid #f5c6cb;
-        }
-        
-        .hidden {
-            display: none;
-        }
-        
-        .results-container {
-            text-align: center;
-        }
-        
-        .score-display {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--primary);
-            margin: 1rem 0;
-        }
-        
-        .review-item {
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            border-radius: 8px;
-            background: white;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-        }
-        
-        .review-item.correct {
-            border-left: 4px solid var(--success);
-        }
-        
-        .review-item.incorrect {
-            border-left: 4px solid var(--danger);
-        }
-        
-        .tab-container {
-            display: flex;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        .tab {
-            padding: 1rem 1.5rem;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-        }
-        
-        .tab.active {
-            border-bottom: 3px solid var(--primary);
-            font-weight: 600;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .question-image {
-            max-width: 100%;
-            height: auto;
-            margin: 1rem 0;
-            border-radius: 5px;
-        }
-        
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-        }
-        
-        .progress-bar {
-            height: 10px;
-            background: #e9ecef;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-            overflow: hidden;
-        }
-        
-        .progress {
-            height: 100%;
-            background: var(--primary);
-            border-radius: 5px;
-            transition: width 0.3s;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>✏️ Exam→ Video Course (8 lesson )</title>
+  <style>
+    :root {
+      --brand: #2563eb;
+      --ok: #16a34a;
+      --warn: #f59e0b;
+      --bad: #dc2626;
+      --bg: #f8fafc;
+      --fg: #0f172a;
+      --muted: #64748b;
+      --card: #ffffff;
+      --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"; background: var(--bg); color: var(--fg); margin:0; }
+    header { background: var(--card); border-bottom: 1px solid var(--border); padding: 12px 20px; position: sticky; top:0; z-index: 10;}
+    h1 { font-size: 20px; margin: 0; }
+    .container { max-width: 1100px; margin: 20px auto; padding: 0 16px; }
+    .grid { display: grid; gap: 16px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+    .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+    .space { height: 8px; }
+    .btn { cursor: pointer; border: 1px solid var(--border); background: #fff; padding: 10px 14px; border-radius: 12px; font-weight: 600; }
+    .btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+    .btn.primary { background: var(--brand); color: white; border-color: transparent; }
+    .btn.ghost { background: transparent; }
+    .tag { display:inline-flex; align-items:center; gap:6px; padding: 4px 8px; border-radius: 999px; border:1px solid var(--border); background:#fff; font-size:12px; color: var(--muted); }
+    .progress-wrap { background: #e5e7eb; border-radius: 999px; height: 10px; overflow: hidden; }
+    .progress { height: 10px; background: var(--brand); width: 0%; }
+    .muted { color: var(--muted); }
+    .ok { color: var(--ok); }
+    .bad { color: var(--bad); }
+    .warn { color: var(--warn); }
+    .divider { height: 1px; background: var(--border); margin: 12px 0; }
+    .tabs { display:flex; gap:8px; }
+    .tab { padding: 8px 12px; border:1px solid var(--border); border-radius: 999px; background:#fff; cursor:pointer; font-weight:600; }
+    .tab.active { background: var(--brand); color:#fff; border-color: transparent; }
+    .hidden { display:none !important; }
+    .video-box { border-radius: 12px; overflow: hidden; border:1px solid var(--border); background:#000; }
+    .quiz-q { margin-bottom: 12px; padding: 12px; border:1px solid var(--border); border-radius: 12px; }
+    .quiz-q h4 { margin: 0 0 8px; font-size: 15px; }
+    .quiz-q label { display:block; margin: 6px 0; cursor:pointer; }
+    .pill { font-size:12px; padding:2px 8px; border-radius: 999px; border:1px solid var(--border); color: var(--muted);}
+    .kpi { display:grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap:12px; }
+    .kpi .card { text-align:center; }
+    .kpi .num { font-size: 22px; font-weight: 800; }
+    details[open] summary::marker, summary::marker { content: ""; }
+    summary { cursor: pointer; font-weight: 700; }
+    .small { font-size: 12px; }
+    @media (max-width: 720px){ .kpi{ grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Interactive Exam System</h1>
-            <p>Test your knowledge and track your progress</p>
-        </header>
-        
-        <div class="tab-container">
-            <div class="tab active" data-tab="take-exam">Take Exam</div>
-            <div class="tab" data-tab="view-results">View Results</div>
-            <div class="tab" data-tab="teacher-view">Teacher View</div>
-        </div>
-        
-        <!-- Take Exam Tab -->
-        <div class="tab-content active" id="take-exam">
-            <div class="card">
-                <h2>Unit 1: Introduction to Web Development</h2>
-                <p>Answer the following questions to test your knowledge. You can navigate between questions and review your answers before submission.</p>
-                
-                <div class="progress-bar">
-                    <div class="progress" id="exam-progress" style="width: 10%;"></div>
-                </div>
-                
-                <div id="exam-container">
-                    <!-- Exam questions will be inserted here -->
-                </div>
-                
-                <div class="controls">
-                    <button class="btn" id="prev-btn">Previous</button>
-                    <button class="btn" id="next-btn">Next</button>
-                    <button class="btn btn-success" id="submit-exam">Submit Exam</button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Results Tab -->
-        <div class="tab-content" id="view-results">
-            <div class="card results-container">
-                <h2>Exam Results</h2>
-                <p>Your performance on the exam</p>
-                
-                <div class="score-display">
-                    <span id="score">0</span>/<span id="total-questions">0</span>
-                </div>
-                
-                <div id="results-breakdown">
-                    <!-- Results will be inserted here -->
-                </div>
-                
-                <button class="btn" id="retry-exam">Retry Exam</button>
-            </div>
-        </div>
-        
-        <!-- Teacher View Tab -->
-        <div class="tab-content" id="teacher-view">
-            <div class="card">
-                <h2>Teacher Dashboard</h2>
-                <p>Create and manage exam questions</p>
-                
-                <div class="form-group">
-                    <label for="question-type">Question Type:</label>
-                    <select id="question-type">
-                        <option value="multiple-choice">Multiple Choice</option>
-                        <option value="true-false">True/False</option>
-                        <option value="fill-blank">Fill in the Blank</option>
-                        <option value="image-based">Image-Based Question</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="question-text">Question:</label>
-                    <textarea id="question-text" rows="3" placeholder="Enter your question here"></textarea>
-                </div>
-                
-                <div id="options-container" class="options-container">
-                    <label>Options:</label>
-                    <div class="option-item">
-                        <input type="radio" name="correct-option" value="0">
-                        <input type="text" placeholder="Option 1">
-                    </div>
-                    <div class="option-item">
-                        <input type="radio" name="correct-option" value="1">
-                        <input type="text" placeholder="Option 2">
-                    </div>
-                    <div class="option-item">
-                        <input type="radio" name="correct-option" value="2">
-                        <input type="text" placeholder="Option 3">
-                    </div>
-                    <div class="option-item">
-                        <input type="radio" name="correct-option" value="3">
-                        <input type="text" placeholder="Option 4">
-                    </div>
-                </div>
-                
-                <div id="image-upload-container" class="form-group hidden">
-                    <label for="question-image">Upload Image:</label>
-                    <input type="file" id="question-image" accept="image/*">
-                </div>
-                
-                <div class="form-group">
-                    <label for="question-explanation">Explanation (optional):</label>
-                    <textarea id="question-explanation" rows="2" placeholder="Add explanation for the correct answer"></textarea>
-                </div>
-                
-                <button class="btn btn-success" id="add-question">Add Question</button>
-                
-                <h3 style="margin-top: 2rem;">Current Questions</h3>
-                <div id="questions-list">
-                    <!-- Added questions will be listed here -->
-                </div>
-            </div>
-        </div>
+  <header class="row" role="banner">
+    <h1>✏️ Exam→ Video Course (8 lesson)</h1>
+    <span class="tag" id="studentTag">No student</span>
+    <div style="margin-left:auto" class="row">
+      <button class="tab active" id="tabCourse">Course</button>
+      <button class="tab" id="tabTeacher">Teacher Dashboard</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Student Sign-in / Profile -->
+    <div class="card" id="signinCard">
+      <h2>👤 Student Sign‑in</h2>
+      <p class="muted">Enter your name or ID. Your progress is saved in this browser (localStorage).</p>
+      <div class="row">
+        <input id="studentId" placeholder="Your name or ID" style="padding:10px 12px; border:1px solid var(--border); border-radius:12px; min-width:260px;" />
+        <button class="btn primary" id="btnStart">Start / Continue</button>
+        <button class="btn ghost" id="btnSwitch" title="Switch to another student">Switch</button>
+      </div>
+      <div class="space"></div>
+      <div class="row small muted">
+        <span>Tip: Teacher can create multiple demo students and track each one separately.</span>
+      </div>
     </div>
 
-    <script>
-        // Sample questions for demonstration
-        const sampleQuestions = [
-            {
-                id: 1,
-                type: "multiple-choice",
-                question: "What does HTML stand for?",
-                options: [
-                    "Hyper Text Markup Language",
-                    "High Tech Modern Language",
-                    "Hyper Transfer Markup Language",
-                    "Home Tool Markup Language"
-                ],
-                correctAnswer: 0,
-                explanation: "HTML stands for Hyper Text Markup Language, which is the standard markup language for creating web pages."
-            },
-            {
-                id: 2,
-                type: "true-false",
-                question: "JavaScript is the same as Java.",
-                options: [
-                    "True",
-                    "False"
-                ],
-                correctAnswer: 1,
-                explanation: "JavaScript and Java are completely different languages, both in concept and design."
-            },
-            {
-                id: 3,
-                type: "fill-blank",
-                question: "The CSS property for controlling the space between elements is called ______.",
-                correctAnswer: "margin",
-                explanation: "The margin property controls the space around elements outside of any defined borders."
-            },
-            {
-                id: 4,
-                type: "image-based",
-                question: "Which HTML tag represents the content inside this image?",
-                imageUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='100' viewBox='0 0 200 100'%3E%3Crect width='200' height='100' fill='%23f0f0f0'/%3E%3Ctext x='100' y='50' font-family='Arial' font-size='12' text-anchor='middle' dominant-baseline='middle'%3E%3Ctspan x='100' dy='-0.5em'%3E%26lt;div%26gt;%3C/tspan%3E%3Ctspan x='100' dy='1.5em'%3EContent here%3C/tspan%3E%3Ctspan x='100' dy='1.5em'%3E%26lt;/div%26gt;%3C/tspan%3E%3C/text%3E%3C/svg%3E",
-                options: [
-                    "&lt;div&gt;",
-                    "&lt;span&gt;",
-                    "&lt;section&gt;",
-                    "&lt;article&gt;"
-                ],
-                correctAnswer: 0,
-                explanation: "The image shows a div element with some content inside it."
-            }
-        ];
+    <!-- Course View -->
+    <div class="grid" id="courseView">
+      <div class="card">
+        <div class="row" style="justify-content: space-between; align-items: center;">
+          <div class="row">
+            <span class="pill">Module <span id="modIndex">1</span> / <span id="modTotal">8</span></span>
+            <span class="pill" id="videoStatus">Video: Not watched</span>
+            <span class="pill" id="quizStatus">Quiz: Not taken</span>
+          </div>
+          <div style="min-width: 220px;">
+            <div class="progress-wrap" title="Overall progress">
+              <div class="progress" id="overallProgress"></div>
+            </div>
+            <div class="small muted" id="overallLabel">0% complete</div>
+          </div>
+        </div>
+        <div class="divider"></div>
 
-        // Current exam state
-        let currentExam = {
-            questions: [],
-            currentQuestionIndex: 0,
-            answers: {},
-            score: 0
-        };
+        <!-- Video -->
+        <div class="video-box">
+          <video id="lessonVideo" width="100%" controls preload="metadata" poster=""  playsinline>
+            <!-- Video sources fixed to use body.mp4 -->
+            <source id="videoSource" src="body.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
 
-        // Initialize the application
-        document.addEventListener('DOMContentLoaded', function() {
-            // Load sample questions for demonstration
-            currentExam.questions = sampleQuestions;
-            
-            // Set up tab navigation
-            setupTabs();
-            
-            // Initialize exam
-            renderExamQuestion(0);
-            
-            // Set up event listeners
-            document.getElementById('next-btn').addEventListener('click', nextQuestion);
-            document.getElementById('prev-btn').addEventListener('click', previousQuestion);
-            document.getElementById('submit-exam').addEventListener('click', submitExam);
-            document.getElementById('retry-exam').addEventListener('click', retryExam);
-            
-            // Teacher view functionality
-            document.getElementById('question-type').addEventListener('change', toggleQuestionOptions);
-            document.getElementById('add-question').addEventListener('click', addQuestion);
-            
-            // Update progress bar
-            updateProgressBar();
+
+        
+        <div class="row" style="justify-content: space-between; margin-top: 10px;">
+          <div class="small muted">You must watch the video to the end before the quiz unlocks.</div>
+          <button class="btn" id="btnResetWatch">Mark as not watched</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Quiz -->
+        <details id="quizPanel" open>
+          <summary>📝 Quiz (10 questions)</summary>
+          <form id="quizForm"></form>
+          <div class="row" style="justify-content: space-between;">
+            <div class="small muted" id="quizHint">Score at least <b>80%</b> to proceed. If you fail, re‑watch the video.</div>
+            <div>
+              <button class="btn" id="btnCheck">Check Answers</button>
+              <button class="btn ghost" id="btnRetake" disabled>Retake Quiz</button>
+            </div>
+          </div>
+        </details>
+
+        <div class="divider"></div>
+
+        <!-- Nav -->
+        <div class="row" style="justify-content: space-between;">
+          <button class="btn" id="btnPrev">← Previous</button>
+          <div class="row">
+            <button class="btn" id="btnSave">Save Progress</button>
+            <button class="btn primary" id="btnNext" disabled>Next →</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+          
+
+
+        <H3>All list PDF</H3>
+               
+                 <br><a href="Transmitted disease.pdf" target="_blank"> 1. Transmitted disease</a>
+                 <br><a href="sexully disese.pdf" target="_blank"> 2. Sexully transmitted diseses STD's</a>
+                 <br><a href="body disese ans immunite .pdf" target="_blank"> 3. Body immunization system</a>
+                 <br><a href="drug.pdf" target="_blank"> 4. Drugs</a>
+                 <br><a href="The Skeletal System.pdf" target="_blank"> 5.Skeletal System</a>
+                 <br><a href="reproduction.pdf" target="_blank"> 6. Reproduction</a>
+                 <br><a href="Metamorphosis.pdf" target="_blank"> 7. Metamorphosis</a>
+
+
+        <h3>ℹ️ How to use</h3>
+        <ul>
+          
+          
+          <li>Rules enforced: <b>Video must be fully watched</b> + <b>Quiz ≥ 80%</b> to unlock Next.</li>
+          <li>If quiz &lt; 80%, the student is forced to re‑watch the video before retaking.</li>
+          <li>Progress is saved automatically and can be exported from Teacher Dashboard.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Teacher Dashboard -->
+    <div id="teacherView" class="hidden">
+      <div class="grid">
+        <div class="card">
+          <h2>👩‍🏫 Teacher Dashboard</h2>
+          <div class="row">
+            <button class="btn" id="btnRefresh">Refresh</button>
+            <button class="btn" id="btnExport">Export CSV</button>
+            <button class="btn bad" id="btnWipe">Wipe ALL local progress</button>
+          </div>
+          <div class="divider"></div>
+          <div class="kpi">
+            <div class="card"><div class="small muted">Students</div><div class="num" id="kpiStudents">0</div></div>
+            <div class="card"><div class="small muted">Avg Completion</div><div class="num" id="kpiAvg">0%</div></div>
+            <div class="card"><div class="small muted">Fully Completed</div><div class="num" id="kpiDone">0</div></div>
+            <div class="card"><div class="small muted">Quiz Pass Rate</div><div class="num" id="kpiPassRate">0%</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Students</h3>
+          <div class="small muted">Click a student to see detailed progress.</div>
+          <div id="studentsList"></div>
+        </div>
+        <div class="card">
+          <h3>Student Details</h3>
+          <div id="studentDetail" class="small muted">Select a student…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================
+    // 🔧 CONFIGURATION (EDIT ME)
+    // =========================
+
+    // 1) Define 8 modules with video sources and 10-question quizzes each.
+    //    👉 Replace video paths; edit questions as you like.
+    
+    const SAMPLE_QUIZ = [
+  { 
+    q: "Q1) Focused mode is for:", 
+    options: ["Deep concentration", "Big-picture thinking", "Multitasking", "Relaxed brainstorming"], 
+    answer: 0 
+  },
+  { 
+    q: "Q2) Diffuse mode helps with:", 
+    options: ["Detailed analysis", "Big-picture thinking", "Memorization", "Speed reading"], 
+    answer: 0 
+  },
+  { 
+    q: "Q3) Taking breaks can:", 
+    options: ["Distract from learning", "Improve learning", "Cause forgetting", "Reduce motivation"], 
+    answer: 0 
+  },
+  { 
+    q: "Q4) Spaced repetition means:", 
+    options: ["Cramming all at once", "Studying in intervals over time", "Studying only once", "Studying without breaks"], 
+    answer: 0 
+  },
+  { 
+    q: "Q5) Sleep helps with:", 
+    options: ["Memory consolidation", "Forgetting information", "Staying awake longer", "Reducing focus"], 
+    answer: 0 
+  },
+  { 
+    q: "Q6) Practice tests can:", 
+    options: ["Boost retention", "Cause anxiety only", "Replace studying", "Be counterproductive"], 
+    answer: 0 
+  },
+  { 
+    q: "Q7) Multitasking usually:", 
+    options: ["Improves focus", "Reduces productivity", "Saves time", "Enhances memory"], 
+    answer: 0 
+  },
+  { 
+    q: "Q8) Active recall means:", 
+    options: ["Reading quickly", "Retrieving info without looking", "Highlighting text", "Listening passively"], 
+    answer: 0 
+  },
+  { 
+    q: "Q9) Short study sessions are often:", 
+    options: ["Less effective", "Better than one long session", "Too brief to learn", "Only for beginners"], 
+    answer: 0 
+  },
+  { 
+    q: "Q10) Reflection after learning is:", 
+    options: ["Not useful", "Essential for deep learning", "A waste of time", "Only for advanced learners"], 
+    answer:  0
+  },
+  { 
+    q: "Q11) The Pomodoro Technique involves:", 
+    options: ["Studying all night", "25-minute focused sessions with breaks", "Only group study", "No breaks allowed"], 
+    answer: 1 
+  },
+  { 
+    q: "Q12) Interleaving practice means:", 
+    options: ["Studying one topic deeply", "Mixing different subjects/topics", "Only practicing easy problems", "Avoiding difficult topics"], 
+    answer: 1 
+  }
+];
+  
+    const MODULES = [
+  {
+    title: "Module 1",
+    video: "body1.mp4",
+    quiz:[
+  {
+    q: "Q1) What is the definition of a disease?",
+    options: ["A condition that prevents the body or mind from working normally", "A type of medicine that cures infections", "A healthy state of the body", "A nutritional supplement"],
+    answer: 0
+  },
+  {
+    q: "Q2) What do diseases cause in people?",
+    options: ["Happiness and joy", "Misery, fear and pain", "Increased energy", "Better sleep"],
+    answer: 1
+  },
+  {
+    q: "Q3) Diseases that spread from one person to another are called:",
+    options: ["Genetic diseases", "Infectious or communicable diseases", "Deficiency diseases", "Chronic diseases"],
+    answer: 1
+  },
+  {
+    q: "Q4) What are the main causes of communicable diseases?",
+    options: ["Poor diet", "Lack of exercise", "Tiny living organisms called germs", "Genetic mutations"],
+    answer: 2
+  },
+  {
+    q: "Q5) Germs are mostly either:",
+    options: ["Fungi or algae", "Bacteria or viruses", "Plants or animals", "Minerals or vitamins"],
+    answer: 1
+  },
+  {
+    q: "Q6) Which of these is an example of a parasite?",
+    options: ["Amoeba", "Penicillin", "Vitamin C", "Oxygen"],
+    answer: 0
+  },
+  {
+    q: "Q7) How many bacteria can fit on the head of a pin?",
+    options: ["One hundred", "One thousand", "One million", "One billion"],
+    answer: 2
+  },
+  {
+    q: "Q8) Where are bacteria NOT found?",
+    options: ["In intestines of people", "In soil and water", "In the air", "Nowhere - they are found everywhere"],
+    answer: 3
+  },
+  {
+    q: "Q9) Bacteria reproduce through:",
+    options: ["Binary fission", "Budding", "Spore formation", "Sexual reproduction"],
+    answer: 0
+  },
+  {
+    q: "Q10) How quickly can a single bacterium divide into two?",
+    options: ["Within 20 minutes", "After 24 hours", "Once per week", "Only once in their lifetime"],
+    answer: 0
+  },
+  {
+    q: "Q11) Bacteria reproduce best in what type of environment?",
+    options: ["Cold and dry", "Warm and moist", "Hot and dry", "Freezing and wet"],
+    answer: 1
+  },
+  {
+    q: "Q12) Which disease is caused by harmful bacteria?",
+    options: ["Diphtheria", "Common cold", "Influenza", "Measles"],
+    answer: 0
+  },
+  {
+    q: "Q13) How do harmful bacteria cause disease?",
+    options: ["By producing poisons called toxins", "By stealing nutrients", "By blocking blood flow", "By changing body temperature"],
+    answer: 0
+  },
+  {
+    q: "Q14) Which is an example of harmless bacteria?",
+    options: ["Bacteria that cause tetanus", "Bacteria that sour milk", "Bacteria that cause food poisoning", "Bacteria that cause diphtheria"],
+    answer: 1
+  },
+  {
+    q: "Q15) What do decomposer bacteria do?",
+    options: ["Cause diseases", "Decompose dead animals and plants", "Make people sick", "Produce antibiotics"],
+    answer: 1
+  },
+  {
+    q: "Q16) What can be extracted from some bacteria?",
+    options: ["Viruses", "Antibiotics", "Toxins", "Parasites"],
+    answer: 1
+  },
+  {
+    q: "Q17) What problem has arisen from antibiotic misuse?",
+    options: ["Viruses have become smaller", "Bacteria have become resistant", "All diseases are now curable", "Antibiotics work faster"],
+    answer: 1
+  },
+  {
+    q: "Q18) How do viruses compare in size to bacteria?",
+    options: ["They are larger", "They are the same size", "They are much smaller", "Their size varies daily"],
+    answer: 2
+  },
+  {
+    q: "Q19) How many viruses could fit inside one bacterium?",
+    options: ["One or two", "About ten", "An enormous number", "None - viruses are larger"],
+    answer: 2
+  },
+  {
+    q: "Q20) Why can't viruses be seen with an ordinary microscope?",
+    options: ["They are transparent", "They are too small", "They move too fast", "They don't exist"],
+    answer: 1
+  },
+  {
+    q: "Q21) How do viruses replicate compared to bacteria?",
+    options: ["They replicate more slowly", "They replicate at the same rate", "They replicate very rapidly", "They don't replicate at all"],
+    answer: 2
+  },
+  {
+    q: "Q22) Where must viruses replicate?",
+    options: ["In soil", "In water", "Inside living cells", "In the air"],
+    answer: 2
+  },
+  {
+    q: "Q23) What is the first step in viral infection?",
+    options: ["They attach to a living cell", "They produce toxins", "They divide in half", "They die immediately"],
+    answer: 0
+  },
+  {
+    q: "Q24) What happens after viruses form inside a cell?",
+    options: ["The cell becomes stronger", "The cell eventually bursts", "The cell reproduces faster", "The cell becomes a virus"],
+    answer: 1
+  },
+  {
+    q: "Q25) What is released when an infected cell bursts?",
+    options: ["Nutrients", "New viruses", "Antibodies", "White blood cells"],
+    answer: 1
+  },
+  {
+    q: "Q26) What can the newly released viruses do?",
+    options: ["Infect other cells", "Turn into bacteria", "Become harmless", "Produce antibiotics"],
+    answer: 0
+  },
+  {
+    q: "Q27) According to the text, why do diseases continue to spread worldwide?",
+    options: ["Because there are too many doctors", "Because people don't know what causes them or how they spread", "Because medicines are too effective", "Because people are too healthy"],
+    answer: 1
+  },
+  {
+    q: "Q28) What is the main reason millions suffer from preventable diseases?",
+    options: ["Lack of medical schools", "Lack of knowledge about causes and prevention", "Too many hospitals", "Too many health workers"],
+    answer: 1
+  },
+  {
+    q: "Q29) Which of these is NOT mentioned as a parasite?",
+    options: ["Guardian", "Amoeba", "Anchylostoma", "Penicillin"],
+    answer: 3
+  },
+  {
+    q: "Q30) Where are bacteria found in the human body?",
+    options: ["Only in the stomach", "Only in the blood", "In intestines, lungs, mouth and nose", "Only on the skin"],
+    answer: 2
+  },
+  {
+    q: "Q31) Bacteria are found in animal:",
+    options: ["Hair only", "Excreta", "Bones only", "Teeth only"],
+    answer: 1
+  },
+  {
+    q: "Q32) The text says no place is free of:",
+    options: ["Viruses only", "Bacteria", "Parasites only", "Fungi only"],
+    answer: 1
+  },
+  {
+    q: "Q33) Bacterial reproduction is described as:",
+    options: ["Sexual reproduction", "Asexual by binary fission", "By spore formation only", "Doesn't happen"],
+    answer: 1
+  },
+  {
+    q: "Q34) What makes bacterial reproduction rate 'very rapid'?",
+    options: ["They divide slowly", "They divide within 20 minutes", "They divide once per year", "They never divide"],
+    answer: 1
+  },
+  {
+    q: "Q35) Tetanus is caused by:",
+    options: ["A virus", "Harmful bacteria", "A parasite", "Fungi"],
+    answer: 1
+  },
+  {
+    q: "Q36) Food poisoning can be caused by:",
+    options: ["Some forms of bacteria", "Viruses only", "Parasites only", "All bacteria"],
+    answer: 0
+  },
+  {
+    q: "Q37) Bacteria that sour milk are:",
+    options: ["Always harmful", "Harmless", "Deadly", "Non-existent"],
+    answer: 1
+  },
+  {
+    q: "Q38) What has caused antibiotic resistance?",
+    options: ["Proper use of medicines", "Misuse of antibiotics", "Not using any medicines", "Using herbal remedies"],
+    answer: 1
+  },
+  {
+    q: "Q39) Viruses are described as:",
+    options: ["Large organisms", "Infectious agents", "Type of bacteria", "Helpful organisms"],
+    answer: 1
+  },
+  {
+    q: "Q40) Viruses cannot be:",
+    options: ["Seen with ordinary microscope", "Harmful", "Infectious", "Found anywhere"],
+    answer: 0
+  },
+  {
+    q: "Q41) How are viruses cultured compared to bacteria?",
+    options: ["They can be grown easily like bacteria", "They cannot be cultured like bacteria", "They grow faster than bacteria", "They don't need special conditions"],
+    answer: 1
+  },
+  {
+    q: "Q42) What happens after viruses attach to a living cell?",
+    options: ["They die", "They form new viruses inside", "They leave the body", "They become bacteria"],
+    answer: 1
+  },
+  {
+    q: "Q43) When the cell bursts, what is released?",
+    options: ["New viruses", "New bacteria", "Antibodies", "Red blood cells"],
+    answer: 0
+  },
+  {
+    q: "Q44) The newly released viruses can:",
+    options: ["Infect other cells", "Become antibiotics", "Cure diseases", "Stop infections"],
+    answer: 0
+  },
+  {
+    q: "Q45) What is the main impact of diseases mentioned in the text?",
+    options: ["They make people stronger", "They kill or weaken people", "They improve mental health", "They increase intelligence"],
+    answer: 1
+  },
+  {
+    q: "Q46) Worldwide, millions suffer from diseases that could be:",
+    options: ["Made worse", "Prevented or cured", "Ignored", "Celebrated"],
+    answer: 1
+  },
+  {
+    q: "Q47) The text mentions that people don't know:",
+    options: ["How to celebrate", "What causes diseases and how they spread", "How to cook food", "How to exercise"],
+    answer: 1
+  },
+  {
+    q: "Q48) Communicable diseases are mainly caused by:",
+    options: ["Large animals", "Tiny living organisms", "Bad weather", "Poor clothing"],
+    answer: 1
+  },
+  {
+    q: "Q49) Germs are mostly:",
+    options: ["Bacteria or viruses", "Fungi or algae", "Plants or animals", "Minerals or rocks"],
+    answer: 0
+  },
+  {
+    q: "Q50) Parasites mentioned include:",
+    options: ["Guardian, amoeba, anchylostoma and ascaris", "Bacteria and viruses", "Fungi and algae", "Plants and animals"],
+    answer: 0
+  },
+  {
+    q: "Q51) Bacteria are described as:",
+    options: ["Very small living organisms", "Very large organisms", "Non-living particles", "Plants"],
+    answer: 0
+  },
+  {
+    q: "Q52) One million bacteria can fit:",
+    options: ["In a swimming pool", "On the head of a pin", "In a car", "In a house"],
+    answer: 1
+  },
+  {
+    q: "Q53) Bacteria are found in:",
+    options: ["Only sick people", "Only in hospitals", "Dust, soil, water, and air", "Only in laboratories"],
+    answer: 2
+  },
+  {
+    q: "Q54) The text says about bacteria: 'no place is free of them' meaning:",
+    options: ["They are everywhere", "They are only in dirty places", "They are only in hospitals", "They are only in animals"],
+    answer: 0
+  },
+  {
+    q: "Q55) Bacteria reproduce rapidly especially in:",
+    options: ["Cold and dry environments", "Warm and moist environments", "Hot and dry environments", "Freezing environments"],
+    answer: 1
+  },
+  {
+    q: "Q56) Binary fission is:",
+    options: ["Sexual reproduction", "Asexual reproduction", "Plant growth", "Animal behavior"],
+    answer: 1
+  },
+  {
+    q: "Q57) A single bacterium can divide into two within:",
+    options: ["20 minutes", "20 hours", "20 days", "20 weeks"],
+    answer: 0
+  },
+  {
+    q: "Q58) The reproduction rate of bacteria is described as:",
+    options: ["Very slow", "Very rapid", "Moderate", "Non-existent"],
+    answer: 1
+  },
+  {
+    q: "Q59) Some bacteria are harmful because they:",
+    options: ["Produce poisons called toxins", "Produce vitamins", "Produce oxygen", "Produce food"],
+    answer: 0
+  },
+  {
+    q: "Q60) Examples of diseases caused by harmful bacteria include:",
+    options: ["Diphtheria, tetanus and food poisoning", "Common cold and flu", "Headaches and back pain", "Broken bones"],
+    answer: 0
+  },
+  {
+    q: "Q61) Harmless bacteria include those that:",
+    options: ["Cause diseases", "Sour milk and decompose dead matter", "Make people sick", "Cause infections"],
+    answer: 1
+  },
+  {
+    q: "Q62) Decomposer bacteria break down:",
+    options: ["Living animals", "Dead animals and plant residues", "Rocks and minerals", "Water and air"],
+    answer: 1
+  },
+  {
+    q: "Q63) Antibiotics can be extracted from:",
+    options: ["Viruses", "Some bacteria", "Parasites", "All germs"],
+    answer: 1
+  },
+  {
+    q: "Q64) Some diseases have become resistant to antibiotics due to:",
+    options: ["Proper use", "Misuse of medicines", "Not using them", "Using too little"],
+    answer: 1
+  },
+  {
+    q: "Q65) Viruses are much smaller than:",
+    options: ["Dust particles", "Bacteria", "Water molecules", "Air particles"],
+    answer: 1
+  },
+  {
+    q: "Q66) An enormous number of viruses could fit:",
+    options: ["On a pin head", "In one bacterium", "In a hospital", "In a city"],
+    answer: 1
+  },
+  {
+    q: "Q67) Viruses cannot be seen with:",
+    options: ["An electron microscope", "An ordinary microscope", "A telescope", "Glasses"],
+    answer: 1
+  },
+  {
+    q: "Q68) Viruses cannot be cultured:",
+    options: ["In laboratories", "Like bacteria", "At all", "In animals"],
+    answer: 1
+  },
+  {
+    q: "Q69) Like bacteria, viruses replicate:",
+    options: ["Very slowly", "Very rapidly", "Only sometimes", "Never"],
+    answer: 1
+  },
+  {
+    q: "Q70) Viruses attach themselves to:",
+    options: ["A living cell", "Dead tissue", "Rocks", "Water"],
+    answer: 0
+  },
+  {
+    q: "Q71) New viruses are formed:",
+    options: ["Outside the body", "Inside the cell", "In the air", "In soil"],
+    answer: 1
+  },
+  {
+    q: "Q72) The cell eventually bursts, releasing:",
+    options: ["New viruses", "New bacteria", "Antibodies", "White blood cells"],
+    answer: 0
+  },
+  {
+    q: "Q73) The released viruses can then:",
+    options: ["Infect other cells", "Die immediately", "Become harmless", "Turn into medicine"],
+    answer: 0
+  },
+  {
+    q: "Q74) What is the primary characteristic of bacteria mentioned?",
+    options: ["They are very small living organisms", "They are large plants", "They are non-living", "They are visible to naked eye"],
+    answer: 0
+  },
+  {
+    q: "Q75) Where exactly are bacteria found in people?",
+    options: ["Only in blood", "Intestines, lungs, mouth and noses", "Only on skin", "Only in bones"],
+    answer: 1
+  },
+  {
+    q: "Q76) Bacteria are found in animals and their:",
+    options: ["Hair", "Excreta", "Food", "Homes"],
+    answer: 1
+  },
+  {
+    q: "Q77) The text emphasizes that bacteria are found:",
+    options: ["Only in dirty places", "Nowhere is free of them", "Only in hospitals", "Only in sick people"],
+    answer: 1
+  },
+  {
+    q: "Q78) Bacterial reproduction is especially rapid in:",
+    options: ["Any environment", "Warm and moist environment", "Cold environment", "Dry environment"],
+    answer: 1
+  },
+  {
+    q: "Q79) Bacteria reproduce asexually by:",
+    options: ["Binary fission", "Budding", "Spores", "Seeds"],
+    answer: 0
+  },
+  {
+    q: "Q80) The rapid division time of bacteria is:",
+    options: ["20 minutes", "20 hours", "2 hours", "2 days"],
+    answer: 0
+  },
+  {
+    q: "Q81) Harmful bacteria cause disease by producing:",
+    options: ["Poisons called toxins", "Vitamins", "Antibiotics", "Food"],
+    answer: 0
+  },
+  {
+    q: "Q82) Which disease is NOT mentioned as caused by bacteria?",
+    options: ["Diphtheria", "Tetanus", "Food poisoning", "Common cold"],
+    answer: 3
+  },
+  {
+    q: "Q83) Harmless bacteria include those that:",
+    options: ["Cause souring of milk", "Cause diseases", "Make people sick", "Cause infections"],
+    answer: 0
+  },
+  {
+    q: "Q84) Decomposer bacteria break down:",
+    options: ["Living plants", "Dead animals and plants", "Rocks", "Water"],
+    answer: 1
+  },
+  {
+    q: "Q85) What medical product can be extracted from bacteria?",
+    options: ["Viruses", "Antibiotics", "Toxins", "Parasites"],
+    answer: 1
+  },
+  {
+    q: "Q86) Antibiotic resistance has developed due to:",
+    options: ["Proper use", "Misuse of antibiotics", "Not using antibiotics", "Using natural remedies"],
+    answer: 1
+  },
+  {
+    q: "Q87) How do viruses compare to bacteria in size?",
+    options: ["They are larger", "They are same size", "They are much smaller", "Size varies"],
+    answer: 2
+  },
+  {
+    q: "Q88) The number of viruses that can fit in one bacterium is:",
+    options: ["Few", "An enormous number", "Exactly 100", "None"],
+    answer: 1
+  },
+  {
+    q: "Q89) Why can't ordinary microscopes see viruses?",
+    options: ["They are too small", "They are invisible", "They don't exist", "Microscopes are broken"],
+    answer: 0
+  },
+  {
+    q: "Q90) How do viruses replicate compared to bacteria?",
+    options: ["They cannot be cultured like bacteria", "They grow faster in labs", "They are easier to culture", "They don't replicate"],
+    answer: 0
+  },
+  {
+    q: "Q91) What is similar between viruses and bacteria?",
+    options: ["They replicate very rapidly", "They are the same size", "They can be seen with ordinary microscope", "They are both harmless"],
+    answer: 0
+  },
+  {
+    q: "Q92) The first step in viral infection is:",
+    options: ["Attach to living cell", "Produce toxins", "Divide in half", "Die"],
+    answer: 0
+  },
+  {
+    q: "Q93) Where are new viruses formed?",
+    options: ["Outside the body", "Inside the cell", "In the air", "In soil"],
+    answer: 1
+  },
+  {
+    q: "Q94) What happens to the cell after viruses form inside?",
+    options: ["It becomes stronger", "It eventually bursts", "It reproduces", "It dies slowly"],
+    answer: 1
+  },
+  {
+    q: "Q95) What is released when the cell bursts?",
+    options: ["New viruses", "New bacteria", "Nutrients", "Water"],
+    answer: 0
+  },
+  {
+    q: "Q96) These released viruses can then:",
+    options: ["Infect other cells", "Become medicine", "Die immediately", "Turn into bacteria"],
+    answer: 0
+  },
+  {
+    q: "Q97) According to the text, what is a major reason diseases spread?",
+    options: ["People know too much", "People don't know causes and prevention", "There are too many doctors", "Medicines work too well"],
+    answer: 1
+  },
+  {
+    q: "Q98) What do people lack knowledge about according to the text?",
+    options: ["What causes diseases and how to prevent them", "How to cook food", "How to build houses", "How to read books"],
+    answer: 0
+  },
+  {
+    q: "Q99) The main agents causing communicable diseases are:",
+    options: ["Large animals", "Tiny living organisms", "Bad food", "Dirty water"],
+    answer: 1
+  },
+  {
+    q: "Q100) Parasites that cause illness include:",
+    options: ["Guardian, amoeba, anchylostoma and ascaris", "Bacteria and viruses", "Fungi only", "Plants only"],
+    answer: 0
+  }
+  
+]
+
+  },
+  {
+    title: "Module 2",
+    video: "body2.mp4",
+    quiz: [
+  {
+    q: "Q1) How do STDs primarily enter the body?",
+    options: ["Through the mouth", "Through the sexual organs", "Through the skin", "Through the lungs"],
+    answer: 1
+  },
+  {
+    q: "Q2) What are the three common STDs mentioned?",
+    options: ["HIV, Hepatitis, Herpes", "Gonorrhea, Syphilis, AIDS", "Chlamydia, HPV, Genital warts", "Malaria, Typhoid, Cholera"],
+    answer: 1
+  },
+  {
+    q: "Q3) How are these STDs primarily spread?",
+    options: ["Through contaminated water", "Through sexual contact", "Through air droplets", "Through food"],
+    answer: 1
+  },
+  {
+    q: "Q4) Which STD is described as the newest sexually transmitted disease?",
+    options: ["Gonorrhea", "Syphilis", "AIDS", "Herpes"],
+    answer: 2
+  },
+  {
+    q: "Q5) What causes gonorrhea?",
+    options: ["A virus", "A bacterium called Neisseria gonorrhoeae", "A fungus", "A parasite"],
+    answer: 1
+  },
+  {
+    q: "Q6) How is gonorrhea transmitted?",
+    options: ["Through contaminated food", "Through sexual contact", "Through air", "Through water"],
+    answer: 1
+  },
+  {
+    q: "Q7) Where does gonorrhea grow and multiply in women?",
+    options: ["In the stomach", "In the reproductive tract including cervix, uterus and fallopian tubes", "In the liver", "In the brain"],
+    answer: 1
+  },
+  {
+    q: "Q8) Where does gonorrhea grow in both men and women?",
+    options: ["In the urethra", "In the lungs", "In the blood", "In the bones"],
+    answer: 0
+  },
+  {
+    q: "Q9) What is a common early symptom of gonorrhea?",
+    options: ["Hair loss", "Burning, irritating feeling when passing urine", "Blurred vision", "Coughing blood"],
+    answer: 1
+  },
+  {
+    q: "Q10) How soon after sexual contact can gonorrhea symptoms appear?",
+    options: ["Immediately", "2-10 days", "1 month", "6 months"],
+    answer: 1
+  },
+  {
+    q: "Q11) What type of discharge is associated with gonorrhea?",
+    options: ["Clear watery discharge", "Thick yellowish pus discharge", "Bloody discharge", "No discharge"],
+    answer: 1
+  },
+  {
+    q: "Q12) What symptom do women with gonorrhea experience in the lower abdomen?",
+    options: ["No pain", "Sharp pain", "Lower abdominal pain", "Back pain only"],
+    answer: 2
+  },
+  {
+    q: "Q13) What can happen to a newborn baby if the mother has gonorrhea?",
+    options: ["The baby will be immune", "The baby may have pus and sticky discharge", "The baby will be healthier", "The baby will have no effects"],
+    answer: 1
+  },
+  {
+    q: "Q14) What complication can occur in men from gonorrhea?",
+    options: ["Blockage of the urethra from scarring", "Improved urination", "Stronger immune system", "Better fertility"],
+    answer: 0
+  },
+  {
+    q: "Q15) What can gonorrhea cause in women?",
+    options: ["Improved fertility", "Sterility", "Stronger bones", "Better eyesight"],
+    answer: 1
+  },
+  {
+    q: "Q16) What dangerous condition can blocked fallopian tubes cause?",
+    options: ["Normal pregnancy", "Ectopic pregnancy", "Twin pregnancy", "No pregnancy possible"],
+    answer: 1
+  },
+  {
+    q: "Q17) Why is an ectopic pregnancy dangerous?",
+    options: ["It causes weight loss", "The tube may burst causing severe internal bleeding", "It makes delivery easier", "It prevents future pregnancies"],
+    answer: 1
+  },
+  {
+    q: "Q18) What can happen if gonorrhea germs spread through the blood?",
+    options: ["Improved health", "Inflammation of joints or other organs", "Stronger bones", "Better skin"],
+    answer: 1
+  },
+  {
+    q: "Q19) How can gonorrhea be prevented?",
+    options: ["By eating healthy food", "By keeping faithful to a partner", "By exercising regularly", "By drinking lots of water"],
+    answer: 1
+  },
+  {
+    q: "Q20) What should infected people do during treatment?",
+    options: ["Have more sex", "Abstain from sex", "Change partners", "Ignore the symptoms"],
+    answer: 1
+  },
+  {
+    q: "Q21) How is gonorrhea treated?",
+    options: ["With aspirin", "With penicillin injections", "With vitamin C", "With surgery"],
+    answer: 1
+  },
+  {
+    q: "Q22) What causes syphilis?",
+    options: ["A virus", "A slender cork screw-shaped spirochete called Treponema pallidum", "A fungus", "A parasite"],
+    answer: 1
+  },
+  {
+    q: "Q23) How is syphilis transmitted?",
+    options: ["Through contaminated water", "Through sexual contact", "Through air", "Through food"],
+    answer: 1
+  },
+  {
+    q: "Q24) Where does syphilis primarily act in the body?",
+    options: ["In the digestive system", "In the reproductive organs", "In the nervous system", "In the respiratory system"],
+    answer: 1
+  },
+  {
+    q: "Q25) What appears in the primary stage of syphilis?",
+    options: ["A painful sore", "A chance which is a painless sore", "A rash all over the body", "Fever and chills"],
+    answer: 1
+  },
+  {
+    q: "Q26) How long does the primary stage of syphilis last?",
+    options: ["1 week", "2-3 weeks", "6 months", "1 year"],
+    answer: 1
+  },
+  {
+    q: "Q27) What happens to the chancre in syphilis?",
+    options: ["It stays forever", "It disappears", "It becomes cancerous", "It spreads to other people"],
+    answer: 1
+  },
+  {
+    q: "Q28) After the chancre disappears, what stage comes next?",
+    options: ["Tertiary stage", "Secondary stage", "Final stage", "Recovery stage"],
+    answer: 1
+  },
+  {
+    q: "Q29) When does the secondary stage of syphilis appear?",
+    options: ["Immediately", "4-6 weeks after primary infection", "1 year later", "5 years later"],
+    answer: 1
+  },
+  {
+    q: "Q30) What skin symptom appears in secondary syphilis?",
+    options: ["Itchy rash", "Generalized non-itchy skin rash", "Blisters", "No skin symptoms"],
+    answer: 1
+  },
+  {
+    q: "Q31) Where do ulcers appear in secondary syphilis?",
+    options: ["On the feet", "In the mouth", "On the back", "On the hands"],
+    answer: 1
+  },
+  {
+    q: "Q32) What glands swell in secondary syphilis?",
+    options: ["Salivary glands", "Lymph glands", "Sweat glands", "Thyroid glands"],
+    answer: 1
+  },
+  {
+    q: "Q33) What other symptoms occur in secondary syphilis?",
+    options: ["Headaches, rash, reddish patches on genitals", "Improved vision", "Increased energy", "Better appetite"],
+    answer: 0
+  },
+  {
+    q: "Q34) When does the tertiary stage of syphilis occur?",
+    options: ["Immediately after infection", "After 2-10 years or more after secondary stage", "After 1 month", "After 50 years"],
+    answer: 1
+  },
+  {
+    q: "Q35) What does tertiary syphilis destroy?",
+    options: ["Only the skin", "Skin, mucous, cartilage, bones, blood vessels, and nervous system", "Only the digestive system", "Only the respiratory system"],
+    answer: 1
+  },
+  {
+    q: "Q36) What parts of the nervous system can tertiary syphilis affect?",
+    options: ["Only the brain", "Brain, spinal cord, and eyes", "Only the spinal cord", "Only peripheral nerves"],
+    answer: 1
+  },
+  {
+    q: "Q37) How can untreated syphilis affect pregnant women?",
+    options: ["Makes pregnancy easier", "Causes repeated abortions and premature babies", "Prevents pregnancy", "Makes babies healthier"],
+    answer: 1
+  },
+  {
+    q: "Q38) What can babies born to mothers with syphilis have?",
+    options: ["No problems", "Signs of congenital syphilis", "Better immunity", "Stronger bones"],
+    answer: 1
+  },
+  {
+    q: "Q39) How can syphilis be prevented?",
+    options: ["By keeping faithful to one partner", "By eating healthy", "By exercising", "By sleeping well"],
+    answer: 0
+  },
+  {
+    q: "Q40) What should be done when syphilis infection is seen?",
+    options: ["Ignore it", "Get early treatment", "Wait for symptoms to worsen", "Treat with home remedies"],
+    answer: 1
+  },
+  {
+    q: "Q41) Why should partners be treated at the same time for syphilis?",
+    options: ["To save money", "To prevent reinfection", "To make treatment faster", "Because the doctor says so"],
+    answer: 1
+  },
+  {
+    q: "Q42) What should infected people do during syphilis treatment?",
+    options: ["Have more sex", "Abstain from sex", "Change partners frequently", "Have unprotected sex"],
+    answer: 1
+  },
+  {
+    q: "Q43) What should not be shared during injection of medicines?",
+    options: ["Food", "Needles or syringes", "Clothes", "Books"],
+    answer: 1
+  },
+  {
+    q: "Q44) What is prohibited in Islam according to the text?",
+    options: ["Eating meat", "Fornication (Zina)", "Drinking water", "Sleeping"],
+    answer: 1
+  },
+  {
+    q: "Q45) What should married couples avoid according to the text?",
+    options: ["Eating together", "Sexual relations outside marriage", "Talking to each other", "Working together"],
+    answer: 1
+  },
+  {
+    q: "Q46) What should be done with cuts and wounds?",
+    options: ["Leave them open", "Cover them with waterproof plasters or clean cloth", "Wash them with dirty water", "Ignore them"],
+    answer: 1
+  },
+  {
+    q: "Q47) How is syphilis treated?",
+    options: ["With aspirin", "With penicillin injections", "With vitamin C", "With surgery"],
+    answer: 1
+  },
+  {
+    q: "Q48) What can early diagnosis and correct drugs lead to for HIV patients?",
+    options: ["Immediate cure", "An almost normal lifespan", "Worse health", "No change"],
+    answer: 1
+  },
+  {
+    q: "Q49) How is AIDS described?",
+    options: ["A mild disease", "A deadly new disease in the STD category", "A common cold", "A skin infection"],
+    answer: 1
+  },
+  {
+    q: "Q50) What does AIDS stand for?",
+    options: ["Autoimmune Deficiency Syndrome", "Acquired Immune Deficiency Syndrome", "Advanced Infection Disease System", "Acquired Infection Defense System"],
+    answer: 1
+  },
+  {
+    q: "Q51) What is a syndrome?",
+    options: ["A single disease", "A group of diseases", "A type of medicine", "A health condition"],
+    answer: 1
+  },
+  {
+    q: "Q52) What causes AIDS?",
+    options: ["Bacteria", "HIV", "Fungi", "Parasites"],
+    answer: 1
+  },
+  {
+    q: "Q53) What does HIV stand for?",
+    options: ["Human Infectious Virus", "Human Immunodeficiency Virus", "Human Inflammation Virus", "Human Immunity Vaccine"],
+    answer: 1
+  },
+  {
+    q: "Q54) Where did HIV initially originate according to the text?",
+    options: ["From contaminated water", "From eating 'bush meat' infected with SIV", "From mosquito bites", "From air pollution"],
+    answer: 1
+  },
+  {
+    q: "Q55) What does SIV stand for?",
+    options: ["Simian Infectious Virus", "Simian Immunodeficiency Virus", "Simian Inflammation Virus", "Simian Immunity Vaccine"],
+    answer: 1
+  },
+  {
+    q: "Q56) Where is SIV found?",
+    options: ["In humans", "In chimpanzees", "In dogs", "In birds"],
+    answer: 1
+  },
+  {
+    q: "Q57) How can HIV be transmitted?",
+    options: ["Through shaking hands", "Through sexual intercourse", "Through hugging", "Through sharing food"],
+    answer: 1
+  },
+  {
+    q: "Q58) How can HIV be transmitted through blood?",
+    options: ["Through infected blood during transfusion", "Through touching blood", "Through seeing blood", "Through donating blood"],
+    answer: 0
+  },
+  {
+    q: "Q59) What can sharing needles or syringes lead to?",
+    options: ["HIV transmission", "Better health", "Stronger immunity", "No risk"],
+    answer: 0
+  },
+  {
+    q: "Q60) How can an infected mother pass HIV to her fetus?",
+    options: ["Through the placenta", "Through the air", "Through food", "Through touch"],
+    answer: 0
+  },
+  {
+    q: "Q61) How can an infected mother pass HIV to her baby?",
+    options: ["Through breastfeeding", "Through holding the baby", "Through talking to the baby", "Through bathing the baby"],
+    answer: 0
+  },
+  {
+    q: "Q62) What does HIV destroy in the body?",
+    options: ["The digestive system", "The immune cells", "The nervous system", "The skeletal system"],
+    answer: 1
+  },
+  {
+    q: "Q63) What is a common symptom of AIDS?",
+    options: ["Weight gain", "Loss of weight", "Increased appetite", "More energy"],
+    answer: 1
+  },
+  {
+    q: "Q64) What do AIDS patients experience?",
+    options: ["Fatigue", "High energy", "Good sleep", "No tiredness"],
+    answer: 0
+  },
+  {
+    q: "Q65) What happens to appetite in AIDS patients?",
+    options: ["It increases", "Loss of appetite", "No change", "It becomes better"],
+    answer: 1
+  },
+  {
+    q: "Q66) What digestive symptom occurs in AIDS?",
+    options: ["Constipation", "Diarrhea", "Normal digestion", "Improved digestion"],
+    answer: 1
+  },
+  {
+    q: "Q67) What other digestive symptom occurs?",
+    options: ["Vomiting", "Good appetite", "Healthy stomach", "No problems"],
+    answer: 0
+  },
+  {
+    q: "Q68) What indicates low immune system in AIDS?",
+    options: ["High immune system indication", "Low immune system indication", "Normal immunity", "Strong immunity"],
+    answer: 1
+  },
+  {
+    q: "Q69) What cancer can develop in AIDS patients?",
+    options: ["Lung cancer", "Cancer of blood vessels", "Skin cancer", "Breast cancer"],
+    answer: 1
+  },
+  {
+    q: "Q70) What appears on the skin with this cancer?",
+    options: ["Red spots", "Purple lesions", "White patches", "Brown marks"],
+    answer: 1
+  },
+  {
+    q: "Q71) What respiratory symptom occurs in AIDS?",
+    options: ["Constant dry coughs", "No cough", "Productive cough", "Occasional cough"],
+    answer: 0
+  },
+  {
+    q: "Q72) What breathing problem occurs?",
+    options: ["Shortness of breath", "Easy breathing", "No breathing problems", "Improved lung capacity"],
+    answer: 0
+  },
+  {
+    q: "Q73) What skin problem occurs?",
+    options: ["Skin rashes", "Perfect skin", "No skin problems", "Smooth skin"],
+    answer: 0
+  },
+  {
+    q: "Q74) What happens at night with AIDS patients?",
+    options: ["No sweating", "Extensive night sweats", "Normal sweating", "Less sweating"],
+    answer: 1
+  },
+  {
+    q: "Q75) What factor aids the spread of HIV in a country?",
+    options: ["High awareness", "Low awareness", "Good education", "Adequate healthcare"],
+    answer: 1
+  },
+  {
+    q: "Q76) What psychological factor aids spread?",
+    options: ["Acceptance", "Denial", "Understanding", "Cooperation"],
+    answer: 1
+  },
+  {
+    q: "Q77) What information problem aids spread?",
+    options: ["Too much information", "Lack of information", "Correct information", "Useful information"],
+    answer: 1
+  },
+  {
+    q: "Q78) What population movement aids spread?",
+    options: ["Stable population", "Migration and population mobility", "No movement", "Local travel only"],
+    answer: 1
+  },
+  {
+    q: "Q79) What social condition aids spread?",
+    options: ["Peace", "Conflict and displacement", "Stability", "Good governance"],
+    answer: 1
+  },
+  {
+    q: "Q80) What healthcare problem aids spread?",
+    options: ["Excellent healthcare centers", "Inadequate healthcare centers", "Too many hospitals", "Good medical services"],
+    answer: 1
+  },
+  {
+    q: "Q81) Which STD is caused by a bacterium?",
+    options: ["AIDS", "Gonorrhea", "HIV", "All STDs"],
+    answer: 1
+  },
+  {
+    q: "Q82) What is the shape of Treponema pallidum?",
+    options: ["Round", "Slender cork screw-shaped", "Square", "Triangular"],
+    answer: 1
+  },
+  {
+    q: "Q83) In which stage of syphilis does a painless sore appear?",
+    options: ["Secondary stage", "Tertiary stage", "Primary stage", "Final stage"],
+    answer: 2
+  },
+  {
+    q: "Q84) How long might the secondary stage of syphilis last before tertiary stage?",
+    options: ["2-10 years or more", "1 week", "1 month", "6 months"],
+    answer: 0
+  },
+  {
+    q: "Q85) What can tertiary syphilis damage?",
+    options: ["Only external organs", "Internal organs like brain and spinal cord", "Only the skin", "Only bones"],
+    answer: 1
+  },
+  {
+    q: "Q86) How can HIV be transmitted from mother to child?",
+    options: ["Through the placenta and breastfeeding", "Through air", "Through touch", "Through food"],
+    answer: 0
+  },
+  {
+    q: "Q87) What is the main treatment for gonorrhea and syphilis?",
+    options: ["Vitamin C", "Penicillin injections", "Surgery", "Herbal medicine"],
+    answer: 1
+  },
+  {
+    q: "Q88) What is recommended for couples where one has an STD?",
+    options: ["Only one partner gets treated", "Both partners get treated at the same time", "No treatment needed", "Separate immediately"],
+    answer: 1
+  },
+  {
+    q: "Q89) What should people do during STD treatment regarding sexual activity?",
+    options: ["Have more sex", "Abstain from sex", "Change partners", "Have unprotected sex"],
+    answer: 1
+  },
+  {
+    q: "Q90) What does HIV specifically attack in the body?",
+    options: ["Red blood cells", "Immune cells", "Nerve cells", "Skin cells"],
+    answer: 1
+  },
+  {
+    q: "Q91) What is the relationship between SIV and HIV?",
+    options: ["They are the same", "SIV is the form of HIV in chimpanzees", "HIV is the animal version", "No relationship"],
+    answer: 1
+  },
+  {
+    q: "Q92) What is a major symptom of AIDS-related cancer?",
+    options: ["Purple lesions on the skin", "Green spots", "Yellow patches", "No skin changes"],
+    answer: 0
+  },
+  {
+    q: "Q93) What type of cough is common in AIDS patients?",
+    options: ["Wet productive cough", "Constant dry cough", "No cough", "Occasional mild cough"],
+    answer: 1
+  },
+  {
+    q: "Q94) What happens to weight in AIDS patients?",
+    options: ["Weight gain", "Loss of weight", "No change", "Variable weight"],
+    answer: 1
+  },
+  {
+    q: "Q95) What is one factor that helps HIV spread in communities?",
+    options: ["Good education", "Low awareness", "Adequate healthcare", "Stable population"],
+    answer: 1
+  },
+  {
+    q: "Q96) What social issue contributes to HIV spread?",
+    options: ["Peace and stability", "Conflict and displacement", "Good governance", "Economic growth"],
+    answer: 1
+  },
+  {
+    q: "Q97) What healthcare issue contributes to HIV spread?",
+    options: ["Too many hospitals", "Inadequate healthcare centers", "Excellent medical services", "Good health education"],
+    answer: 1
+  },
+  {
+    q: "Q98) What can proper treatment achieve for HIV patients?",
+    options: ["Complete cure", "An almost normal lifespan", "Worsening condition", "No benefit"],
+    answer: 1
+  },
+  {
+    q: "Q99) What is the most important prevention method mentioned for STDs?",
+    options: ["Eating healthy", "Being faithful to one partner", "Exercising regularly", "Sleeping well"],
+    answer: 1
+  },
+  {
+    q: "Q100) What religious practice is mentioned for STD prevention?",
+    options: ["Praying five times daily", "Avoiding fornication (Zina)", "Fasting", "Charity"],
+    answer: 1
+  }
+]
+  },
+  {
+    title: "Module 3",
+    video: "body3.mp4",
+    quiz: [
+  {
+    q: "Q1) What is the body's first natural defense against germs?",
+    options: ["The immune system", "The skin", "White blood cells", "Antibodies"],
+    answer: 1
+  },
+  {
+    q: "Q2) What does the skin act as against germs?",
+    options: ["A food source", "A barrier", "A breeding ground", "A weak point"],
+    answer: 1
+  },
+  {
+    q: "Q3) If germs get past the skin, what do they encounter?",
+    options: ["The digestive system", "The immune system", "The nervous system", "The skeletal system"],
+    answer: 1
+  },
+  {
+    q: "Q4) Why is it difficult to have resistance to all common cold viruses?",
+    options: ["There are too many different viruses", "The immune system is weak", "Cold viruses are too strong", "People don't eat well"],
+    answer: 0
+  },
+  {
+    q: "Q5) Why are colds common and recurring illnesses?",
+    options: ["People don't wash hands", "There are many different cold viruses", "No vaccines exist", "Doctors don't treat them"],
+    answer: 1
+  },
+  {
+    q: "Q6) What is another name for immunization?",
+    options: ["Medication", "Vaccination", "Treatment", "Therapy"],
+    answer: 1
+  },
+  {
+    q: "Q7) What does immunization help the body's defenses do?",
+    options: ["Weaken against diseases", "Forget diseases", "Fight against diseases", "Ignore diseases"],
+    answer: 2
+  },
+  {
+    q: "Q8) Immunization protects people from contracting diseases such as:",
+    options: ["Headaches and back pain", "Measles, tuberculosis, diphtheria, and tetanus", "Broken bones", "Eye problems"],
+    answer: 1
+  },
+  {
+    q: "Q9) Who can be vaccinated against these diseases?",
+    options: ["Only adults", "Only elderly people", "Young children", "Only sick people"],
+    answer: 2
+  },
+  {
+    q: "Q10) What is the status of AIDS vaccine development?",
+    options: ["It has been successfully developed", "There has not yet been a breakthrough", "It is widely available", "It works perfectly"],
+    answer: 1
+  },
+  {
+    q: "Q11) Despite extensive research, what is true about AIDS vaccine?",
+    options: ["Many breakthroughs have occurred", "No breakthrough yet", "It is easy to develop", "It is not needed"],
+    answer: 1
+  },
+  {
+    q: "Q12) Immunization is very important for preventing diseases in:",
+    options: ["Adults only", "Elderly only", "Infants particularly", "Teenagers only"],
+    answer: 2
+  },
+  {
+    q: "Q13) Besides immunization, diseases can be controlled through:",
+    options: ["Personal hygiene habits", "Eating more food", "Sleeping less", "Exercising excessively"],
+    answer: 0
+  },
+  {
+    q: "Q14) What public programs help control diseases?",
+    options: ["Sports programs", "Sanitation programs", "Music programs", "Art programs"],
+    answer: 1
+  },
+  {
+    q: "Q15) The body's defense system includes both the skin and the:",
+    options: ["Digestive system", "Immune system", "Respiratory system", "Circulatory system"],
+    answer: 1
+  },
+  {
+    q: "Q16) What prevents germs from entering the body?",
+    options: ["The skin as a barrier", "The stomach acid", "The lungs", "The bones"],
+    answer: 0
+  },
+  {
+    q: "Q17) Vaccination helps the body's natural defenses to:",
+    options: ["Weaken over time", "Fight diseases", "Stop working", "Become lazy"],
+    answer: 1
+  },
+  {
+    q: "Q18) Which disease mentioned does NOT have a successful vaccine yet?",
+    options: ["Measles", "Tuberculosis", "AIDS", "Tetanus"],
+    answer: 2
+  },
+  {
+    q: "Q19) Personal hygiene habits help in:",
+    options: ["Making people tired", "Controlling diseases", "Weakening immunity", "Spreading germs"],
+    answer: 1
+  },
+  {
+    q: "Q20) Public sanitation programs are important for:",
+    options: ["Disease control", "Entertainment", "Sports", "Music events"],
+    answer: 0
+  }
+]
+  },
+  {
+    title: "Module 4",
+    video: "body4.mp4",
+    quiz: [
+  {
+    q: "Q1) What is the definition of a drug?",
+    options: ["Any substance that alters the way the body works", "Only illegal substances", "Only prescription medicines", "Only natural herbs"],
+    answer: 0
+  },
+  {
+    q: "Q2) Drugs can be:",
+    options: ["Only harmful", "Only useful", "Both useful and harmful", "Always safe"],
+    answer: 2
+  },
+  {
+    q: "Q3) Correct use of drugs can:",
+    options: ["Cause diseases", "Cure many diseases and illnesses", "Make people addicted", "Always be dangerous"],
+    answer: 1
+  },
+  {
+    q: "Q4) When are drugs extremely dangerous?",
+    options: ["When used with doctor's advice", "When used without proper medical advice", "When taken with food", "When stored properly"],
+    answer: 1
+  },
+  {
+    q: "Q5) What is drug abuse?",
+    options: ["Using drugs for treating illness", "Using drugs for non-illness-curing reasons", "Following doctor's prescription", "Using herbal medicines"],
+    answer: 1
+  },
+  {
+    q: "Q6) Why do people use drugs improperly?",
+    options: ["They enjoy the effect on their bodies", "They want to get sick", "They are forced to", "It makes them smarter"],
+    answer: 0
+  },
+  {
+    q: "Q7) Which of these is mentioned as a damaging drug?",
+    options: ["Vitamin C", "Tobacco", "Aspirin", "Penicillin"],
+    answer: 1
+  },
+  {
+    q: "Q8) What happens if drugs are taken over a long period?",
+    options: ["The person becomes healthier", "The person can become addicted", "The drugs become harmless", "The body rejects them"],
+    answer: 1
+  },
+  {
+    q: "Q9) How many main categories of drugs are mentioned?",
+    options: ["One", "Two", "Three", "Four"],
+    answer: 1
+  },
+  {
+    q: "Q10) What are the two categories of drugs?",
+    options: ["Legal and illegal drugs", "Laboratory-manufactured and herbal drugs", "Safe and dangerous drugs", "Expensive and cheap drugs"],
+    answer: 1
+  },
+  {
+    q: "Q11) What are antibiotics?",
+    options: ["Chemicals secreted by bacteria or fungi", "Synthetic chemicals", "Plant extracts", "Animal products"],
+    answer: 0
+  },
+  {
+    q: "Q12) Where are antibiotics extracted?",
+    options: ["In kitchens", "In laboratories", "In farms", "In forests"],
+    answer: 1
+  },
+  {
+    q: "Q13) Which is an example of a life-saving drug?",
+    options: ["Tobacco", "Penicillin", "Cocaine", "Alcohol"],
+    answer: 1
+  },
+  {
+    q: "Q14) What do laboratory drugs kill in the human body?",
+    options: ["Vitamins", "Micro-organisms", "Blood cells", "Nerve cells"],
+    answer: 1
+  },
+  {
+    q: "Q15) Sulphonamides are used for:",
+    options: ["Headaches", "Bacterial infections", "Viral infections", "Fungal infections"],
+    answer: 1
+  },
+  {
+    q: "Q16) Aspirin is used for:",
+    options: ["Headaches", "Bacterial infections", "Viral infections", "Fungal infections"],
+    answer: 0
+  },
+  {
+    q: "Q17) What has improved human health worldwide?",
+    options: ["Drugs like retrovirals and vaccines", "Only herbal medicines", "Only illegal drugs", "No drugs have helped"],
+    answer: 0
+  },
+  {
+    q: "Q18) How are most health-improving drugs administered?",
+    options: ["Without any instructions", "With a doctor's prescription", "By guessing the dose", "Through injection only"],
+    answer: 1
+  },
+  {
+    q: "Q19) What is a prescription?",
+    options: ["A drug itself", "Doctor's written instructions for drug use", "A type of drug", "A disease"],
+    answer: 1
+  },
+  {
+    q: "Q20) What does a prescription indicate?",
+    options: ["Only the drug name", "Correct dosage and duration", "The drug color", "The manufacturer"],
+    answer: 1
+  },
+  {
+    q: "Q21) Some drugs are designed to affect the:",
+    options: ["Heart only", "Brain", "Liver only", "Kidneys only"],
+    answer: 1
+  },
+  {
+    q: "Q22) What do sedatives do?",
+    options: ["Speed up brain activity", "Slow down brain activity", "Cause hallucinations", "Kill pain"],
+    answer: 1
+  },
+  {
+    q: "Q23) Sedatives help with:",
+    options: ["Sleep", "Energy", "Hallucinations", "Pain"],
+    answer: 0
+  },
+  {
+    q: "Q24) What do stimulants do?",
+    options: ["Slow down brain action", "Speed up brain action", "Cause sleep", "Kill pain"],
+    answer: 1
+  },
+  {
+    q: "Q25) Who are stimulants prescribed for?",
+    options: ["People with depression", "People with too much energy", "People who sleep too much", "People with no problems"],
+    answer: 0
+  },
+  {
+    q: "Q26) What do hallucinogens cause?",
+    options: ["Sleep", "Hallucinations", "Pain relief", "Energy"],
+    answer: 1
+  },
+  {
+    q: "Q27) What do pain killers suppress?",
+    options: ["Parts of the brain for feeling pain", "Hunger", "Thirst", "Memory"],
+    answer: 0
+  },
+  {
+    q: "Q28) What often happens to these brain-affecting drugs?",
+    options: ["They are always used correctly", "They are often misused", "They are never abused", "They are harmless"],
+    answer: 1
+  },
+  {
+    q: "Q29) Which drugs are hallucinogens?",
+    options: ["Aspirin and penicillin", "Cannabis and cocaine", "Vitamins and minerals", "Herbal teas"],
+    answer: 1
+  },
+  {
+    q: "Q30) What is another name for cannabis?",
+    options: ["Bhang, marijuana, and dagga", "Cocaine and heroin", "Alcohol and tobacco", "Penicillin and aspirin"],
+    answer: 0
+  },
+  {
+    q: "Q31) How is cannabis usually used?",
+    options: ["Injected", "Smoked", "Drunk", "Eaten raw"],
+    answer: 1
+  },
+  {
+    q: "Q32) What may cannabis users have?",
+    options: ["Small eye pupils", "Dilated eye pupils", "No eye changes", "Better vision"],
+    answer: 1
+  },
+  {
+    q: "Q33) Cannabis users may become:",
+    options: ["Energetic", "Lethargic", "Very intelligent", "Very strong"],
+    answer: 1
+  },
+  {
+    q: "Q34) Long-term cannabis use can lead to:",
+    options: ["Better health", "Psychosis", "Improved memory", "Stronger bones"],
+    answer: 1
+  },
+  {
+    q: "Q35) Cocaine is extracted from:",
+    options: ["The cocoa plant", "The cannabis plant", "Opium plant", "Tobacco plant"],
+    answer: 0
+  },
+  {
+    q: "Q36) Cocaine use can lead to:",
+    options: ["Increased appetite", "Loss of appetite", "Better sleep", "Improved health"],
+    answer: 1
+  },
+  {
+    q: "Q37) Prolonged cocaine use can result in:",
+    options: ["Insanity", "Better mental health", "Improved thinking", "Happiness"],
+    answer: 0
+  },
+  {
+    q: "Q38) Mandrax is described as:",
+    options: ["Very addictive", "Harmless", "A vitamin", "A food supplement"],
+    answer: 0
+  },
+  {
+    q: "Q39) How is mandrax taken?",
+    options: ["In tablet form", "By injection", "By smoking", "By drinking"],
+    answer: 0
+  },
+  {
+    q: "Q40) Mandrax affects:",
+    options: ["Only the stomach", "The higher centers of the brain", "Only the liver", "Only the kidneys"],
+    answer: 1
+  },
+  {
+    q: "Q41) Prolonged mandrax use causes:",
+    options: ["Mental retardation", "Improved intelligence", "Better memory", "Happiness"],
+    answer: 0
+  },
+  {
+    q: "Q42) Morphine and heroin are obtained from:",
+    options: ["Cannabis", "Opium", "Cocaine", "Tobacco"],
+    answer: 1
+  },
+  {
+    q: "Q43) Morphine and heroin are:",
+    options: ["Weak pain-killers", "Strong pain-killers", "Stimulants", "Sedatives"],
+    answer: 1
+  },
+  {
+    q: "Q44) What can an overdose of sleeping tablets cause?",
+    options: ["Abnormal behavior", "Better sleep", "Improved health", "Happiness"],
+    answer: 0
+  },
+  {
+    q: "Q45) An overdose of medicines is:",
+    options: ["A safe practice", "A dangerous form of drug abuse", "Recommended by doctors", "Harmless"],
+    answer: 1
+  },
+  {
+    q: "Q46) Overdose can lead to:",
+    options: ["Death", "Better health", "Improved immunity", "Longer life"],
+    answer: 0
+  },
+  {
+    q: "Q47) Herbal medicines are prepared from:",
+    options: ["Flowers, seeds, leaves, roots, and bark", "Chemicals only", "Plastic", "Metals"],
+    answer: 0
+  },
+  {
+    q: "Q48) Who prepares herbal medicines?",
+    options: ["Doctors only", "Herbalists", "Chemists only", "Nurses only"],
+    answer: 1
+  },
+  {
+    q: "Q49) How long has knowledge of herbal medicines been passed down?",
+    options: ["For a few years", "For centuries", "Only recently", "Never passed down"],
+    answer: 1
+  },
+  {
+    q: "Q50) Herbal medicines are considered the 'parents' of:",
+    options: ["Some manufactured drugs", "All illegal drugs", "Only harmful drugs", "No other drugs"],
+    answer: 0
+  },
+  {
+    q: "Q51) How do herbal medicines compare to manufactured drugs?",
+    options: ["They are stronger", "They are in a weaker form", "They are identical", "They are more dangerous"],
+    answer: 1
+  },
+  {
+    q: "Q52) In which religion is alcohol forbidden?",
+    options: ["Christianity", "Islam", "Hinduism", "Buddhism"],
+    answer: 1
+  },
+  {
+    q: "Q53) What is alcoholism?",
+    options: ["Drinking occasionally", "Excessive use of intoxicating drink", "Drinking water", "Drinking juice"],
+    answer: 1
+  },
+  {
+    q: "Q54) Alcoholics often have:",
+    options: ["Good family relationships", "Poor relationships with families", "Perfect work performance", "Excellent health"],
+    answer: 1
+  },
+  {
+    q: "Q55) Alcohol directly damages which organs?",
+    options: ["Heart and lungs", "Brain and liver", "Kidneys and stomach", "Skin and bones"],
+    answer: 1
+  },
+  {
+    q: "Q56) Alcohol may lead to malnutrition and cancer of the:",
+    options: ["Lungs", "Gullet", "Skin", "Bones"],
+    answer: 1
+  },
+  {
+    q: "Q57) Why does alcoholism cause fighting?",
+    options: ["Drunk people reason well", "Drunk people cannot reason well", "Alcohol makes people peaceful", "Alcohol improves thinking"],
+    answer: 1
+  },
+  {
+    q: "Q58) Drunk people become:",
+    options: ["Quarrelsome", "Peaceful", "Intelligent", "Kind"],
+    answer: 0
+  },
+  {
+    q: "Q59) What can quarreling and fighting cause?",
+    options: ["Happiness", "Permanent psychological damage", "Better relationships", "Improved health"],
+    answer: 1
+  },
+  {
+    q: "Q60) What is the legal status of alcohol in 'our country'?",
+    options: ["Legal", "Illegal", "Encouraged", "Required"],
+    answer: 1
+  },
+  {
+    q: "Q61) Alcohol leads to poor:",
+    options: ["School performance", "Eating habits", "Sleep patterns", "Exercise routines"],
+    answer: 0
+  },
+  {
+    q: "Q62) Alcohol can cause people to:",
+    options: ["Excel in duties", "Fail in their duties", "Become perfect workers", "Improve performance"],
+    answer: 1
+  },
+  {
+    q: "Q63) Alcohol is a main cause of:",
+    options: ["Good driving", "Road accidents", "Safe travel", "Improved traffic"],
+    answer: 1
+  },
+  {
+    q: "Q64) Parents who drink may:",
+    options: ["Neglect or harm their children", "Become better parents", "Improve family life", "Help children more"],
+    answer: 0
+  },
+  {
+    q: "Q65) Alcohol leads to:",
+    options: ["Wealth and self-care", "Poverty and self-neglect", "Good health", "Happiness"],
+    answer: 1
+  },
+  {
+    q: "Q66) Alcohol destroys the:",
+    options: ["Liver and nervous system", "Heart and lungs", "Kidneys and stomach", "Skin and bones"],
+    answer: 0
+  },
+  {
+    q: "Q67) Alcohol creates:",
+    options: ["Social and economic problems", "Only happiness", "Wealth", "Good health"],
+    answer: 0
+  },
+  {
+    q: "Q68) Smoking tobacco is dangerous for:",
+    options: ["Only the smoker", "The smoker and their family", "No one", "Only children"],
+    answer: 1
+  },
+  {
+    q: "Q69) What poisons are in cigarette smoke?",
+    options: ["Tar and nicotine", "Vitamins and minerals", "Water and air", "Food particles"],
+    answer: 0
+  },
+  {
+    q: "Q70) What is tar?",
+    options: ["A sticky substance", "A liquid", "A gas", "A solid rock"],
+    answer: 0
+  },
+  {
+    q: "Q71) What does tar do to the lungs?",
+    options: ["Cleans them", "Clogs them up", "Makes them stronger", "Improves breathing"],
+    answer: 1
+  },
+  {
+    q: "Q72) Why do smokers pant more when running?",
+    options: ["They have better lungs", "They have clogged lungs", "They are more athletic", "They exercise more"],
+    answer: 1
+  },
+  {
+    q: "Q73) Why don't good athletes smoke?",
+    options: ["They want healthy bodies", "They don't know about smoking", "It makes them stronger", "It improves performance"],
+    answer: 0
+  },
+  {
+    q: "Q74) Where does nicotine go in the smoker's body?",
+    options: ["Only to the lungs", "Into the blood and spreads throughout", "Only to the stomach", "Only to the brain"],
+    answer: 1
+  },
+  {
+    q: "Q75) What does nicotine prevent from working correctly?",
+    options: ["The stomach", "The heart", "The kidneys", "The skin"],
+    answer: 1
+  },
+  {
+    q: "Q76) Nicotine can lead to:",
+    options: ["A heart attack", "Better heart health", "Stronger heart", "Improved circulation"],
+    answer: 0
+  },
+  {
+    q: "Q77) Heavy smokers may develop:",
+    options: ["Better lungs", "Lung cancer", "Stronger immunity", "Improved health"],
+    answer: 1
+  },
+  {
+    q: "Q78) What is lung cancer?",
+    options: ["A disease where growth blocks the lungs", "A mild cough", "A temporary illness", "A harmless condition"],
+    answer: 0
+  },
+  {
+    q: "Q79) If a pregnant woman smokes, nicotine goes into the:",
+    options: ["Placenta", "Baby's food", "Mother's hair", "Father's lungs"],
+    answer: 0
+  },
+  {
+    q: "Q80) Smoking during pregnancy causes the baby to:",
+    options: ["Grow faster", "Grow slowly", "Become stronger", "Be born healthy"],
+    answer: 1
+  },
+  {
+    q: "Q81) A smoking mother's breast-milk contains:",
+    options: ["Vitamins", "Nicotine", "Extra nutrients", "Medicine"],
+    answer: 1
+  },
+  {
+    q: "Q82) One person's smoking makes others breathe:",
+    options: ["Clean air", "Poisonous, smoke-filled air", "Fresh air", "Oxygen"],
+    answer: 1
+  },
+  {
+    q: "Q83) A baby's delicate lungs can be damaged by:",
+    options: ["Breathing in smoke", "Drinking milk", "Sleeping", "Crying"],
+    answer: 0
+  },
+  {
+    q: "Q84) Stomach upsets are common among people who:",
+    options: ["Eat healthy", "Chew tobacco", "Exercise", "Drink water"],
+    answer: 1
+  },
+  {
+    q: "Q85) Smoking is:",
+    options: ["Inexpensive", "Expensive", "Free", "Money-saving"],
+    answer: 1
+  },
+  {
+    q: "Q86) Money spent on smoking could be used to:",
+    options: ["Improve family health", "Buy more cigarettes", "Damage health more", "Make people sick"],
+    answer: 0
+  },
+  {
+    q: "Q87) What is Qat?",
+    options: ["A plant whose twigs are chewed", "A type of food", "A drink", "A medicine"],
+    answer: 0
+  },
+  {
+    q: "Q88) Qat chewing can lead to:",
+    options: ["Health, social, and economic problems", "Only health benefits", "Improved relationships", "Wealth"],
+    answer: 0
+  },
+  {
+    q: "Q89) Qat contains:",
+    options: ["Chemical stimulants", "Sedatives", "Pain killers", "Vitamins"],
+    answer: 0
+  },
+  {
+    q: "Q90) Qat affects:",
+    options: ["Only the stomach", "The brain and all nerves", "Only the liver", "Only the kidneys"],
+    answer: 1
+  },
+  {
+    q: "Q91) Qat can affect:",
+    options: ["Sleep patterns", "Only appetite", "Only vision", "Only hearing"],
+    answer: 0
+  },
+  {
+    q: "Q92) Qat chewers tend to:",
+    options: ["Sleep too much", "Stay awake for long periods", "Eat more", "Exercise more"],
+    answer: 1
+  },
+  {
+    q: "Q93) Staying awake leads to poor health because the body needs:",
+    options: ["Rest and sleep", "More food", "More exercise", "More work"],
+    answer: 0
+  },
+  {
+    q: "Q94) Qat chewers usually have:",
+    options: ["Good appetite", "Poor appetite", "Normal appetite", "Increased appetite"],
+    answer: 1
+  },
+  {
+    q: "Q95) Poor appetite results in:",
+    options: ["Malnutrition and poor health", "Better health", "Weight gain", "Improved nutrition"],
+    answer: 0
+  },
+  {
+    q: "Q96) Heavy Qat chewers suffer from:",
+    options: ["Mouth and stomach ulcers", "Better digestion", "Improved appetite", "Stronger teeth"],
+    answer: 0
+  },
+  {
+    q: "Q97) Heavy Qat chewers also suffer from:",
+    options: ["Diarrhea", "Constipation", "Normal bowel movements", "Improved digestion"],
+    answer: 1
+  },
+  {
+    q: "Q98) What do glue sniffers inhale?",
+    options: ["Gas, petrol, kerosene, paint, or aerosol", "Oxygen only", "Clean air", "Perfume"],
+    answer: 0
+  },
+  {
+    q: "Q99) Glue sniffing makes people feel like they are:",
+    options: ["Floating and not part of the world", "Very strong", "Very intelligent", "Very happy"],
+    answer: 0
+  },
+  {
+    q: "Q100) When the feeling stops, glue sniffers may experience:",
+    options: ["Headaches, vomiting, or unconsciousness", "Better health", "Improved mood", "More energy"],
+    answer: 0
+  }
+]
+  },
+  {
+    title: "Module 5",
+    video: "body5.mp4",
+    quiz:  [
+  {
+    q: "Q1) What is the definition of a skeleton?",
+    options: ["The muscles of the body", "The framework of the body made up of bones", "The nervous system", "The digestive system"],
+    answer: 1
+  },
+  {
+    q: "Q2) How many types of skeletons are there in animals?",
+    options: ["One", "Two", "Three", "Four"],
+    answer: 2
+  },
+  {
+    q: "Q3) Which animals have a hydrostatic skeleton?",
+    options: ["Birds and mammals", "Flatworms and roundworms", "Spiders and insects", "Fish and amphibians"],
+    answer: 1
+  },
+  {
+    q: "Q4) What provides support in a hydrostatic skeleton?",
+    options: ["Hard bones", "Water pressure inside the body", "A hard outer shell", "Cartilage"],
+    answer: 1
+  },
+  {
+    q: "Q5) Hydrostatic pressure is the main support in:",
+    options: ["Animals with backbones", "Animals with no skeleton", "All animals", "Only mammals"],
+    answer: 1
+  },
+  {
+    q: "Q6) What is an exoskeleton?",
+    options: ["Skeleton inside the body", "Skeleton outside the body", "No skeleton", "Water skeleton"],
+    answer: 1
+  },
+  {
+    q: "Q7) Which animals have an exoskeleton?",
+    options: ["Birds and fish", "Tortoise, spiders and insects", "Mammals and amphibians", "Flatworms only"],
+    answer: 1
+  },
+  {
+    q: "Q8) Exoskeleton provides:",
+    options: ["Soft outer covering", "Hard outer skeleton", "No support", "Internal support"],
+    answer: 1
+  },
+  {
+    q: "Q9) What is an endoskeleton?",
+    options: ["Skeleton outside the body", "Skeleton inside the body", "No skeleton", "Water skeleton"],
+    answer: 1
+  },
+  {
+    q: "Q10) Which animals have an endoskeleton?",
+    options: ["Animals with backbone", "Animals without backbone", "Only insects", "Only worms"],
+    answer: 0
+  },
+  {
+    q: "Q11) Endoskeleton is found in:",
+    options: ["Birds, mammals, amphibians and fish", "Spiders and insects only", "Flatworms only", "All animals"],
+    answer: 0
+  },
+  {
+    q: "Q12) What type of skeleton do humans have?",
+    options: ["Hydrostatic skeleton", "Exoskeleton", "Endoskeleton", "No skeleton"],
+    answer: 2
+  },
+  {
+    q: "Q13) How many bones does the human skeleton have?",
+    options: ["100 bones", "206 bones", "300 bones", "500 bones"],
+    answer: 1
+  },
+  {
+    q: "Q14) How many regions does the human skeleton have?",
+    options: ["One region", "Two regions", "Three regions", "Four regions"],
+    answer: 2
+  },
+  {
+    q: "Q15) The axial skeleton consists of:",
+    options: ["Limbs and girdles", "Skull and vertebral column", "Thorax only", "Arms and legs"],
+    answer: 1
+  },
+  {
+    q: "Q16) What is another name for the vertebral column?",
+    options: ["The rib cage", "Backbone or spine", "The pelvis", "The skull"],
+    answer: 1
+  },
+  {
+    q: "Q17) The axial skeleton supports:",
+    options: ["The limbs only", "The main axis of the body", "Only the head", "Only the chest"],
+    answer: 1
+  },
+  {
+    q: "Q18) The appendicular skeleton consists of:",
+    options: ["The skull and spine", "The four limbs and girdles", "The thorax only", "The rib cage"],
+    answer: 1
+  },
+  {
+    q: "Q19) What are appendages?",
+    options: ["The internal organs", "The limbs (legs and arms)", "The bones of the head", "The ribs"],
+    answer: 1
+  },
+  {
+    q: "Q20) What supports the appendages?",
+    options: ["Girdles", "The skull", "The vertebral column", "The ribs"],
+    answer: 0
+  },
+  {
+    q: "Q21) The thoracic skeleton consists of:",
+    options: ["The head only", "The thorax or chest", "The limbs only", "The pelvis only"],
+    answer: 1
+  },
+  {
+    q: "Q22) How many functions of the skeletal system are listed?",
+    options: ["Three functions", "Four functions", "Five functions", "Six functions"],
+    answer: 2
+  },
+  {
+    q: "Q23) The first function of the skeleton is:",
+    options: ["Protection", "Support", "Mineral storage", "Blood formation"],
+    answer: 1
+  },
+  {
+    q: "Q24) The skeleton supports the body and gives it:",
+    options: ["Color", "Shape", "Temperature", "Energy"],
+    answer: 1
+  },
+  {
+    q: "Q25) The second function of the skeleton is:",
+    options: ["Support", "Protection", "Muscle attachment", "Mineral storage"],
+    answer: 1
+  },
+  {
+    q: "Q26) What does the skeleton protect?",
+    options: ["Only the muscles", "The important parts of the body", "Only the bones", "Nothing"],
+    answer: 1
+  },
+  {
+    q: "Q27) According to the table, what does the skull protect?",
+    options: ["Heart and lungs", "Brain and eyes", "Spinal cord", "Urinary bladder"],
+    answer: 1
+  },
+  {
+    q: "Q28) What does the vertebral column protect?",
+    options: ["Brain and eyes", "Heart and lungs", "Spinal cord", "Urinary bladder"],
+    answer: 2
+  },
+  {
+    q: "Q29) What do the ribs protect?",
+    options: ["Brain and eyes", "Spinal cord", "Heart and lungs", "Urinary bladder"],
+    answer: 2
+  },
+  {
+    q: "Q30) What does the pelvis protect?",
+    options: ["Brain and eyes", "Spinal cord", "Heart and lungs", "Urinary bladder and abdomen"],
+    answer: 3
+  },
+  {
+    q: "Q31) The third function of the skeleton is:",
+    options: ["Support", "Protection", "Muscle attachment", "Blood formation"],
+    answer: 2
+  },
+  {
+    q: "Q32) The skeleton provides space for:",
+    options: ["Muscle attachment", "Food storage", "Air storage", "Water storage"],
+    answer: 0
+  },
+  {
+    q: "Q33) What makes movements possible?",
+    options: ["The bones alone", "The muscles", "The skin", "The hair"],
+    answer: 1
+  },
+  {
+    q: "Q34) The fourth function of the skeleton is:",
+    options: ["Support", "Protection", "Muscle attachment", "Mineral storage"],
+    answer: 3
+  },
+  {
+    q: "Q35) What does the skeleton store for the body?",
+    options: ["Minerals", "Water", "Air", "Food"],
+    answer: 0
+  },
+  {
+    q: "Q36) The fifth function of the skeleton is:",
+    options: ["Support", "Protection", "Blood formation", "Mineral storage"],
+    answer: 2
+  },
+  {
+    q: "Q37) Where does blood formation occur?",
+    options: ["In the skin", "In the bone marrow of long bones", "In the muscles", "In the stomach"],
+    answer: 1
+  },
+  {
+    q: "Q38) What type of blood cells does bone marrow make?",
+    options: ["White blood cells only", "Red blood cells", "No blood cells", "Only platelets"],
+    answer: 1
+  },
+  {
+    q: "Q39) Which type of skeleton do tortoises have?",
+    options: ["Hydrostatic skeleton", "Exoskeleton", "Endoskeleton", "No skeleton"],
+    answer: 1
+  },
+  {
+    q: "Q40) Which type of skeleton do birds have?",
+    options: ["Hydrostatic skeleton", "Exoskeleton", "Endoskeleton", "No skeleton"],
+    answer: 2
+  },
+  {
+    q: "Q41) The human skeleton is divided into how many main regions?",
+    options: ["Two", "Three", "Four", "Five"],
+    answer: 1
+  },
+  {
+    q: "Q42) The axial skeleton includes:",
+    options: ["Arms and legs", "Skull and backbone", "Rib cage only", "Pelvis only"],
+    answer: 1
+  },
+  {
+    q: "Q43) The appendicular skeleton includes:",
+    options: ["Skull and spine", "Arms, legs and their supports", "Rib cage", "Vertebral column"],
+    answer: 1
+  },
+  {
+    q: "Q44) The thoracic skeleton is the:",
+    options: ["Head", "Chest", "Arms", "Legs"],
+    answer: 1
+  },
+  {
+    q: "Q45) Which function involves giving the body its shape?",
+    options: ["Protection", "Support", "Mineral storage", "Blood formation"],
+    answer: 1
+  },
+  {
+    q: "Q46) Which function involves safeguarding vital organs?",
+    options: ["Support", "Protection", "Muscle attachment", "Blood formation"],
+    answer: 1
+  },
+  {
+    q: "Q47) Which function allows movement by providing attachment points?",
+    options: ["Support", "Protection", "Muscle attachment", "Mineral storage"],
+    answer: 2
+  },
+  {
+    q: "Q48) Which function involves storing important nutrients?",
+    options: ["Support", "Protection", "Mineral storage", "Blood formation"],
+    answer: 2
+  },
+  {
+    q: "Q49) Which function involves producing blood cells?",
+    options: ["Support", "Protection", "Mineral storage", "Blood formation"],
+    answer: 3
+  },
+  {
+    q: "Q50) Where exactly are red blood cells produced?",
+    options: ["In the bone marrow", "In the heart", "In the lungs", "In the liver"],
+    answer: 0
+  }
+]
+  },
+  {
+    title: "Module 6",
+    video: "body6.mp4",
+    quiz: [
+  {
+    q: "Q1) How many characteristics do living things have?",
+    options: ["Five", "Six", "Seven", "Eight"],
+    answer: 2
+  },
+  {
+    q: "Q2) What is breathing or respiration?",
+    options: ["Getting oxygen, removing carbon dioxide", "Eating food", "Moving around", "Growing bigger"],
+    answer: 0
+  },
+  {
+    q: "Q3) What does excretion involve?",
+    options: ["Taking in food", "Removing waste", "Producing offspring", "Responding to stimuli"],
+    answer: 1
+  },
+  {
+    q: "Q4) What is locomotion?",
+    options: ["Removing waste", "Moving from place to place", "Producing offspring", "Breathing"],
+    answer: 1
+  },
+  {
+    q: "Q5) What is reproduction?",
+    options: ["Forming more individuals", "Removing waste", "Taking in food", "Growing"],
+    answer: 0
+  },
+  {
+    q: "Q6) What is sensitivity and response?",
+    options: ["Reacting to the environment", "Eating food", "Producing waste", "Breathing"],
+    answer: 0
+  },
+  {
+    q: "Q7) What is nutrition?",
+    options: ["Taking in food", "Removing waste", "Moving around", "Growing"],
+    answer: 0
+  },
+  {
+    q: "Q8) What causes growing in living things?",
+    options: ["Due to food", "Due to water only", "Due to air only", "Due to sunlight only"],
+    answer: 0
+  },
+  {
+    q: "Q9) What is reproduction?",
+    options: ["Process of producing new individuals", "Process of eating food", "Process of breathing", "Process of moving"],
+    answer: 0
+  },
+  {
+    q: "Q10) What does fertilization involve?",
+    options: ["Union of egg and sperm", "Union of two eggs", "Union of two sperms", "Division of cells"],
+    answer: 0
+  },
+  {
+    q: "Q11) What do ovaries produce?",
+    options: ["Female sex cells or eggs", "Male sex cells", "Sperm", "Semen"],
+    answer: 0
+  },
+  {
+    q: "Q12) What is the function of the oviduct?",
+    options: ["Produce eggs", "Tube through which egg passes", "Where baby develops", "Birth canal"],
+    answer: 1
+  },
+  {
+    q: "Q13) What is another name for the oviduct?",
+    options: ["Uterus", "Fallopian tube", "Vagina", "Ovary"],
+    answer: 1
+  },
+  {
+    q: "Q14) Where is the baby carried before birth?",
+    options: ["In the ovary", "In the uterus", "In the oviduct", "In the vagina"],
+    answer: 1
+  },
+  {
+    q: "Q15) What is the vagina also known as?",
+    options: ["The egg tube", "The birth canal", "The ovary", "The uterus"],
+    answer: 1
+  },
+  {
+    q: "Q16) What do testes produce?",
+    options: ["Female sex cells", "Male sex cells or sperm", "Eggs", "Hormones only"],
+    answer: 1
+  },
+  {
+    q: "Q17) Where are the testes enclosed?",
+    options: ["In the penis", "In a sac called scrotum", "In the abdomen", "In the sperm ducts"],
+    answer: 1
+  },
+  {
+    q: "Q18) What do sperm ducts do?",
+    options: ["Produce sperm", "Pass sperm to the penis", "Produce semen", "Store urine"],
+    answer: 1
+  },
+  {
+    q: "Q19) What liquid do male sex glands produce?",
+    options: ["Urine", "Blood", "Semen", "Saliva"],
+    answer: 2
+  },
+  {
+    q: "Q20) What is the function of the penis?",
+    options: ["Produce sperm", "Put sperm into vagina", "Store urine", "Produce semen"],
+    answer: 1
+  },
+  {
+    q: "Q21) Where does fertilization usually occur?",
+    options: ["In the vagina", "In the uterus", "In the oviduct", "In the ovary"],
+    answer: 2
+  },
+  {
+    q: "Q22) What is formed when a sperm enters an ovum?",
+    options: ["An embryo", "A fetus", "A zygote", "A baby"],
+    answer: 2
+  },
+  {
+    q: "Q23) Where does the fertilized egg attach itself?",
+    options: ["To the wall of the vagina", "To the wall of the uterus", "To the ovary", "To the oviduct"],
+    answer: 1
+  },
+  {
+    q: "Q24) What is the developing baby called after one month?",
+    options: ["Zygote", "Embryo", "Fetus", "Baby"],
+    answer: 2
+  },
+  {
+    q: "Q25) What are twins?",
+    options: ["Two eggs from different mothers", "Two embryos from one fertilized egg", "Two sperms in one egg", "Two zygotes from different fathers"],
+    answer: 1
+  },
+  {
+    q: "Q26) What is the placenta?",
+    options: ["Where fetus receives food", "The birth canal", "The egg producer", "The sperm producer"],
+    answer: 0
+  },
+  {
+    q: "Q27) What is the umbilical cord?",
+    options: ["Tube connecting mother and fetus", "The birth canal", "The egg tube", "The sperm tube"],
+    answer: 0
+  },
+  {
+    q: "Q28) How long does human gestation take?",
+    options: ["6 months", "9 months", "12 months", "3 months"],
+    answer: 1
+  },
+  {
+    q: "Q29) What is the first sign of labor?",
+    options: ["Baby crying", "Uterus contractions", "Water breaking", "Mother feeling happy"],
+    answer: 1
+  },
+  {
+    q: "Q30) What is natural delivery?",
+    options: ["Baby pushed out through vagina", "Baby removed by surgery", "Baby born through abdomen", "Baby born through oviduct"],
+    answer: 0
+  },
+  {
+    q: "Q31) What is another name for puberty?",
+    options: ["Childhood", "Adolescence", "Adulthood", "Old age"],
+    answer: 1
+  },
+  {
+    q: "Q32) When can a person reproduce?",
+    options: ["At birth", "After reaching puberty", "In childhood", "In old age"],
+    answer: 1
+  },
+  {
+    q: "Q33) At what age do boys typically produce semen?",
+    options: ["10-11 years", "14-15 years", "18-19 years", "20-21 years"],
+    answer: 1
+  },
+  {
+    q: "Q34) What is the release of eggs called?",
+    options: ["Fertilization", "Ovulation", "Gestation", "Copulation"],
+    answer: 1
+  },
+  {
+    q: "Q35) How often does ovulation occur?",
+    options: ["Once every 7 days", "Once every 28 days", "Once every 3 months", "Once a year"],
+    answer: 1
+  },
+  {
+    q: "Q36) What is a primary sex characteristic in boys?",
+    options: ["Hair growth", "Production of sperm", "Muscular body", "Broad shoulders"],
+    answer: 1
+  },
+  {
+    q: "Q37) What is a secondary sex characteristic in girls?",
+    options: ["Production of eggs", "Softening of voice", "Development of sex organs", "Ovulation"],
+    answer: 1
+  },
+  {
+    q: "Q38) What is the significant importance in human development?",
+    options: ["School education", "Parental care", "Playing sports", "Watching TV"],
+    answer: 1
+  },
+  {
+    q: "Q39) How does a mother feed her baby initially?",
+    options: ["With solid food", "By breast-feeding", "With bottled milk only", "With adult food"],
+    answer: 1
+  },
+  {
+    q: "Q40) What do children learn during parental bonding?",
+    options: ["To communicate", "To drive cars", "To cook food", "To build houses"],
+    answer: 0
+  },
+  {
+    q: "Q41) How many types of fish are there?",
+    options: ["One", "Two", "Three", "Four"],
+    answer: 1
+  },
+  {
+    q: "Q42) What are the two types of fish?",
+    options: ["Big and small", "Bony and cartilaginous", "Fresh and salt", "Young and old"],
+    answer: 1
+  },
+  {
+    q: "Q43) Where do fish reproduce?",
+    options: ["On land", "In water", "In trees", "In air"],
+    answer: 1
+  },
+  {
+    q: "Q44) What do most fish do after fertilization?",
+    options: ["Care for their young", "Leave the fertilized eggs", "Build nests", "Feed the young"],
+    answer: 1
+  },
+  {
+    q: "Q45) Which fish is an exception in parental care?",
+    options: ["Shark", "Tilapia", "Tuna", "Mackerel"],
+    answer: 1
+  },
+  {
+    q: "Q46) When do frogs mate?",
+    options: ["Dry season", "Rainy season", "Winter", "Summer"],
+    answer: 1
+  },
+  {
+    q: "Q47) How does the male frog attract the female?",
+    options: ["By dancing", "By croaking sound", "By changing color", "By building nest"],
+    answer: 1
+  },
+  {
+    q: "Q48) What do frog eggs have around them?",
+    options: ["A hard shell", "Jelly", "A soft skin", "No covering"],
+    answer: 1
+  },
+  {
+    q: "Q49) What do tadpoles breathe through?",
+    options: ["Lungs", "Gills", "Skin", "Mouth"],
+    answer: 1
+  },
+  {
+    q: "Q50) How do birds transfer sperm?",
+    options: ["With a penis", "Through reproductive openings", "By kissing", "Through feathers"],
+    answer: 1
+  }
+]
+  },
+  {
+    title: "Module 7",
+    video: "body7.mp4",
+    quiz:  [
+  {
+    q: "Q1) How many characteristics do living things have?",
+    options: ["Five", "Six", "Seven", "Eight"],
+    answer: 2
+  },
+  {
+    q: "Q2) What is breathing or respiration?",
+    options: ["Getting oxygen, removing carbon dioxide", "Eating food", "Moving around", "Growing bigger"],
+    answer: 0
+  },
+  {
+    q: "Q3) What does excretion involve?",
+    options: ["Taking in food", "Removing waste", "Producing offspring", "Responding to stimuli"],
+    answer: 1
+  },
+  {
+    q: "Q4) What is locomotion?",
+    options: ["Removing waste", "Moving from place to place", "Producing offspring", "Breathing"],
+    answer: 1
+  },
+  {
+    q: "Q5) What is reproduction?",
+    options: ["Forming more individuals", "Removing waste", "Taking in food", "Growing"],
+    answer: 0
+  },
+  {
+    q: "Q6) What is sensitivity and response?",
+    options: ["Reacting to the environment", "Eating food", "Producing waste", "Breathing"],
+    answer: 0
+  },
+  {
+    q: "Q7) What is nutrition?",
+    options: ["Taking in food", "Removing waste", "Moving around", "Growing"],
+    answer: 0
+  },
+  {
+    q: "Q8) What causes growing in living things?",
+    options: ["Due to food", "Due to water only", "Due to air only", "Due to sunlight only"],
+    answer: 0
+  },
+  {
+    q: "Q9) What is reproduction?",
+    options: ["Process of producing new individuals", "Process of eating food", "Process of breathing", "Process of moving"],
+    answer: 0
+  },
+  {
+    q: "Q10) What does fertilization involve?",
+    options: ["Union of egg and sperm", "Union of two eggs", "Union of two sperms", "Division of cells"],
+    answer: 0
+  },
+  {
+    q: "Q11) What do ovaries produce?",
+    options: ["Female sex cells or eggs", "Male sex cells", "Sperm", "Semen"],
+    answer: 0
+  },
+  {
+    q: "Q12) What is the function of the oviduct?",
+    options: ["Produce eggs", "Tube through which egg passes", "Where baby develops", "Birth canal"],
+    answer: 1
+  },
+  {
+    q: "Q13) What is another name for the oviduct?",
+    options: ["Uterus", "Fallopian tube", "Vagina", "Ovary"],
+    answer: 1
+  },
+  {
+    q: "Q14) Where is the baby carried before birth?",
+    options: ["In the ovary", "In the uterus", "In the oviduct", "In the vagina"],
+    answer: 1
+  },
+  {
+    q: "Q15) What is the vagina also known as?",
+    options: ["The egg tube", "The birth canal", "The ovary", "The uterus"],
+    answer: 1
+  },
+  {
+    q: "Q16) What do testes produce?",
+    options: ["Female sex cells", "Male sex cells or sperm", "Eggs", "Hormones only"],
+    answer: 1
+  },
+  {
+    q: "Q17) Where are the testes enclosed?",
+    options: ["In the penis", "In a sac called scrotum", "In the abdomen", "In the sperm ducts"],
+    answer: 1
+  },
+  {
+    q: "Q18) What do sperm ducts do?",
+    options: ["Produce sperm", "Pass sperm to the penis", "Produce semen", "Store urine"],
+    answer: 1
+  },
+  {
+    q: "Q19) What liquid do male sex glands produce?",
+    options: ["Urine", "Blood", "Semen", "Saliva"],
+    answer: 2
+  },
+  {
+    q: "Q20) What is the function of the penis?",
+    options: ["Produce sperm", "Put sperm into vagina", "Store urine", "Produce semen"],
+    answer: 1
+  },
+  {
+    q: "Q21) Where does fertilization usually occur?",
+    options: ["In the vagina", "In the uterus", "In the oviduct", "In the ovary"],
+    answer: 2
+  },
+  {
+    q: "Q22) What is formed when a sperm enters an ovum?",
+    options: ["An embryo", "A fetus", "A zygote", "A baby"],
+    answer: 2
+  },
+  {
+    q: "Q23) Where does the fertilized egg attach itself?",
+    options: ["To the wall of the vagina", "To the wall of the uterus", "To the ovary", "To the oviduct"],
+    answer: 1
+  },
+  {
+    q: "Q24) What is the developing baby called after one month?",
+    options: ["Zygote", "Embryo", "Fetus", "Baby"],
+    answer: 2
+  },
+  {
+    q: "Q25) What are twins?",
+    options: ["Two eggs from different mothers", "Two embryos from one fertilized egg", "Two sperms in one egg", "Two zygotes from different fathers"],
+    answer: 1
+  },
+  {
+    q: "Q26) What is the placenta?",
+    options: ["Where fetus receives food", "The birth canal", "The egg producer", "The sperm producer"],
+    answer: 0
+  },
+  {
+    q: "Q27) What is the umbilical cord?",
+    options: ["Tube connecting mother and fetus", "The birth canal", "The egg tube", "The sperm tube"],
+    answer: 0
+  },
+  {
+    q: "Q28) How long does human gestation take?",
+    options: ["6 months", "9 months", "12 months", "3 months"],
+    answer: 1
+  },
+  {
+    q: "Q29) What is the first sign of labor?",
+    options: ["Baby crying", "Uterus contractions", "Water breaking", "Mother feeling happy"],
+    answer: 1
+  },
+  {
+    q: "Q30) What is natural delivery?",
+    options: ["Baby pushed out through vagina", "Baby removed by surgery", "Baby born through abdomen", "Baby born through oviduct"],
+    answer: 0
+  },
+  {
+    q: "Q31) What is another name for puberty?",
+    options: ["Childhood", "Adolescence", "Adulthood", "Old age"],
+    answer: 1
+  },
+  {
+    q: "Q32) When can a person reproduce?",
+    options: ["At birth", "After reaching puberty", "In childhood", "In old age"],
+    answer: 1
+  },
+  {
+    q: "Q33) At what age do boys typically produce semen?",
+    options: ["10-11 years", "14-15 years", "18-19 years", "20-21 years"],
+    answer: 1
+  },
+  {
+    q: "Q34) What is the release of eggs called?",
+    options: ["Fertilization", "Ovulation", "Gestation", "Copulation"],
+    answer: 1
+  },
+  {
+    q: "Q35) How often does ovulation occur?",
+    options: ["Once every 7 days", "Once every 28 days", "Once every 3 months", "Once a year"],
+    answer: 1
+  },
+  {
+    q: "Q36) What is a primary sex characteristic in boys?",
+    options: ["Hair growth", "Production of sperm", "Muscular body", "Broad shoulders"],
+    answer: 1
+  },
+  {
+    q: "Q37) What is a secondary sex characteristic in girls?",
+    options: ["Production of eggs", "Softening of voice", "Development of sex organs", "Ovulation"],
+    answer: 1
+  },
+  {
+    q: "Q38) What is the significant importance in human development?",
+    options: ["School education", "Parental care", "Playing sports", "Watching TV"],
+    answer: 1
+  },
+  {
+    q: "Q39) How does a mother feed her baby initially?",
+    options: ["With solid food", "By breast-feeding", "With bottled milk only", "With adult food"],
+    answer: 1
+  },
+  {
+    q: "Q40) What do children learn during parental bonding?",
+    options: ["To communicate", "To drive cars", "To cook food", "To build houses"],
+    answer: 0
+  },
+  {
+    q: "Q41) How many types of fish are there?",
+    options: ["One", "Two", "Three", "Four"],
+    answer: 1
+  },
+  {
+    q: "Q42) What are the two types of fish?",
+    options: ["Big and small", "Bony and cartilaginous", "Fresh and salt", "Young and old"],
+    answer: 1
+  },
+  {
+    q: "Q43) Where do fish reproduce?",
+    options: ["On land", "In water", "In trees", "In air"],
+    answer: 1
+  },
+  {
+    q: "Q44) What do most fish do after fertilization?",
+    options: ["Care for their young", "Leave the fertilized eggs", "Build nests", "Feed the young"],
+    answer: 1
+  },
+  {
+    q: "Q45) Which fish is an exception in parental care?",
+    options: ["Shark", "Tilapia", "Tuna", "Mackerel"],
+    answer: 1
+  },
+  {
+    q: "Q46) When do frogs mate?",
+    options: ["Dry season", "Rainy season", "Winter", "Summer"],
+    answer: 1
+  },
+  {
+    q: "Q47) How does the male frog attract the female?",
+    options: ["By dancing", "By croaking sound", "By changing color", "By building nest"],
+    answer: 1
+  },
+  {
+    q: "Q48) What do frog eggs have around them?",
+    options: ["A hard shell", "Jelly", "A soft skin", "No covering"],
+    answer: 1
+  },
+  {
+    q: "Q49) What do tadpoles breathe through?",
+    options: ["Lungs", "Gills", "Skin", "Mouth"],
+    answer: 1
+  },
+  {
+    q: "Q50) How do birds transfer sperm?",
+    options: ["With a penis", "Through reproductive openings", "By kissing", "Through feathers"],
+    answer: 1
+  }
+]
+  },
+  {
+    title: "Module 8",
+    video: "body8.mp4",
+    quiz: [
+  {
+    q: "Q1) What is metamorphosis?",
+    options: [
+      "Change in form and habits after embryonic stage",
+      "The embryonic stage itself", 
+      "A type of reproduction",
+      "Growth without change"
+    ],
+    answer: 0
+  },
+  {
+    q: "Q2) Which of these is an example of metamorphosis in insects?",
+    options: [
+      "Tadpole to frog",
+      "Maggot to adult fly",
+      "Puppy to dog",
+      "Kitten to cat"
+    ],
+    answer: 1
+  },
+  {
+    q: "Q3) What is the change from a caterpillar to a butterfly called?",
+    options: [
+      "Reproduction",
+      "Metamorphosis", 
+      "Evolution",
+      "Growth"
+    ],
+    answer: 1
+  },
+  {
+    q: "Q4) In which group does the tadpole to frog transformation occur?",
+    options: [
+      "Insects",
+      "Amphibians",
+      "Birds", 
+      "Mammals"
+    ],
+    answer: 1
+  },
+  {
+    q: "Q5) Which stage comes between egg and pupa in butterfly metamorphosis?",
+    options: [
+      "Adult",
+      "Larva",
+      "Tadpole",
+      "Chrysalis"
+    ],
+    answer: 1
+  }
+]
+  },
+];
+
+    
+    const PASS_PERCENT = 80; // minimum score to proceed
+
+    // =========================
+    // 📦 STATE & STORAGE
+    // =========================
+
+    const STORAGE_KEY = "course_students_v1"; // holds dictionary of student profiles
+
+    function loadAllStudents() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+      catch { return {}; }
+    }
+    function saveAllStudents(students) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(students));
+    }
+
+    function defaultProfile(id) {
+      return {
+        id,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        currentIndex: 0,
+        modules: MODULES.map(() => ({ watched: false, score: null, passed: false, attempts: 0, lastAt: null })),
+      };
+    }
+
+    let students = loadAllStudents();
+    let profile = null; // active student
+
+    // =========================
+    // 🧠 HELPERS
+    // =========================
+
+    function $(id){ return document.getElementById(id); }
+
+    function setStudentTag() {
+      $("studentTag").textContent = profile ? `Student: ${profile.id}` : "No student";
+    }
+
+    function updateOverallProgressUI() {
+      const total = MODULES.length;
+      const passed = profile.modules.filter(m => m.passed).length;
+      const pct = Math.round((passed / total) * 100);
+      $("overallProgress").style.width = pct + "%";
+      $("overallLabel").textContent = `${pct}% complete`;
+    }
+
+    function fmtDate(iso) {
+      if (!iso) return "-";
+      const d = new Date(iso);
+      return d.toLocaleString();
+    }
+
+    // =========================
+    // 🎬 COURSE RENDERING
+    // =========================
+
+    const videoEl = $("lessonVideo");
+    const videoSourceEl = $("videoSource");
+    const quizForm = $("quizForm");
+    const quizPanel = $("quizPanel");
+
+    let currentIndex = 0;
+    let videoWatched = false;
+    let quizPassed = false;
+    let lastScore = null;
+
+    function loadModule(index){
+      currentIndex = index;
+      const m = MODULES[index];
+      $("modIndex").textContent = index + 1;
+      $("modTotal").textContent = MODULES.length;
+
+      // Video
+      videoEl.pause();
+      videoSourceEl.src = m.video;
+      videoEl.load();
+      videoWatched = !!profile.modules[index].watched; // restore if already watched
+      $("videoStatus").textContent = videoWatched ? "Video: Watched ✔" : "Video: Not watched";
+
+      // Quiz
+      renderQuiz(m.quiz, index);
+      quizPassed = !!profile.modules[index].passed;
+      lastScore = profile.modules[index].score;
+      $("quizStatus").textContent = lastScore == null ? "Quiz: Not taken" : `Quiz: ${lastScore}% ${quizPassed ? "✔" : "✖"}`;
+
+      // Controls
+      $("btnPrev").disabled = index === 0;
+      updateNextState();
+      updateOverallProgressUI();
+    }
+
+    function renderQuiz(questions, modIndex){
+      quizForm.innerHTML = "";
+      questions.forEach((item, i) => {
+        const div = document.createElement("div");
+        div.className = "quiz-q";
+        div.innerHTML = `
+          <h4>${item.q}</h4>
+          ${item.options.map((opt, j) => `
+            <label><input type="radio" name="q${i}" value="${j}"> ${opt}</label>
+          `).join("")}
+        `;
+        quizForm.appendChild(div);
+      });
+      $("btnRetake").disabled = true;
+    }
+
+    function updateNextState(){
+      const enabled = videoWatched && quizPassed;
+      $("btnNext").disabled = !enabled;
+    }
+
+    // =========================
+    // 🎥 VIDEO LOGIC
+    // =========================
+
+    videoEl.addEventListener("ended", () => {
+      videoWatched = true;
+      profile.modules[currentIndex].watched = true;
+      profile.modules[currentIndex].lastAt = new Date().toISOString();
+      profile.updatedAt = new Date().toISOString();
+      saveAllStudents(students);
+      $("videoStatus").textContent = "Video: Watched ✔";
+      quizPanel.open = true; // auto-open quiz
+      updateNextState();
+    });
+
+    $("btnResetWatch").addEventListener("click", () => {
+      videoWatched = false;
+      profile.modules[currentIndex].watched = false;
+      profile.modules[currentIndex].passed = false;
+      profile.modules[currentIndex].score = null;
+      profile.updatedAt = new Date().toISOString();
+      saveAllStudents(students);
+      $("videoStatus").textContent = "Video: Not watched";
+      $("quizStatus").textContent = "Quiz: Not taken";
+      $("btnNext").disabled = true;
+      lastScore = null; quizPassed = false;
+      videoEl.currentTime = 0;
+      videoEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    // =========================
+    // 📝 QUIZ LOGIC
+    // =========================
+
+    $("btnCheck").addEventListener("click", (e) => {
+      e.preventDefault();
+      const m = MODULES[currentIndex];
+
+      // Require video watched before checking
+      if (!videoWatched){
+        alert("Please watch the video completely before taking the quiz.");
+        return;
+      }
+
+      let correct = 0;
+      m.quiz.forEach((q, i) => {
+        const selected = quizForm.querySelector(`input[name="q${i}"]:checked`);
+        if (selected && Number(selected.value) === q.answer) correct++;
+      });
+      const score = Math.round((correct / m.quiz.length) * 100);
+      lastScore = score;
+
+      const passed = score >= PASS_PERCENT;
+      quizPassed = passed;
+
+      // Update profile
+      const pm = profile.modules[currentIndex];
+      pm.attempts += 1;
+      pm.score = score;
+      pm.passed = passed;
+      pm.lastAt = new Date().toISOString();
+      profile.updatedAt = new Date().toISOString();
+      saveAllStudents(students);
+
+      // UI
+      $("quizStatus").textContent = `Quiz: ${score}% ${passed ? "✔" : "✖"}`;
+      updateNextState();
+
+      if (!passed){
+        alert(`Score ${score}%. You need at least ${PASS_PERCENT}%. Re‑watching the video is required before retaking.`);
+        // Force re‑watch: lock quiz retake until video ends again
+        videoWatched = false;
+        pm.watched = false;
+        saveAllStudents(students);
+        $("videoStatus").textContent = "Video: Not watched";
+        $("btnRetake").disabled = true;
+        videoEl.currentTime = 0;
+        videoEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        videoEl.play();
+      } else {
+        alert(`Great! You passed with ${score}%. You can go Next.`);
+        $("btnRetake").disabled = false;
+      }
+    });
+
+    $("btnRetake").addEventListener("click", (e) => {
+      e.preventDefault();
+      // Allow retake only if already passed (for improving score) — otherwise forced rewatch handled above
+      const confirmRetake = confirm("Retake quiz? Your last score will be kept as the best.");
+      if (!confirmRetake) return;
+      // Clear radio selections
+      quizForm.querySelectorAll('input[type="radio"]').forEach(i => i.checked = false);
+    });
+
+    // =========================
+    // 🔀 NAVIGATION
+    // =========================
+
+    $("btnPrev").addEventListener("click", () => {
+      if (currentIndex > 0){ loadModule(currentIndex - 1); }
+    });
+
+    $("btnNext").addEventListener("click", () => {
+      if (currentIndex < MODULES.length - 1){
+        loadModule(currentIndex + 1);
+      } else {
+        alert("🎉 Course finished! Great job.");
+      }
+    });
+
+    $("btnSave").addEventListener("click", () => {
+      profile.currentIndex = currentIndex;
+      profile.updatedAt = new Date().toISOString();
+      saveAllStudents(students);
+      alert("Progress saved.");
+    });
+
+    // =========================
+    // 👤 SIGN-IN
+    // =========================
+
+    function activateProfile(id){
+      if (!students[id]) students[id] = defaultProfile(id);
+      profile = students[id];
+      profile.updatedAt = new Date().toISOString();
+      saveAllStudents(students);
+      setStudentTag();
+      $("signinCard").classList.add("hidden");
+      $("courseView").classList.remove("hidden");
+      $("teacherView").classList.add("hidden");
+      loadModule(profile.currentIndex || 0);
+    }
+
+    $("btnStart").addEventListener("click", () => {
+      const id = $("studentId").value.trim();
+      if (!id) return alert("Please enter your name or ID");
+      activateProfile(id);
+    });
+
+    $("btnSwitch").addEventListener("click", () => {
+      $("signinCard").classList.remove("hidden");
+      $("courseView").classList.add("hidden");
+      $("teacherView").classList.add("hidden");
+      profile = null;
+      setStudentTag();
+    });
+
+    // =========================
+    // 🧑‍🏫 TEACHER DASHBOARD
+    // =========================
+
+    function renderTeacher(){
+      const list = $("studentsList");
+      list.innerHTML = "";
+      const entries = Object.values(students).sort((a,b)=> (a.id > b.id ? 1 : -1));
+
+      // KPIs
+      $("kpiStudents").textContent = entries.length;
+      const compRates = entries.map(s => s.modules.filter(m=>m.passed).length / MODULES.length);
+      const avg = entries.length ? Math.round(100 * compRates.reduce((a,b)=>a+b,0)/entries.length) : 0;
+      $("kpiAvg").textContent = `${avg}%`;
+      const done = entries.filter(s => s.modules.every(m=>m.passed)).length;
+      $("kpiDone").textContent = done;
+      const allAttempts = entries.flatMap(s => s.modules.map(m => ({score:m.score, attempts:m.attempts})));
+      const passCount = allAttempts.filter(x => x.score != null && x.score >= PASS_PERCENT).length;
+      const takenCount = allAttempts.filter(x => x.score != null).length;
+      $("kpiPassRate").textContent = takenCount ? `${Math.round(100 * passCount / takenCount)}%` : "0%";
+
+      entries.forEach(s => {
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.style.cssText = 'justify-content: space-between; padding:10px 0; border-bottom:1px solid var(--border)';
+        const completed = s.modules.filter(m => m.passed).length;
+        row.innerHTML = `
+          <div><b>${s.id}</b><div class="small muted">Updated: ${fmtDate(s.updatedAt)}</div></div>
+          <div class="row" style="gap:6px;">
+            <span class="pill">${completed}/${MODULES.length} passed</span>
+            <button class="btn" data-id="${s.id}">View</button>
+          </div>
+        `;
+        row.querySelector('button').addEventListener('click', () => showStudentDetail(s.id));
+        list.appendChild(row);
+      });
+    }
+
+    function showStudentDetail(id){
+      const s = students[id];
+      if (!s){ $("studentDetail").textContent = "Not found."; return; }
+      const rows = s.modules.map((m, i) => `
+        <tr>
+          <td style="padding:6px 8px; border-bottom:1px solid var(--border);">Module ${i+1}</td>
+          <td style="padding:6px 8px; border-bottom:1px solid var(--border);">${m.watched ? 'Watched ✔' : 'Not watched'}</td>
+          <td style="padding:6px 8px; border-bottom:1px solid var(--border);">${m.score == null ? '-' : m.score + '%'}</td>
+          <td style="padding:6px 8px; border-bottom:1px solid var(--border);">${m.passed ? 'Passed ✔' : 'Pending ✖'}</td>
+          <td style="padding:6px 8px; border-bottom:1px solid var(--border);">Attempts: ${m.attempts || 0}</td>
+          <td style="padding:6px 8px; border-bottom:1px solid var(--border);">${fmtDate(m.lastAt)}</td>
+        </tr>
+      `).join('');
+      $("studentDetail").innerHTML = `
+        <div class="row" style="justify-content: space-between;">
+          <div>
+            <div><b>${s.id}</b></div>
+            <div class="small muted">Created: ${fmtDate(s.createdAt)} · Updated: ${fmtDate(s.updatedAt)}</div>
+          </div>
+          <button class="btn" id="btnImpersonate">Impersonate</button>
+        </div>
+        <div class="space"></div>
+        <div class极客 .progress-wrap"><div class="progress" style="width:${Math.round(100 * s.modules.filter(m=>m.passed).length / MODULES.length)}%"></div></div>
+        <div class="space"></div>
+        <table style="width:100%; border-collapse: collapse;">
+          <thead>
+            <tr>
+              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Module</th>
+              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Video</th>
+              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Score</th>
+              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Status</th>
+              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Attempts</th>
+              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Last Update</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+      $("btnImpersonate").addEventListener('click', () => {
+        activateProfile(s.id);
+        document.getElementById('tabCourse').click();
+      });
+    }
+
+    $("btnRefresh").addEventListener("click", () => { students = loadAllStudents(); renderTeacher(); });
+
+    $("btnExport").addEventListener("click", () => {
+      const entries = Object.values(students);
+      const header = ["student_id","module","watched","score","passed","attempts","lastAt","createdAt","updatedAt"];
+      const rows = [header.join(",")];
+      entries.forEach(s => {
+        s.modules.forEach((m, i) => {
+          rows.push([
+            JSON.stringify(s.id),
+            i+1,
+            m.watched,
+            m.score == null ? "" : m.score,
+            m.passed,
+            m.attempts || 0,
+            m极客.lastAt || "",
+            s.createdAt,
+            s.updatedAt,
+          ].join(","));
         });
+      });
+      const blob = new Blob([rows.join("\n")], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'course_progress.csv'; a.click();
+      URL.revokeObjectURL(url);
+    });
 
-        // Tab navigation
-        function setupTabs() {
-            const tabs = document.querySelectorAll('.tab');
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    // Remove active class from all tabs and content
-                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                    
-                    // Add active class to clicked tab and corresponding content
-                    tab.classList.add('active');
-                    document.getElementById(tab.dataset.tab).classList.add('active');
-                });
-            });
-        }
+    $("btnWipe").addEventListener("click", () => {
+      if (!confirm("This will delete ALL local progress for ALL students on this device. Continue?")) return;
+      localStorage.removeItem(STORAGE_KEY);
+      students = {}; profile = null;
+      $("studentsList").innerHTML = "";
+      $("studentDetail").textContent = "Select a student…";
+      $("signin极客").classList.remove("hidden");
+      $("courseView").classList.add("hidden");
+      $("teacherView").classList.add("hidden");
+      setStudentTag();
+    });
 
-        // Render exam question based on index
-        function renderExamQuestion(index) {
-            const examContainer = document.getElementById('exam-container');
-            const question = currentExam.questions[index];
-            
-            if (!question) return;
-            
-            let questionHTML = `
-                <div class="exam-question">
-                    <h3>Question ${index + 1} of ${currentExam.questions.length}</h3>
-                    <p>${question.question}</p>
-            `;
-            
-            // Add image if it's an image-based question
-            if (question.type === 'image-based' && question.imageUrl) {
-                questionHTML += `<img src="${question.imageUrl}" alt="Question image" class="question-image">`;
-            }
-            
-            questionHTML += `</div><div class="exam-options">`;
-            
-            // Render options based on question type
-            if (question.type === 'multiple-choice' || question.type === 'image-based' || question.type === 'true-false') {
-                question.options.forEach((option, i) => {
-                    const isSelected = currentExam.answers[index] === i;
-                    questionHTML += `
-                        <div class="exam-option ${isSelected ? 'selected' : ''}" data-index="${i}">
-                            ${option}
-                        </div>
-                    `;
-                });
-            } else if (question.type === 'fill-blank') {
-                const answer = currentExam.answers[index] || '';
-                questionHTML += `
-                    <input type="text" value="${answer}" placeholder="Type your answer here" 
-                           class="fill-blank-input" id="blank-answer">
-                `;
-            }
-            
-            questionHTML += `</div>`;
-            
-            examContainer.innerHTML = questionHTML;
-            
-            // Add event listeners to options
-            if (question.type !== 'fill-blank') {
-                document.querySelectorAll('.exam-option').forEach(option => {
-                    option.addEventListener('click', () => {
-                        selectOption(index, parseInt(option.dataset.index));
-                    });
-                });
-            } else {
-                document.getElementById('blank-answer').addEventListener('input', (e) => {
-                    currentExam.answers[index] = e.target.value.trim().toLowerCase();
-                });
-            }
-            
-            // Update navigation buttons
-            document.getElementById('prev-btn').style.visibility = index === 0 ? 'hidden' : 'visible';
-            document.getElementById('next-btn').style.visibility = index === currentExam.questions.length - 1 ? 'hidden' : 'visible';
-            document.getElementById('submit-exam').style.visibility = index === currentExam.questions.length - 1 ? 'visible' : 'hidden';
-            
-            // Update progress bar
-            updateProgressBar();
-        }
+    // Tabs
+    const tabCourse = $("tabCourse");
+    const tabTeacher = $("tabTeacher");
+    tabCourse.addEventListener('click', () => {
+      tabCourse.classList.add('active');
+      tabTeacher.classList.remove('active');
+      $("courseView").classList.remove('hidden');
+      $("teacherView").classList.add('hidden');
+    });
+    tabTeacher.addEventListener('click', () => {
+      tabTeacher.classList.add('active');
+      tabCourse.classList.remove('active');
+      $("courseView").classList.add('hidden');
+      $("teacherView").classList.remove('hidden');
+      renderTeacher();
+    });
 
-        // Select an option for multiple choice questions
-        function selectOption(questionIndex, optionIndex) {
-            currentExam.answers[questionIndex] = optionIndex;
-            
-            // Update UI to show selected option
-            document.querySelectorAll('.exam-option').forEach(option => {
-                option.classList.remove('selected');
-            });
-            
-            document.querySelector(`.exam-option[data-index="${optionIndex}"]`).classList.add('selected');
-        }
+    // Boot
+    (function init(){
+      // Auto-activate last used student if any
+      const lastId = sessionStorage.getItem('lastStudentId');
+      if (lastId && loadAllStudents()[lastId]){
+        students = load极客Students();
+        profile = students[lastId];
+        setStudentTag();
+        $("signinCard").classList.add("hidden");
+        $("courseView").classList.remove("hidden");
+        loadModule(profile.currentIndex || 0);
+      } else {
+        $("courseView").classList.remove("hidden");
+      }
 
-        // Navigate to next question
-        function nextQuestion() {
-            if (currentExam.currentQuestionIndex < currentExam.questions.length - 1) {
-                currentExam.currentQuestionIndex++;
-                renderExamQuestion(currentExam.currentQuestionIndex);
-            }
-        }
-
-        // Navigate to previous question
-        function previousQuestion() {
-            if (currentExam.currentQuestionIndex > 0) {
-                currentExam.currentQuestionIndex--;
-                renderExamQuestion(currentExam.currentQuestionIndex);
-            }
-        }
-
-        // Update progress bar
-        function updateProgressBar() {
-            const progress = ((currentExam.currentQuestionIndex + 1) / currentExam.questions.length) * 100;
-            document.getElementById('exam-progress').style.width = `${progress}%`;
-        }
-
-        // Submit exam and calculate score
-        function submitExam() {
-            let score = 0;
-            let resultsHTML = '';
-            
-            currentExam.questions.forEach((question, index) => {
-                const userAnswer = currentExam.answers[index];
-                let isCorrect = false;
-                
-                if (question.type === 'fill-blank') {
-                    isCorrect = userAnswer === question.correctAnswer.toLowerCase();
-                } else {
-                    isCorrect = userAnswer === question.correctAnswer;
-                }
-                
-                if (isCorrect) score++;
-                
-                // Generate result item HTML
-                resultsHTML += `
-                    <div class="review-item ${isCorrect ? 'correct' : 'incorrect'}">
-                        <h3>Question ${index + 1}: ${isCorrect ? 'Correct' : 'Incorrect'}</h3>
-                        <p>${question.question}</p>
-                `;
-                
-                if (question.type === 'image-based' && question.imageUrl) {
-                    resultsHTML += `<img src="${question.imageUrl}" alt="Question image" class="question-image">`;
-                }
-                
-                if (question.type !== 'fill-blank') {
-                    resultsHTML += `<p>Your answer: ${question.options[userAnswer] || 'Not answered'}</p>`;
-                    resultsHTML += `<p>Correct answer: ${question.options[question.correctAnswer]}</p>`;
-                } else {
-                    resultsHTML += `<p>Your answer: ${userAnswer || 'Not answered'}</p>`;
-                    resultsHTML += `<p>Correct answer: ${question.correctAnswer}</p>`;
-                }
-                
-                if (question.explanation) {
-                    resultsHTML += `<p><strong>Explanation:</strong> ${question.explanation}</p>`;
-                }
-                
-                resultsHTML += `</div>`;
-            });
-            
-            // Update results display
-            document.getElementById('score').textContent = score;
-            document.getElementById('total-questions').textContent = currentExam.questions.length;
-            document.getElementById('results-breakdown').innerHTML = resultsHTML;
-            
-            // Switch to results tab
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelector('.tab[data-tab="view-results"]').classList.add('active');
-            document.getElementById('view-results').classList.add('active');
-            
-            // Update exam score
-            currentExam.score = score;
-        }
-
-        // Retry the exam
-        function retryExam() {
-            currentExam.answers = {};
-            currentExam.currentQuestionIndex = 0;
-            currentExam.score = 0;
-            
-            renderExamQuestion(0);
-            
-            // Switch back to exam tab
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelector('.tab[data-tab="take-exam"]').classList.add('active');
-            document.getElementById('take-exam').classList.add('active');
-        }
-
-        // Teacher view functions
-        function toggleQuestionOptions() {
-            const questionType = document.getElementById('question-type').value;
-            const optionsContainer = document.getElementById('options-container');
-            const imageUploadContainer = document.getElementById('image-upload-container');
-            
-            if (questionType === 'fill-blank') {
-                optionsContainer.classList.add('hidden');
-                imageUploadContainer.classList.add('hidden');
-            } else if (questionType === 'image-based') {
-                optionsContainer.classList.remove('hidden');
-                imageUploadContainer.classList.remove('hidden');
-            } else {
-                optionsContainer.classList.remove('hidden');
-                imageUploadContainer.classList.add('hidden');
-            }
-        }
-
-        function addQuestion() {
-            const questionType = document.getElementById('question-type').value;
-            const questionText = document.getElementById('question-text').value;
-            const explanation = document.getElementById('question-explanation').value;
-            
-            if (!questionText) {
-                alert('Please enter a question');
-                return;
-            }
-            
-            const newQuestion = {
-                id: currentExam.questions.length + 1,
-                type: questionType,
-                question: questionText,
-                explanation: explanation
-            };
-            
-            if (questionType === 'fill-blank') {
-                const correctAnswer = document.querySelector('#options-container .option-item input[type="text"]').value;
-                if (!correctAnswer) {
-                    alert('Please enter the correct answer');
-                    return;
-                }
-                newQuestion.correctAnswer = correctAnswer.toLowerCase();
-            } else {
-                const options = [];
-                let correctAnswer = null;
-                
-                document.querySelectorAll('#options-container .option-item').forEach((item, index) => {
-                    const optionText = item.querySelector('input[type="text"]').value;
-                    if (optionText) {
-                        options.push(optionText);
-                        if (item.querySelector('input[type="radio"]').checked) {
-                            correctAnswer = index;
-                        }
-                    }
-                });
-                
-                if (options.length < 2) {
-                    alert('Please provide at least two options');
-                    return;
-                }
-                
-                if (correctAnswer === null) {
-                    alert('Please select the correct answer');
-                    return;
-                }
-                
-                newQuestion.options = options;
-                newQuestion.correctAnswer = correctAnswer;
-                
-                if (questionType === 'image-based') {
-                    // In a real application, you would upload the image to a server
-                    // For this demo, we'll just use a placeholder
-                    newQuestion.imageUrl = 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'200\' height=\'100\' viewBox=\'0 0 200 100\'%3E%3Crect width=\'200\' height=\'100\' fill=\'%23f0f0f0\'/%3E%3Ctext x=\'100\' y=\'50\' font-family=\'Arial\' font-size=\'12\' text-anchor=\'middle\' dominant-baseline=\'middle\'%3EImage placeholder%3C/text%3E%3C/svg%3E';
-                }
-            }
-            
-            // Add the new question to the exam
-            currentExam.questions.push(newQuestion);
-            
-            // Update questions list in teacher view
-            const questionsList = document.getElementById('questions-list');
-            const questionItem = document.createElement('div');
-            questionItem.className = 'question-container';
-            questionItem.innerHTML = `
-                <h3>Question ${newQuestion.id}: ${newQuestion.type.replace('-', ' ')}</h3>
-                <p>${newQuestion.question}</p>
-            `;
-            questionsList.appendChild(questionItem);
-            
-            // Clear the form
-            document.getElementById('question-text').value = '';
-            document.getElementById('question-explanation').value = '';
-            document.querySelectorAll('#options-container .option-item input[type="text"]').forEach(input => {
-                input.value = '';
-            });
-            document.querySelector('#options-container .option-item input[type="radio"]').checked = true;
-            
-            alert('Question added successfully!');
-        }
-    </script>
+      $("btnStart").addEventListener('click', () => {
+        const id = $("studentId").value.trim();
+        if (id){ sessionStorage.setItem('lastStudentId', id); }
+      });
+    })();
+  </script>
 </body>
 </html>
