@@ -57,7 +57,7 @@
 </head>
 <body>
   <header class="row" role="banner">
-    <h1>🎓 Video → Quiz Course (8 Modules)</h1>
+    <h1>🎓 Video → Quiz Course (8 lesson)</h1>
     <span class="tag" id="studentTag">No student</span>
     <div style="margin-left:auto" class="row">
       <button class="tab active" id="tabCourse">Course</button>
@@ -69,7 +69,7 @@
     <!-- Student Sign-in / Profile -->
     <div class="card" id="signinCard">
       <h2>👤 Student Sign‑in</h2>
-      <p class="muted">Enter your name or ID. Your progress is saved in this browser (localStorage).</p>
+      <p class="muted">Enter your name or ID. Your p rogress is saved in this browser (localStorage).</p>
       <div class="row">
         <input id="studentId" placeholder="Your name or ID" style="padding:10px 12px; border:1px solid var(--border); border-radius:12px; min-width:260px;" />
         <button class="btn primary" id="btnStart">Start / Continue</button>
@@ -147,10 +147,10 @@
 
 
         <H3>All list PDF</H3>
-               
+              
                  <br><a href="Transmitted disease.pdf" target="_blank"> 1. Transmitted disease</a>
                  <br><a href="sexully disese.pdf" target="_blank"> 2. Sexully transmitted diseses STD's</a>
-                 <br><a href="sexully disese Part 2.pdf" target="_blank"> 2. Sexully transmitted diseses STD's</a>
+                 <br><a href="sexully disese Part 2.pdf" target="_blank"> A. Sexully transmitted diseses STD's</a>
                  <br><a href="body disese ans immunite .pdf" target="_blank"> 3. Body immunization system</a>
                  <br><a href="drug (2).pptx   " target="_blank"> 4. Drugs</a>
                  <br><a href="The Skeletal System.pdf" target="_blank"> 5.Skeletal System</a>
@@ -158,13 +158,13 @@
                  <br><a href="Metamorphosis.pdf" target="_blank"> 7. Metamorphosis</a>
 
 
-        <h3>ℹ️ How to use</h3>
+        <h3>ℹ️ Sida loo isticmaalo</h3> 
         <ul>
           
-          
-          <li>Rules enforced: <b>Video must be fully watched</b> + <b>Quiz ≥ 80%</b> to unlock Next.</li>
-          <li>If quiz &lt; 80%, the student is forced to re‑watch the video before retaking.</li>
-          <li>Progress is saved automatically and can be exported from Teacher Dashboard.</li>
+        
+          <li>Xeerar la dhaqan geliyay: <b>Fiidiyowga waa in si buuxda loo daawadaa</b> + <b>Imtixaanka (Quiz) ≥ 80%</b> si loo furo qaybta xigta.</li>
+          <li>Haddii natiijada imtixaanka ay ka yar tahay 80%, ardaygu waa inuu mar kale daawadaa fiidiyowga ka hor inta uusan dib u gelin imtixaanka.</li>
+          <li>Horumarka si toos ah ayaa loo kaydiyaa waxaana laga dhoofin karaa Guddi Macallin (Teacher Dashboard).</li>
         </ul>
       </div>
     </div>
@@ -209,19 +209,17 @@
     //    👉 Replace video paths; edit questions as you like.
     
     const SAMPLE_QUIZ = [
-      { q: "Q1) Focused mode is for deep concentration.", options: ["True", "False"], answer: 0 },
-      { q: "Q2) Diffuse mode helps with big-picture thinking.", options: ["True", "False"], answer: 0 },
-      { q: "Q3) Taking breaks can improve learning.", options: ["True", "False"], answer: 0 },
-      { q: "Q4) Spaced repetition means cramming all at once.", options: ["True", "False"], answer: 1 },
-      { q: "Q5) Sleep supports memory consolidation.", options: ["True", "False"], answer: 0 },
-      { q: "Q6) Practice tests can boost retention.", options: ["True", "False"], answer: 0 },
-      { q: "Q7) Multitasking usually improves focus.", options: ["True", "False"], answer: 1 },
-      { q: "Q8) Active recall means retrieving info without looking.", options: ["True", "False"], answer: 0 },
-      { q: "Q9) Short study sessions are often better than one long session.", options: ["True", "False"], answer: 0 },
-      { q: "Q10) Reflection after learning is not useful.", options: ["True", "False"], answer: 1 },
-      { q: "Q11) Reflection after learning is not useful.", options: ["True", "False"], answer: 1 },
-      { q: "12) Reflection after learning is not useful.", options: ["True", "False"], answer: 1 },
-    ];
+  { q: "Q1) Puberty is the period when the body matures and becomes capable of reproduction.", options: ["True", "False"], answer: 0 },
+  { q: "Q2) A newborn baby's sex organs are already fully developed and functional.", options: ["True", "False"], answer: 1 },
+  { q: "Q3) A girl reaches puberty at the age of 35 years.", options: ["True", "False"], answer: 1 },
+  { q: "Q4) A secondary sexual characteristic in boys is the broadening of the shoulders.", options: ["True", "False"], answer: 0 },
+  { q: "Q5) In most fish, parents provide extensive care for their young after the eggs hatch.", options: ["True", "False"], answer: 1 },
+  { q: "Q6) In frogs, the male fertilizes the eggs after the female has laid them in the water.", options: ["True", "False"], answer: 1 },
+  { q: "Q7) Parental care in humans helps a child learn to communicate and use language.", options: ["True", "False"], answer: 0 },
+  { q: "Q8) The sequence of bird reproduction includes nest building and incubation of eggs.", options: ["True", "False"], answer: 0 },
+  { q: "Q9) Male birds have a penis to transfer sperm internally to the female.", options: ["True", "False"], answer: 1 },
+  { q: "Q10) In the tilapia fish, the mother is known to carry and protect the fertilized eggs in her mouth.", options: ["True", "False"], answer: 0 }
+];
   
     const MODULES = [
   {
@@ -259,22 +257,68 @@
   {
     title: "Module 3",
     video: "body3.mp4",
-    quiz: JSON.parse(JSON.stringify(SAMPLE_QUIZ)),
+    quiz: [
+  { q: "Q1) The skin is part of the body's natural defense system, acting as a barrier to germs.", options: ["True", "False"], answer: 0 },
+  { q: "Q2) If germs get past the skin, they are immediately destroyed and cannot cause illness.", options: ["True", "False"], answer: 1 },
+  { q: "Q3) It is easy for the body to develop resistance to all the different viruses that cause the common cold.", options: ["True", "False"], answer: 1 },
+  { q: "Q4) Immunization and vaccination are two different things; vaccination does not help the body's natural defenses.", options: ["True", "False"], answer: 1 },
+  { q: "Q5) Vaccines can protect people from diseases like measles, tuberculosis, diphtheria, and tetanus.", options: ["True", "False"], answer: 0 },
+  { q: "Q6) According to the text, a vaccine for AIDS has been successfully developed.", options: ["True", "False"], answer: 1 },
+  { q: "Q7) Immunization is an important prevention method only for adults.", options: ["True", "False"], answer: 1 },
+  { q: "Q8) Personal hygiene habits are listed as another way to help control communicable diseases.", options: ["True", "False"], answer: 0 },
+  { q: "Q9) Public sanitation programs have no effect on controlling the spread of disease.", options: ["True", "False"], answer: 1 },
+  { q: "Q10) The immune system is the body's first line of defense against germs.", options: ["True", "False"], answer: 1 }
+],
   },
   {
     title: "Module 4",
     video: "body4.mp4",
-    quiz: JSON.parse(JSON.stringify(SAMPLE_QUIZ)),
+    quiz: [
+  { q: "Q1) A drug is defined as any substance that alters the way the body works.", options: ["True", "False"], answer: 0 },
+  { q: "Q2) Using drugs without a doctor's advice for reasons other than treating an illness is known as drug abuse.", options: ["True", "False"], answer: 0 },
+  { q: "Q3) Drugs like penicillin and aspirin are examples of herbal or traditional drugs.", options: ["True", "False"], answer: 1 },
+  { q: "Q4) Stimulants are a type of brain-affecting drug that slow down brain activity.", options: ["True", "False"], answer: 1 },
+  { q: "Q5) The text states that long-term use of cannabis can lead to psychosis.", options: ["True", "False"], answer: 0 },
+  { q: "Q6) Herbal medicines have no connection to modern manufactured drugs.", options: ["True", "False"], answer: 1 },
+  { q: "Q7) According to the text, alcoholism only affects the drinker's health and has no impact on their family or social life.", options: ["True", "False"], answer: 1 },
+  { q: "Q8) Nicotine is a poison that can prevent the heart from working correctly and lead to a heart attack.", options: ["True", "False"], answer: 0 },
+  { q: "Q9) Qat chewing is described as a habit that improves appetite and leads to better nutrition.", options: ["True", "False"], answer: 1 },
+  { q: "Q10) The effects of glue sniffing can include feeling like one is floating, followed by headaches, vomiting, or unconsciousness.", options: ["True", "False"], answer: 0 }
+],
   },
   {
     title: "Module 5",
     video: "body5.mp4",
-    quiz: JSON.parse(JSON.stringify(SAMPLE_QUIZ)),
+    quiz: [
+  { q: "Q1) A skeleton is defined as the framework of the body made up of bones.", options: ["True", "False"], answer: 0 },
+  { q: "Q2) Animals with a hydrostatic skeleton, like flatworms, are supported by a hard outer shell.", options: ["True", "False"], answer: 1 },
+  { q: "Q3) Spiders and insects are examples of animals with an endoskeleton.", options: ["True", "False"], answer: 1 },
+  { q: "Q4) Animals with a backbone, like birds and fish, have an endoskeleton.", options: ["True", "False"], answer: 0 },
+  { q: "Q5) The human skeleton is an exoskeleton.", options: ["True", "False"], answer: 1 },
+  { q: "Q6) The human skeleton consists of 206 bones.", options: ["True", "False"], answer: 0 },
+  { q: "Q7) The axial skeleton consists of the limbs and the girdles that support them.", options: ["True", "False"], answer: 1 },
+  { q: "Q8) According to the table, the ribs protect the heart and lungs.", options: ["True", "False"], answer: 0 },
+  { q: "Q9) The skeleton functions to support the body but does not play a role in blood formation.", options: ["True", "False"], answer: 1 },
+  { q: "Q10) The pelvis protects the urinary bladder and abdomen.", options: ["True", "False"], answer: 0 }
+],
   },
   {
     title: "Module 6",
     video: "body6.mp4",
-    quiz: JSON.parse(JSON.stringify(SAMPLE_QUIZ)),
+    quiz: [
+  { q: "Q1) Breathing or respiration involves getting oxygen and removing carbon dioxide.", options: ["True", "False"], answer: 0 },
+  { q: "Q2) Exceeding is the process of removing waste from an organism.", options: ["True", "False"], answer: 1 },
+  { q: "Q3) Locomotion means forming more individuals.", options: ["True", "False"], answer: 1 },
+  { q: "Q4) Nutrition is the process of taking in food.", options: ["True", "False"], answer: 0 },
+  { q: "Q5) Reproduction is not a characteristic of all living things.", options: ["True", "False"], answer: 1 },
+  { q: "Q6) The oviduct is also called the isthosan bath.", options: ["True", "False"], answer: 1 },
+  { q: "Q7) The urethra is the part of the female's body where the baby is carried before birth.", options: ["True", "False"], answer: 1 },
+  { q: "Q8) The testes produce male sex cells called sperm.", options: ["True", "False"], answer: 0 },
+  { q: "Q9) The placenta is where the foetus receives its food from the mother.", options: ["True", "False"], answer: 0 },
+  { q: "Q10) The full gestation period for a human is 9 months.", options: ["True", "False"], answer: 0 },
+  { q: "Q11) After the third month, the foetus is fully formed and only grows in size for the remaining six months.", options: ["True", "False"], answer: 1 },
+  { q: "Q12) Powerful contractions of the uterus push the baby out through the vagina during natural delivery.", options: ["True", "False"], answer: 0 }
+],
   },
   {
     title: "Module 7",
@@ -284,7 +328,18 @@
   {
     title: "Module 8",
     video: "body8.mp4",
-    quiz: JSON.parse(JSON.stringify(SAMPLE_QUIZ)),
+    quiz: [
+  { q: "Q1) Metamorphosis is a change in form that occurs after the embryonic stage of an animal's development.", options: ["True", "False"], answer: 0 },
+  { q: "Q2) A change in habits never accompanies the change in form during metamorphosis.", options: ["True", "False"], answer: 1 },
+  { q: "Q3) The transformation of a maggot into an adult fly is an example of metamorphosis in insects.", options: ["True", "False"], answer: 0 },
+  { q: "Q4) The change from a caterpillar to a butterfly is not considered metamorphosis.", options: ["True", "False"], answer: 1 },
+  { q: "Q5) The changing of a tadpole into a frog is an example of metamorphosis in amphibians.", options: ["True", "False"], answer: 0 },
+  { q: "Q6) The life cycle of a beetle was provided as a detailed example in the text.", options: ["True", "False"], answer: 1 },
+  { q: "Q7) According to the diagram, the second stage in a butterfly's life cycle is the pupa.", options: ["True", "False"], answer: 1 },
+  { q: "Q8) The larval stage of a butterfly is called a caterpillar.", options: ["True", "False"], answer: 0 },
+  { q: "Q9) The text and diagram suggest that metamorphosis is a quick, single-step process.", options: ["True", "False"], answer: 1 },
+  { q: "Q10) The pupa is the final adult stage of a butterfly.", options: ["True", "False"], answer: 1 }
+],
   },
 ];
 
