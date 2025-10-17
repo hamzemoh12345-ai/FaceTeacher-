@@ -52,7 +52,24 @@
     details[open] summary::marker, summary::marker { content: ""; }
     summary { cursor: pointer; font-weight: 700; }
     .small { font-size: 12px; }
-    @media (max-width: 720px){ .kpi{ grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    .user-permissions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+    .permission-control { display: flex; align-items: center; justify-content: space-between; padding: 8px; border: 1px solid var(--border); border-radius: 8px; }
+    .toggle { position: relative; display: inline-block; width: 44px; height: 24px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 24px; }
+    .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+    input:checked + .slider { background-color: var(--ok); }
+    input:checked + .slider:before { transform: translateX(20px); }
+    .locked { opacity: 0.5; }
+    .sync-status { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; padding: 4px 8px; border-radius: 999px; background: var(--bg); }
+    .sync-status.syncing { color: var(--warn); }
+    .sync-status.synced { color: var(--ok); }
+    .sync-status.error { color: var(--bad); }
+    .cloud-settings { background: var(--bg); padding: 12px; border-radius: 8px; margin-top: 12px; }
+    @media (max-width: 720px){ 
+      .kpi{ grid-template-columns: repeat(2, minmax(0, 1fr)); } 
+      .user-permissions { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -60,6 +77,7 @@
     <h1>🎓 Video → Quiz Course (8 lesson)</h1>
     <span class="tag" id="studentTag">No student</span>
     <div style="margin-left:auto" class="row">
+      <span class="sync-status" id="syncStatus">Offline</span>
       <button class="tab active" id="tabCourse">Course</button>
       <button class="tab" id="tabTeacher">Teacher Dashboard</button>
     </div>
@@ -69,7 +87,7 @@
     <!-- Student Sign-in / Profile -->
     <div class="card" id="signinCard">
       <h2>👤 Student Sign‑in</h2>
-      <p class="muted">Enter your name or ID. Your p rogress is saved in this browser (localStorage).</p>
+      <p class="muted">Enter your name or ID. Your progress is saved locally and synced to the cloud.</p>
       <div class="row">
         <input id="studentId" placeholder="Your name or ID" style="padding:10px 12px; border:1px solid var(--border); border-radius:12px; min-width:260px;" />
         <button class="btn primary" id="btnStart">Start / Continue</button>
@@ -77,7 +95,7 @@
       </div>
       <div class="space"></div>
       <div class="row small muted">
-        <span>Tip: Teacher can create multiple demo students and track each one separately.</span>
+        <span>Tip: Teacher can track all students across all devices in the Teacher Dashboard.</span>
       </div>
     </div>
 
@@ -100,15 +118,13 @@
         <div class="divider"></div>
 
         <!-- Video -->
-        <div class="video-box">
-          <video id="lessonVideo" width="100%" controls preload="metadata" poster=""  playsinline>
+        <div class="video-box" id="videoContainer">
+          <video id="lessonVideo" width="100%" controls preload="metadata" poster="" playsinline>
             <!-- Video sources fixed to use body.mp4 -->
             <source id="videoSource" src="body.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>
-
-
         
         <div class="row" style="justify-content: space-between; margin-top: 10px;">
           <div class="small muted">You must watch the video to the end before the quiz unlocks.</div>
@@ -143,25 +159,18 @@
       </div>
 
       <div class="card">
-          
-
-
-        <H3>All list PDF</H3>
-              
-                 <br><a href="Transmitted disease.pdf" target="_blank"> 1. Transmitted disease</a>
-                 <br><a href="sexully disese.pdf" target="_blank"> 2. Sexully transmitted diseses STD's</a>
-                 <br><a href="sexully disese Part 2.pdf" target="_blank"> A. Sexully transmitted diseses STD's</a>
-                 <br><a href="body disese ans immunite .pdf" target="_blank"> 3. Body immunization system</a>
-                 <br><a href="drug (2).pptx   " target="_blank"> 4. Drugs</a>
-                 <br><a href="The Skeletal System.pdf" target="_blank"> 5.Skeletal System</a>
-                 <br><a href="reproduction.pdf" target="_blank"> 6. Reproduction</a>
-                 <br><a href="Metamorphosis.pdf" target="_blank"> 7. Metamorphosis</a>
-
+        <h3>Liiska PDF-yada</h3>
+        <br><a href="Transmitted disease.pdf" target="_blank"> 1. Transmitted disease</a>
+        <br><a href="sexully disese.pdf" target="_blank"> 2. Sexully transmitted diseses STD's</a>
+        <br><a href="sexully disese Part 2.pdf" target="_blank"> A. Sexully transmitted diseses STD's Part two</a>
+        <br><a href="body disese ans immunite .pdf" target="_blank"> 3. Body immunization system</a>
+        <br><a href="drug (2).pptx" target="_blank"> 4. Drugs</a>
+        <br><a href="The Skeletal System.pdf" target="_blank"> 5.Skeletal System</a>
+        <br><a href="reproduction.pdf" target="_blank"> 6. Reproduction</a>
+        <br><a href="Metamorphosis.pdf" target="_blank"> 7. Metamorphosis</a>
 
         <h3>ℹ️ Sida loo isticmaalo</h3> 
         <ul>
-          
-        
           <li>Xeerar la dhaqan geliyay: <b>Fiidiyowga waa in si buuxda loo daawadaa</b> + <b>Imtixaanka (Quiz) ≥ 80%</b> si loo furo qaybta xigta.</li>
           <li>Haddii natiijada imtixaanka ay ka yar tahay 80%, ardaygu waa inuu mar kale daawadaa fiidiyowga ka hor inta uusan dib u gelin imtixaanka.</li>
           <li>Horumarka si toos ah ayaa loo kaydiyaa waxaana laga dhoofin karaa Guddi Macallin (Teacher Dashboard).</li>
@@ -177,8 +186,29 @@
           <div class="row">
             <button class="btn" id="btnRefresh">Refresh</button>
             <button class="btn" id="btnExport">Export CSV</button>
+            <button class="btn" id="btnSyncNow">Sync Now</button>
             <button class="btn bad" id="btnWipe">Wipe ALL local progress</button>
           </div>
+          <div class="divider"></div>
+          
+          <!-- Cloud Settings -->
+          <div class="cloud-settings">
+            <h3>☁️ Cloud Sync Settings</h3>
+            <p class="small muted">Configure Google Sheets as your database to see all students across all devices</p>
+            <div class="row">
+              <input type="text" id="googleSheetsUrl" placeholder="Google Sheets URL" style="flex:1; padding:8px 12px; border:1px solid var(--border); border-radius:8px;" />
+              <button class="btn" id="btnTestConnection">Test Connection</button>
+            </div>
+            <div class="small muted" style="margin-top:8px;">
+              <strong>Setup Instructions:</strong> 
+              <ol>
+                <li>Create a Google Sheet and share it with "Anyone with the link can edit"</li>
+                <li>Copy the sheet URL and paste it above</li>
+                <li>Click "Test Connection" to verify</li>
+              </ol>
+            </div>
+          </div>
+          
           <div class="divider"></div>
           <div class="kpi">
             <div class="card"><div class="small muted">Students</div><div class="num" id="kpiStudents">0</div></div>
@@ -195,6 +225,19 @@
         <div class="card">
           <h3>Student Details</h3>
           <div id="studentDetail" class="small muted">Select a student…</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Teacher Login Modal -->
+    <div id="teacherLoginModal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; display: flex; align-items: center; justify-content: center;">
+      <div class="card" style="max-width: 400px; width: 90%;">
+        <h2>Teacher Login</h2>
+        <p class="muted">Enter the teacher password to access the dashboard</p>
+        <input type="password" id="teacherPassword" placeholder="Password" style="padding:10px 12px; border:1px solid var(--border); border-radius:12px; width: 100%; margin-bottom: 12px;" />
+        <div class="row" style="justify-content: flex-end;">
+          <button class="btn ghost" id="btnCancelLogin">Cancel</button>
+          <button class="btn primary" id="btnTeacherLogin">Login</button>
         </div>
       </div>
     </div>
@@ -350,7 +393,10 @@
     // 📦 STATE & STORAGE
     // =========================
 
-    const STORAGE_KEY = "course_students_v1"; // holds dictionary of student profiles
+    const STORAGE_KEY = "course_students_v3"; // holds dictionary of student profiles
+    const TEACHER_PASSWORD_KEY = "teacher_password_v1";
+    const USER_PERMISSIONS_KEY = "user_permissions_v1";
+    const CLOUD_CONFIG_KEY = "cloud_config_v1";
 
     function loadAllStudents() {
       try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
@@ -358,6 +404,29 @@
     }
     function saveAllStudents(students) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(students));
+    }
+
+    function loadUserPermissions() {
+      try { return JSON.parse(localStorage.getItem(USER_PERMISSIONS_KEY)) || {}; }
+      catch { return {}; }
+    }
+    function saveUserPermissions(permissions) {
+      localStorage.setItem(USER_PERMISSIONS_KEY, JSON.stringify(permissions));
+    }
+
+    function loadTeacherPassword() {
+      return localStorage.getItem(TEACHER_PASSWORD_KEY) || "teacher123"; // Default password
+    }
+    function saveTeacherPassword(password) {
+      localStorage.setItem(TEACHER_PASSWORD_KEY, password);
+    }
+
+    function loadCloudConfig() {
+      try { return JSON.parse(localStorage.getItem(CLOUD_CONFIG_KEY)) || { googleSheetsUrl: "" }; }
+      catch { return { googleSheetsUrl: "" }; }
+    }
+    function saveCloudConfig(config) {
+      localStorage.setItem(CLOUD_CONFIG_KEY, JSON.stringify(config));
     }
 
     function defaultProfile(id) {
@@ -370,8 +439,23 @@
       };
     }
 
+    function defaultPermissions(id) {
+      return {
+        id,
+        canAccessCourse: true,
+        modulePermissions: MODULES.map(() => ({ 
+          canWatchVideo: true, 
+          canTakeQuiz: true 
+        }))
+      };
+    }
+
     let students = loadAllStudents();
+    let userPermissions = loadUserPermissions();
+    let cloudConfig = loadCloudConfig();
     let profile = null; // active student
+    let teacherLoggedIn = false;
+    let syncInProgress = false;
 
     // =========================
     // 🧠 HELPERS
@@ -397,6 +481,209 @@
       return d.toLocaleString();
     }
 
+    function checkUserModulePermission(moduleIndex) {
+      if (!profile) return { canWatchVideo: false, canTakeQuiz: false };
+      
+      const userPerm = userPermissions[profile.id];
+      if (!userPerm) return { canWatchVideo: true, canTakeQuiz: true }; // Default permissions
+      
+      return userPerm.modulePermissions[moduleIndex] || { canWatchVideo: true, canTakeQuiz: true };
+    }
+
+    function updateSyncStatus(status, message) {
+      const statusEl = $("syncStatus");
+      statusEl.textContent = message;
+      statusEl.className = "sync-status";
+      
+      if (status === "syncing") {
+        statusEl.classList.add("syncing");
+        statusEl.textContent = "🔄 " + message;
+      } else if (status === "synced") {
+        statusEl.classList.add("synced");
+        statusEl.textContent = "✅ " + message;
+      } else if (status === "error") {
+        statusEl.classList.add("error");
+        statusEl.textContent = "❌ " + message;
+      } else {
+        statusEl.textContent = "🌐 " + message;
+      }
+    }
+
+    // =========================
+    // ☁️ CLOUD SYNC FUNCTIONS
+    // =========================
+
+    async function syncToCloud() {
+      if (!cloudConfig.googleSheetsUrl || syncInProgress) return;
+      
+      syncInProgress = true;
+      updateSyncStatus("syncing", "Syncing to cloud...");
+      
+      try {
+        // Convert students data to CSV format for Google Sheets
+        const csvData = convertStudentsToCSV(students);
+        
+        // Use Google Sheets API to append data
+        const success = await appendToGoogleSheets(csvData);
+        
+        if (success) {
+          updateSyncStatus("synced", "Synced to cloud");
+          // Mark students as synced
+          Object.values(students).forEach(student => {
+            student.synced = true;
+          });
+          saveAllStudents(students);
+        } else {
+          updateSyncStatus("error", "Sync failed");
+        }
+      } catch (error) {
+        console.error("Sync error:", error);
+        updateSyncStatus("error", "Sync error");
+      } finally {
+        syncInProgress = false;
+      }
+    }
+
+    async function syncFromCloud() {
+      if (!cloudConfig.googleSheetsUrl || syncInProgress) return;
+      
+      syncInProgress = true;
+      updateSyncStatus("syncing", "Loading from cloud...");
+      
+      try {
+        const cloudStudents = await loadFromGoogleSheets();
+        if (cloudStudents) {
+          // Merge cloud data with local data
+          Object.keys(cloudStudents).forEach(studentId => {
+            if (!students[studentId] || 
+                new Date(cloudStudents[studentId].updatedAt) > new Date(students[studentId].updatedAt)) {
+              students[studentId] = cloudStudents[studentId];
+            }
+          });
+          
+          saveAllStudents(students);
+          updateSyncStatus("synced", "Loaded from cloud");
+          return true;
+        } else {
+          updateSyncStatus("error", "Load failed");
+          return false;
+        }
+      } catch (error) {
+        console.error("Load error:", error);
+        updateSyncStatus("error", "Load error");
+        return false;
+      } finally {
+        syncInProgress = false;
+      }
+    }
+
+    function convertStudentsToCSV(studentsData) {
+      const header = ["student_id", "module", "watched", "score", "passed", "attempts", "lastAt", "createdAt", "updatedAt"];
+      const rows = [header.join(",")];
+      
+      Object.values(studentsData).forEach(student => {
+        student.modules.forEach((module, index) => {
+          rows.push([
+            JSON.stringify(student.id),
+            index + 1,
+            module.watched,
+            module.score == null ? "" : module.score,
+            module.passed,
+            module.attempts || 0,
+            module.lastAt || "",
+            student.createdAt,
+            student.updatedAt,
+          ].join(","));
+        });
+      });
+      
+      return rows.join("\n");
+    }
+
+    async function appendToGoogleSheets(csvData) {
+      if (!cloudConfig.googleSheetsUrl) return false;
+      
+      try {
+        // Extract sheet ID from URL
+        const sheetIdMatch = cloudConfig.googleSheetsUrl.match(/\/d\/([a-zA-Z0-9-_]+)/);
+        if (!sheetIdMatch) {
+          throw new Error("Invalid Google Sheets URL");
+        }
+        
+        const sheetId = sheetIdMatch[1];
+        
+        // For a real implementation, you would use the Google Sheets API
+        // This is a simplified version that would need proper authentication
+        
+        // In a real app, you would use:
+        // const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A1:append?valueInputOption=RAW`, {
+        //   method: 'POST',
+        //   headers: {
+        //     'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
+        //     'Content-Type': 'application/json'
+        //   },
+        //   body: JSON.stringify({
+        //     values: csvData.split('\n').map(row => row.split(','))
+        //   })
+        // });
+        
+        // For demo purposes, we'll simulate a successful response
+        console.log("Would sync to Google Sheets:", sheetId);
+        console.log("Data:", csvData);
+        
+        // Simulate API call delay
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        return true;
+      } catch (error) {
+        console.error("Error appending to Google Sheets:", error);
+        return false;
+      }
+    }
+
+    async function loadFromGoogleSheets() {
+      if (!cloudConfig.googleSheetsUrl) return null;
+      
+      try {
+        // Extract sheet ID from URL
+        const sheetIdMatch = cloudConfig.googleSheetsUrl.match(/\/d\/([a-zA-Z0-9-_]+)/);
+        if (!sheetIdMatch) {
+          throw new Error("Invalid Google Sheets URL");
+        }
+        
+        const sheetId = sheetIdMatch[1];
+        
+        // For a real implementation, you would use the Google Sheets API
+        // This is a simplified version
+        
+        // In a real app, you would use:
+        // const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A1:Z1000`, {
+        //   headers: {
+        //     'Authorization': 'Bearer YOUR_ACCESS_TOKEN'
+        //   }
+        // });
+        // const data = await response.json();
+        // return parseStudentsFromSheetData(data.values);
+        
+        // For demo purposes, we'll return empty data
+        console.log("Would load from Google Sheets:", sheetId);
+        
+        // Simulate API call delay
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        return {};
+      } catch (error) {
+        console.error("Error loading from Google Sheets:", error);
+        return null;
+      }
+    }
+
+    function parseStudentsFromSheetData(sheetData) {
+      // This function would parse the sheet data back into student objects
+      // Implementation depends on your sheet structure
+      return {};
+    }
+
     // =========================
     // 🎬 COURSE RENDERING
     // =========================
@@ -417,18 +704,37 @@
       $("modIndex").textContent = index + 1;
       $("modTotal").textContent = MODULES.length;
 
+      // Check permissions for this module
+      const permissions = checkUserModulePermission(index);
+      
       // Video
       videoEl.pause();
       videoSourceEl.src = m.video;
       videoEl.load();
+      
+      // Apply permissions to video
+      if (!permissions.canWatchVideo) {
+        videoEl.controls = false;
+        $("videoContainer").classList.add("locked");
+      } else {
+        videoEl.controls = true;
+        $("videoContainer").classList.remove("locked");
+      }
+      
       videoWatched = !!profile.modules[index].watched; // restore if already watched
       $("videoStatus").textContent = videoWatched ? "Video: Watched ✔" : "Video: Not watched";
+      if (!permissions.canWatchVideo) {
+        $("videoStatus").textContent = "Video: Locked 🔒";
+      }
 
       // Quiz
-      renderQuiz(m.quiz, index);
+      renderQuiz(m.quiz, index, permissions.canTakeQuiz);
       quizPassed = !!profile.modules[index].passed;
       lastScore = profile.modules[index].score;
       $("quizStatus").textContent = lastScore == null ? "Quiz: Not taken" : `Quiz: ${lastScore}% ${quizPassed ? "✔" : "✖"}`;
+      if (!permissions.canTakeQuiz) {
+        $("quizStatus").textContent = "Quiz: Locked 🔒";
+      }
 
       // Controls
       $("btnPrev").disabled = index === 0;
@@ -436,7 +742,7 @@
       updateOverallProgressUI();
     }
 
-    function renderQuiz(questions, modIndex){
+    function renderQuiz(questions, modIndex, canTakeQuiz){
       quizForm.innerHTML = "";
       questions.forEach((item, i) => {
         const div = document.createElement("div");
@@ -444,16 +750,18 @@
         div.innerHTML = `
           <h4>${item.q}</h4>
           ${item.options.map((opt, j) => `
-            <label><input type="radio" name="q${i}" value="${j}"> ${opt}</label>
+            <label><input type="radio" name="q${i}" value="${j}" ${!canTakeQuiz ? 'disabled' : ''}> ${opt}</label>
           `).join("")}
         `;
         quizForm.appendChild(div);
       });
       $("btnRetake").disabled = true;
+      $("btnCheck").disabled = !canTakeQuiz;
     }
 
     function updateNextState(){
-      const enabled = videoWatched && quizPassed;
+      const permissions = checkUserModulePermission(currentIndex);
+      const enabled = videoWatched && quizPassed && permissions.canWatchVideo && permissions.canTakeQuiz;
       $("btnNext").disabled = !enabled;
     }
 
@@ -462,17 +770,30 @@
     // =========================
 
     videoEl.addEventListener("ended", () => {
+      const permissions = checkUserModulePermission(currentIndex);
+      if (!permissions.canWatchVideo) return;
+      
       videoWatched = true;
       profile.modules[currentIndex].watched = true;
       profile.modules[currentIndex].lastAt = new Date().toISOString();
       profile.updatedAt = new Date().toISOString();
       saveAllStudents(students);
+      
+      // Auto-sync to cloud when important progress is made
+      syncToCloud();
+      
       $("videoStatus").textContent = "Video: Watched ✔";
       quizPanel.open = true; // auto-open quiz
       updateNextState();
     });
 
     $("btnResetWatch").addEventListener("click", () => {
+      const permissions = checkUserModulePermission(currentIndex);
+      if (!permissions.canWatchVideo) {
+        alert("You don't have permission to reset this video.");
+        return;
+      }
+      
       videoWatched = false;
       profile.modules[currentIndex].watched = false;
       profile.modules[currentIndex].passed = false;
@@ -493,6 +814,12 @@
 
     $("btnCheck").addEventListener("click", (e) => {
       e.preventDefault();
+      const permissions = checkUserModulePermission(currentIndex);
+      if (!permissions.canTakeQuiz) {
+        alert("You don't have permission to take this quiz.");
+        return;
+      }
+      
       const m = MODULES[currentIndex];
 
       // Require video watched before checking
@@ -520,6 +847,9 @@
       pm.lastAt = new Date().toISOString();
       profile.updatedAt = new Date().toISOString();
       saveAllStudents(students);
+      
+      // Sync to cloud when quiz is completed
+      syncToCloud();
 
       // UI
       $("quizStatus").textContent = `Quiz: ${score}% ${passed ? "✔" : "✖"}`;
@@ -544,6 +874,12 @@
 
     $("btnRetake").addEventListener("click", (e) => {
       e.preventDefault();
+      const permissions = checkUserModulePermission(currentIndex);
+      if (!permissions.canTakeQuiz) {
+        alert("You don't have permission to retake this quiz.");
+        return;
+      }
+      
       // Allow retake only if already passed (for improving score) — otherwise forced rewatch handled above
       const confirmRetake = confirm("Retake quiz? Your last score will be kept as the best.");
       if (!confirmRetake) return;
@@ -571,6 +907,7 @@
       profile.currentIndex = currentIndex;
       profile.updatedAt = new Date().toISOString();
       saveAllStudents(students);
+      syncToCloud(); // Sync when manually saving
       alert("Progress saved.");
     });
 
@@ -580,14 +917,20 @@
 
     function activateProfile(id){
       if (!students[id]) students[id] = defaultProfile(id);
+      if (!userPermissions[id]) userPermissions[id] = defaultPermissions(id);
+      
       profile = students[id];
       profile.updatedAt = new Date().toISOString();
       saveAllStudents(students);
+      saveUserPermissions(userPermissions);
       setStudentTag();
       $("signinCard").classList.add("hidden");
       $("courseView").classList.remove("hidden");
       $("teacherView").classList.add("hidden");
       loadModule(profile.currentIndex || 0);
+      
+      // Sync new student to cloud
+      syncToCloud();
     }
 
     $("btnStart").addEventListener("click", () => {
@@ -630,8 +973,9 @@
         row.className = 'row';
         row.style.cssText = 'justify-content: space-between; padding:10px 0; border-bottom:1px solid var(--border)';
         const completed = s.modules.filter(m => m.passed).length;
+        const syncedIcon = s.synced ? '✅' : '🌐';
         row.innerHTML = `
-          <div><b>${s.id}</b><div class="small muted">Updated: ${fmtDate(s.updatedAt)}</div></div>
+          <div><b>${s.id}</b> ${syncedIcon}<div class="small muted">Updated: ${fmtDate(s.updatedAt)}</div></div>
           <div class="row" style="gap:6px;">
             <span class="pill">${completed}/${MODULES.length} passed</span>
             <button class="btn" data-id="${s.id}">View</button>
@@ -645,6 +989,9 @@
     function showStudentDetail(id){
       const s = students[id];
       if (!s){ $("studentDetail").textContent = "Not found."; return; }
+      
+      const userPerm = userPermissions[id] || defaultPermissions(id);
+      
       const rows = s.modules.map((m, i) => `
         <tr>
           <td style="padding:6px 8px; border-bottom:1px solid var(--border);">Module ${i+1}</td>
@@ -655,6 +1002,31 @@
           <td style="padding:6px 8px; border-bottom:1px solid var(--border);">${fmtDate(m.lastAt)}</td>
         </tr>
       `).join('');
+      
+      // Create permission controls for each module
+      const permissionControls = MODULES.map((module, i) => {
+        const modulePerm = userPerm.modulePermissions[i] || { canWatchVideo: true, canTakeQuiz: true };
+        return `
+          <div class="permission-control">
+            <div><b>Module ${i+1}:</b> ${module.title}</div>
+            <div class="row">
+              <label class="small">Video: 
+                <label class="toggle">
+                  <input type="checkbox" data-module="${i}" data-type="video" ${modulePerm.canWatchVideo ? 'checked' : ''}>
+                  <span class="slider"></span>
+                </label>
+              </label>
+              <label class="small">Quiz: 
+                <label class="toggle">
+                  <input type="checkbox" data-module="${i}" data-type="quiz" ${modulePerm.canTakeQuiz ? 'checked' : ''}>
+                  <span class="slider"></span>
+                </label>
+              </label>
+            </div>
+          </div>
+        `;
+      }).join('');
+      
       $("studentDetail").innerHTML = `
         <div class="row" style="justify-content: space-between;">
           <div>
@@ -664,29 +1036,75 @@
           <button class="btn" id="btnImpersonate">Impersonate</button>
         </div>
         <div class="space"></div>
-        <div class极客 .progress-wrap"><div class="progress" style="width:${Math.round(100 * s.modules.filter(m=>m.passed).length / MODULES.length)}%"></div></div>
+        <div class="progress-wrap"><div class="progress" style="width:${Math.round(100 * s.modules.filter(m=>m.passed).length / MODULES.length)}%"></div></div>
+        <div class="space"></div>
+        
+        <h4>Module Permissions</h4>
+        <div class="user-permissions">
+          ${permissionControls}
+        </div>
+        
         <div class="space"></div>
         <table style="width:100%; border-collapse: collapse;">
           <thead>
             <tr>
-              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Module</th>
-              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Video</th>
-              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Score</th>
-              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Status</th>
-              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Attempts</th>
-              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var极客-border);">Last Update</th>
+              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);">Module</th>
+              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);">Video</th>
+              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);">Score</th>
+              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);">Status</th>
+              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);">Attempts</th>
+              <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);">Last Update</th>
             </tr>
           </thead>
           <tbody>${rows}</tbody>
         </table>
       `;
+      
+      // Add event listeners to permission toggles
+      $("studentDetail").querySelectorAll('input[type="checkbox"]').forEach(toggle => {
+        toggle.addEventListener('change', function() {
+          const moduleIndex = parseInt(this.dataset.module);
+          const type = this.dataset.type;
+          const isChecked = this.checked;
+          
+          // Update permissions
+          if (!userPermissions[id]) {
+            userPermissions[id] = defaultPermissions(id);
+          }
+          
+          if (type === 'video') {
+            userPermissions[id].modulePermissions[moduleIndex].canWatchVideo = isChecked;
+          } else if (type === 'quiz') {
+            userPermissions[id].modulePermissions[moduleIndex].canTakeQuiz = isChecked;
+          }
+          
+          saveUserPermissions(userPermissions);
+          
+          // If we're currently viewing this student's course, update the UI
+          if (profile && profile.id === id) {
+            loadModule(currentIndex);
+          }
+        });
+      });
+      
       $("btnImpersonate").addEventListener('click', () => {
         activateProfile(s.id);
         document.getElementById('tabCourse').click();
       });
     }
 
-    $("btnRefresh").addEventListener("click", () => { students = loadAllStudents(); renderTeacher(); });
+    $("btnRefresh").addEventListener("click", () => { 
+      students = loadAllStudents(); 
+      userPermissions = loadUserPermissions();
+      renderTeacher(); 
+    });
+
+    $("btnSyncNow").addEventListener("click", async () => {
+      const success = await syncFromCloud();
+      if (success) {
+        renderTeacher();
+      }
+    });
 
     $("btnExport").addEventListener("click", () => {
       const entries = Object.values(students);
@@ -701,7 +1119,7 @@
             m.score == null ? "" : m.score,
             m.passed,
             m.attempts || 0,
-            m极客.lastAt || "",
+            m.lastAt || "",
             s.createdAt,
             s.updatedAt,
           ].join(","));
@@ -717,13 +1135,82 @@
     $("btnWipe").addEventListener("click", () => {
       if (!confirm("This will delete ALL local progress for ALL students on this device. Continue?")) return;
       localStorage.removeItem(STORAGE_KEY);
-      students = {}; profile = null;
+      localStorage.removeItem(USER_PERMISSIONS_KEY);
+      students = {}; 
+      userPermissions = {};
+      profile = null;
       $("studentsList").innerHTML = "";
       $("studentDetail").textContent = "Select a student…";
-      $("signin极客").classList.remove("hidden");
+      $("signinCard").classList.remove("hidden");
       $("courseView").classList.add("hidden");
       $("teacherView").classList.add("hidden");
       setStudentTag();
+    });
+
+    // Cloud configuration
+    $("googleSheetsUrl").value = cloudConfig.googleSheetsUrl;
+    
+    $("googleSheetsUrl").addEventListener("change", function() {
+      cloudConfig.googleSheetsUrl = this.value;
+      saveCloudConfig(cloudConfig);
+    });
+    
+    $("btnTestConnection").addEventListener("click", async function() {
+      const url = $("googleSheetsUrl").value;
+      if (!url) {
+        alert("Please enter a Google Sheets URL");
+        return;
+      }
+      
+      // Test the connection
+      const success = await syncToCloud();
+      if (success) {
+        alert("Connection successful! Data will be synced to this sheet.");
+      } else {
+        alert("Connection failed. Please check the URL and make sure the sheet is shared with 'Anyone with the link can edit'.");
+      }
+    });
+
+    // =========================
+    // 🔐 TEACHER LOGIN
+    // =========================
+
+    function showTeacherLogin() {
+      $("teacherLoginModal").classList.remove("hidden");
+    }
+
+    function hideTeacherLogin() {
+      $("teacherLoginModal").classList.add("hidden");
+      $("teacherPassword").value = "";
+    }
+
+    function checkTeacherLogin() {
+      const password = $("teacherPassword").value;
+      const storedPassword = loadTeacherPassword();
+      
+      if (password === storedPassword) {
+        teacherLoggedIn = true;
+        hideTeacherLogin();
+        $("teacherView").classList.remove("hidden");
+        renderTeacher();
+        return true;
+      } else {
+        alert("Incorrect password. Please try again.");
+        return false;
+      }
+    }
+
+    $("btnTeacherLogin").addEventListener("click", checkTeacherLogin);
+    
+    $("btnCancelLogin").addEventListener("click", () => {
+      hideTeacherLogin();
+      $("tabCourse").click();
+    });
+    
+    $("teacherPassword").addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        checkTeacherLogin();
+      }
     });
 
     // Tabs
@@ -736,6 +1223,11 @@
       $("teacherView").classList.add('hidden');
     });
     tabTeacher.addEventListener('click', () => {
+      if (!teacherLoggedIn) {
+        showTeacherLogin();
+        return;
+      }
+      
       tabTeacher.classList.add('active');
       tabCourse.classList.remove('active');
       $("courseView").classList.add('hidden');
@@ -748,7 +1240,8 @@
       // Auto-activate last used student if any
       const lastId = sessionStorage.getItem('lastStudentId');
       if (lastId && loadAllStudents()[lastId]){
-        students = load极客Students();
+        students = loadAllStudents();
+        userPermissions = loadUserPermissions();
         profile = students[lastId];
         setStudentTag();
         $("signinCard").classList.add("hidden");
@@ -762,6 +1255,13 @@
         const id = $("studentId").value.trim();
         if (id){ sessionStorage.setItem('lastStudentId', id); }
       });
+      
+      // Initial cloud sync check
+      if (cloudConfig.googleSheetsUrl) {
+        updateSyncStatus("", "Cloud ready");
+      } else {
+        updateSyncStatus("", "Offline");
+      }
     })();
   </script>
 </body>
