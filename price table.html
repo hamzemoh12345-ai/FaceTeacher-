@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing Table</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #FEC194 0%, #FF0061 100%);
+            color: #2d3748;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #718096;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .pricing-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .pricing-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            padding: 40px 30px;
+            text-align: center;
+            flex: 1;
+            min-width: 280px;
+            max-width: 350px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .pricing-card.popular {
+            border: 2px solid #4c6fff;
+            transform: scale(1.05);
+        }
+
+        .pricing-card.popular:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #4c6fff;
+            color: white;
+            padding: 8px 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-bottom-left-radius: 12px;
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #4c6fff;
+            margin-bottom: 5px;
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .billing {
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+
+        .features {
+            list-style: none;
+            margin-bottom: 40px;
+            text-align: left;
+        }
+
+        .features li {
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+            color: #4a5568;
+            display: flex;
+            align-items: center;
+        }
+
+        .features li:last-child {
+            border-bottom: none;
+        }
+
+        .features li i {
+            color: #4c6fff;
+            margin-right: 10px;
+            font-size: 0.9rem;
+        }
+
+        .select-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #FEC194 0%, #FF0061 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .select-btn:hover {
+            background: linear-gradient(135deg, #FEC194 0%, #FF0061 100%);
+            transform: translateY(-2px);
+        }
+
+        .popular .select-btn {
+            background: linear-gradient(135deg, #FEC194 0%, #FF0061 100%);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        /* Mobile-specific styles */
+        @media (max-width: 768px) {
+            .pricing-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .pricing-card {
+                width: 100%;
+                max-width: 400px;
+            }
+            
+            .pricing-card.popular {
+                transform: none;
+            }
+            
+            .pricing-card.popular:hover {
+                transform: translateY(-10px);
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Choose Your Plan</h1>
+            <p class="subtitle">Select the perfect plan for your needs with our flexible pricing options</p>
+        </header>
+
+        
+
+            <!-- Standard Plan -->
+            <div class="pricing-card popular">
+                <div class="popular-badge">MOST POPULAR</div>
+                <div class="price">$0.3</div>
+                <h2 class="plan-name">STANDARD</h2>
+                <p class="billing">USD/Month</p>
+                <ul class="features">
+                    <li><i class="fas fa-check"></i> Video maqal iyo muuqaal</li>
+                    <li><i class="fas fa-check"></i> Lorem ipsum dolor sit amet</li>
+                    <li><i class="fas fa-check"></i> Lorem ipsum dolor sit amet</li>
+                    <li><i class="fas fa-check"></i> Lorem ipsum dolor sit amet</li>
+                    <li><i class="fas fa-check"></i> Lorem ipsum dolor sit amet</li>
+                </ul>
+                <button class="select-btn" onclick="window.open('https://wa.me/633383378?text=i%20am%20ready%20go', '_blank')">Send WhatsApp Message</button>
+
+
+                 <div class="phone-number">+63 33 833 78</div>
+        
+        <a href="tel:+633383378" class="call-btn">
+            <span class="phone-icon">📞</span>
+            Call Now
+        </a>
+
+
+
+
+            </div
+
+            
+
+        <footer>
+            <p>Designed with <i class="fas fa-heart" style="color: #e53e3e;"></i> for you</p>
+        </footer>
+    </div>
+
+    <script>
+        // Add interactivity to the select buttons
+        document.querySelectorAll('.select-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const planName = this.closest('.pricing-card').querySelector('.plan-name').textContent;
+                const price = this.closest('.pricing-card').querySelector('.price').textContent;
+                
+                // Show a confirmation message
+                alert(`Thank you for selecting the ${planName} plan at ${price}/month!`);
+                
+                // Add a temporary visual feedback
+                this.style.background = 'linear-gradient(135deg, #38a169 0%, #2f855a 100%)';
+                this.textContent = 'SELECTED!';
+                
+                setTimeout(() => {
+                    this.style.background = 'linear-gradient(135deg, #4c6fff 0%, #3b53c7 100%)';
+                    this.textContent = 'SELECT';
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>
