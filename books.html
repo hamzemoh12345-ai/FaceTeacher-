@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dooro Casharka</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #FEC194 0%, #FF0061 100%);
+            color: #2d3748;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #718096;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-image {
+            width: 105%;
+            height: 126px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 25px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .card-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #3182ce;
+        }
+
+        .card-description {
+            color: #718096;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .card-features {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+
+        .feature i {
+            color: #3182ce;
+        }
+
+        .card-button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #FEC194 0%, #FF0061 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .card-button:hover {
+            background: linear-gradient(135deg, #FEC194 0%, #FF0061 100%);
+            transform: translateY(-2px);
+        }
+
+        .view-all {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .view-all-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: white;
+            color: #3182ce;
+            border: 2px solid #3182ce;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .view-all-button:hover {
+            background: #3182ce;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .cards-container {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Dooro Maaddada </h1>
+            <p class="subtitle">Dooro maaddada aad jeceshahay, kuna bilow safarka aqoonta!
+Barashada waxay ka bilaabataa halka xiisahaagu ku jiro.</p>
+        </header>
+
+        <div class="cards-container">
+            <!-- Card 1 -->
+            <div class="card">
+                <img src="science.png" alt="Swiss Alps Retreat" class="card-image">
+                <div class="card-content">
+                    <div class="card-header">
+                        <h2 class="card-title"> Science</h2>
+                        <div class="card-price">Garde 8</div>
+                    </div>
+                    <p class="card-description">Bar sirta dunida iyo waxa ka hooseeya muuqaalka aan aragno.
+Saynisku waa furaha hal-abuurka iyo horumarka bani’aadamka.
+Fahamka cilmigu wuxuu kaa caawiyaa inaad xaliso dhibaatooyinka adduunka. </p>
+                    <div class="card-features">
+                        <div class="feature">
+                            <i class="fas fa-crown"></i>
+                            <span>Video</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-calendar-day"></i>
+                            <span>13 Chapters</span>
+                        </div>
+                    </div>
+                    <button class="card-button" onclick="window.location.href='chapters science.html'">Bilow hadda!</button>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="card">
+                <img src="social.png" alt="Austrian Mountain Lodge" class="card-image">
+                <div class="card-content">
+                    <div class="card-header">
+                        <h2 class="card-title">Social</h2>
+                        <div class="card-price">Garde 8</div>
+                    </div>
+                    <p class="card-description">Bulshadu waa nolosha — bar sida dadka, dalalka iyo dhaqamadu u wada noolyihiin.
+Maaddadani waxay kaa dhigaysaa qof fahma xiriirka bulshada iyo taariikhda.
+Faham dadka si aad u dhisto adduun nabad iyo isfahan leh.</p>
+                    <div class="card-features">
+                        <div class="feature">
+                            <i class="fas fa-fireplace"></i>
+                            <span>Video</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-hiking"></i>
+                            <span>6 Chapters</span>
+                        </div>
+                    </div>
+                    <button class="card-button" onclick="window.location.href='chapters social.html'">Bilow hadda!</button>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="card">
+                <img src="mathmatics.png" alt="French Chalet Escape" class="card-image">
+                <div class="card-content">
+                    <div class="card-header">
+                        <h2 class="card-title">Mathmatics</h2>
+                        <div class="card-price">Garde 8</div>
+                    </div>
+                    <p class="card-description">Xisaabtu waa luqadda caqliga iyo cilmiga dhabta ah.
+Waxay baraysaa sida loo fikiro si nidaamsan oo sax ah.
+Marka aad xalliso tirooyinka, waxaad dhisaysaa maskax xooggan oo nadiif ah.</p>
+                    <div class="card-features">
+                        <div class="feature">
+                            <i class="fas fa-utensils"></i>
+                            <span>Video</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-spa"></i>
+                            <span>6 Chapers</span>
+                        </div>
+                    </div>
+                    <button class="card-button" onclick="window.location.href='chapters math.html'">Bilow hadda!</button>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="card">
+                <img src="english.png" alt="Italian Dolomites Hideaway" class="card-image">
+                <div class="card-content">
+                    <div class="card-header">
+                        <h2 class="card-title">English</h2>
+                        <div class="card-price">Garde 8</div>
+                    </div>
+                    <p class="card-description">Luqadda fursadaha, safarka, iyo isdhexgalka caalamka.
+Ku hadal Ingiriisi si aad u barato, u safarto, oo adduunka ula xiriirto.
+Waa luqadda suugaanta, filimada, iyo riyooyinka mustaqbalka.</p>
+                    <div class="card-features">
+                        <div class="feature">
+                            <i class="fas fa-mountain"></i>
+                            <span>Video</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-hot-tub"></i>
+                            <span>23 Unit</span>
+                        </div>
+                    </div>
+                    <button class="card-button" onclick="window.location.href='chapters englush.html'">Bilow hadda!</button>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="card">
+                <img src="arabic.png" alt="Bavarian Forest Cabin" class="card-image">
+                
+                <div class="card-content">
+                    <div class="card-header">
+                        <h2 class="card-title">Arabic</h2>
+                        <div class="card-price">Garde 8</div>
+                    </div>
+                    <p class="card-description">Luqadda Qur’aanka Kariimka iyo xikmadda Islaamka.
+Bar Carabi si aad u fahamto diintaada iyo dhaqanka Islaamka.
+Waa luqad hodan ah oo quruxdeeda laga dareemo erey kasta.</p>
+                    <div class="card-features">
+                        <div class="feature">
+                            <i class="fas fa-tree"></i>
+                            <span>Video</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-swimmer"></i>
+                            <span>______</span>
+                        </div>
+                    </div>
+                    <button class="card-button" onclick="window.location.href='chapters arabic.html'">Bilow hadda!</button>
+                </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="card">
+                <img src="tarabiya.png" alt="Pyrenees Mountain Retreat" class="card-image">
+                <div class="card-content">
+                    <div class="card-header">
+                        <h2 class="card-title">Islamic</h2>
+                        <div class="card-price">Garde 8</div>
+                    </div>
+                    <p class="card-description">Tarbiyadu waa nolosha wanaagsan iyo dabeecadda suuban.
+Waxay baraysaa ixtiraam, samir, iyo jacayl dadka kale.
+Qofka leh tarbiyo fiican, waa iftiin bulshada dhexdeeda.</p>
+                    <div class="card-features">
+                        <div class="feature">
+                            <i class="fas fa-snowflake"></i>
+                            <span>Video</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-wifi"></i>
+                            <span>____</span>
+                        </div>
+                    </div>
+                    <button class="card-button" onclick="window.location.href='chapters tarbiya.html'">Bilow hadda!</button>
+                </div>
+            </div>
+
+            <!-- Card 7 -->
+            <div class="card">
+                <img src="somali.png" alt="Scandinavian Fjord Cabin" class="card-image">
+                <div class="card-content">
+                    <div class="card-header">
+                        <h2 class="card-title">Somali</h2>
+                        <div class="card-price">Garde 8</div>
+                    </div>
+                    <p class="card-description">Af-Soomaaligu waa astaanta aqoonsiga iyo dhaqankaaga.
+Bar oo ku faan luqaddaada, waa hanti aan lumin karin.
+Luqadda hooyo waa xididka aqoonta iyo isfahanka bulshada.</p>
+                    <div class="card-features">
+                        <div class="feature">
+                            <i class="fas fa-water"></i>
+                            <span>video</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-sun"></i>
+                            <span>7 Cuttub</span>
+                        </div>
+                    </div>
+                    <button class="card-button" onclick="window.location.href='chapters somali.html'">Bilow hadda!</button>
+                </div>
+            </div>
+
+            
+        </div>
+        
+
+        <div class="view-all">
+            <a href="#" class="view-all-button">Soo bilaw hadda!</a>
+        </div>
+    </div>
+
+    <script>
+        // Add interactivity to the reserve buttons
+        document.querySelectorAll('.card-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const cardTitle = this.closest('.card').querySelector('.card-title').textContent;
+                
+            });
+        });
+    </script>
+</body>
+</html>

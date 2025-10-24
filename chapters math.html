@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpine Destinations</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #FEC194 0%, #FF0061 100%);
+            color: #334e68;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #102a43;
+            margin-bottom: 10px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #486581;
+            max-width: 600px;
+            margin: 0 auto;
+            font-weight: 500;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover .card-image {
+            transform: scale(1.05);
+        }
+
+        .card-content {
+            padding: 22px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .location {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #102a43;
+            margin-bottom: 5px;
+        }
+
+        .country {
+            color: #486581;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .directions-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: linear-gradient(135deg, #FEC194 0%, #FF0061 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(255, 0, 97, 0.2);
+            text-decoration: none;
+            display: inline-block;
+            padding: 10px 20px;
+
+        }
+
+        .directions-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 0, 97, 0.3);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px 0;
+            color: #627d98;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .cards-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .card {
+                display: flex;
+                flex-direction: row;
+                height: 140px;
+            }
+            
+            .card-image {
+                width: 45%;
+                height: 85%;
+            }
+            
+            .card-content {
+                padding: 18px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                width: 60%;
+            }
+            
+            .location {
+                font-size: 1.1rem;
+            }
+            
+            .country {
+                font-size: 0.85rem;
+                margin-bottom: 10px;
+            }
+            
+            .directions-btn {
+                padding: 8px 14px;
+                font-size: 0.8rem;
+                align-self: flex-start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .card {
+                height: 120px;
+            }
+            
+            .card-content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Dooro Chapter-ka</h1>
+            <p class="subtitle">Dooro chapterka naftaada dhoolla-caddeyn gelisa! Baro, sahamiso, oo noqdo qofka aad rabto inaad noqoto.</p>
+        </header>
+
+        <div class="cards-container">
+            <div class="card">
+                <img src="Chapter.png" class="card-image">
+                <div class="card-content">
+                    <h2 class="location">Numbers</h2>
+                    <p class="country">Video</p>
+                    <a href="price table.html" class="directions-btn">
+    Bilow hadda!
+</a>
+
+                </div>
+            </div>
+            <div class="card">
+                <img src="Chapter (1).png" class="card-image">
+                <div class="card-content">
+                    <h2 class="location">Algebra</h2>
+                    <p class="country">Video</p>
+                    <a href="price table.html" class="directions-btn">
+    Bilow hadda!
+</a>
+
+                </div>
+            </div>
+            <div class="card">
+                <img src="Chapter (2).png" class="card-image">
+                <div class="card-content">
+                    <h2 class="location">Geometry</h2>
+                    <p class="country">Video</p>
+                    <a href="price table.html" class="directions-btn">
+    Bilow hadda!
+</a>
+
+                </div>
+            </div>
+            <div class="card">
+                <img src="Chapter (3).png" class="card-image">
+                <div class="card-content">
+                    <h2 class="location">Measurments</h2>
+                    <p class="country">Video</p>
+                    <a href="price table.html" class="directions-btn">
+    Bilow hadda!
+</a>
+
+                </div>
+            </div>
+            <div class="card">
+                <img src="Chapter (4).png" class="card-image">
+                <div class="card-content">
+                    <h2 class="location">Statistics and probability</h2>
+                    <p class="country">Video</p>
+                    <a href="price table.html" class="directions-btn">
+    Bilow hadda!
+</a>
+
+                </div>
+            </div>
+            <div class="card">
+                <img src="Chapter (5).png" class="card-image">
+                <div class="card-content">
+                    <h2 class="location">Trigonometry</h2>
+                    <p class="country">Video</p>
+                    <a href="price table.html" class="directions-btn">
+    Bilow hadda!
+</a>
+
+        
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2025 Doora chapterka | Explore the boook's most beautiful chapters.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.querySelectorAll('.directions-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation(); // Prevent triggering card click
+                const location = this.closest('.card').querySelector('.location').textContent;
+                const country = this.closest('.card').querySelector('.country').textContent;
+                
+            });
+        });
+
+        // Add click functionality to entire card
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', function() {
+                const location = this.querySelector('.location').textContent;
+                const country = this.querySelector('.country').textContent;
+                alert(`Viewing details for ${location}, ${country}`);
+            });
+        });
+    </script>
+</body>
+</html>
