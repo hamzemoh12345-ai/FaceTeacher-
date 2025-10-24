@@ -1,245 +1,929 @@
 <!DOCTYPE html>
 <html lang="en">
-<meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <head>
-  
-  
-  <title>Homepage</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f6f8;
-      margin: 0;
-      padding: 0;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facetech - Online Learning Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS Variables for Colors */
+        :root {
+            --primary-purple: #E91E63;
+            --light-purple: #9B59B6;
+            --dark-purple: #6A0DAD;
+            --pink: #E91E63;
+            --light-pink: #F48FB1;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --dark-gray: #333333;
+            --medium-gray: #777777;
+        }
 
-    /* Banner */
-    .banner img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    /* Section Heading */
-    h2 {
-      font-size: 32px;
-      text-align: center;
-      margin: 40px 0;
-      color: #333;
-    }
+        body {
+            line-height: 1.6;
+            color: var(--dark-gray);
+            background-color: var(--white);
+        }
 
-    /* Card Grid */
-    .card-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-      max-width: 1200px;
-      margin: auto;
-      padding: 0 20px 40px;
-    }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
-    .card {
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
-      transition: transform 0.2s;
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
+        section {
+            padding: 80px 0;
+        }
 
-    .card:hover {
-      transform: translateY(-5px);
-    }
+        h1, h2, h3, h4 {
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
 
-    .card img {
-      width: 100%;
-      height: 350px;
-      object-fit: cover;
-    }
+        h1 {
+            font-size: 2.5rem;
+        }
 
-    .card-content {
-      padding: 20px;
-    }
+        h2 {
+            font-size: 2rem;
+        }
 
-    .card-title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 10px;
-      color: #222;
-    }
+        p {
+            margin-bottom: 15px;
+        }
 
-    .location {
-      font-size: 14px;
-      color: #5a67d8;
-      margin-bottom: 10px;
-    }
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
 
-    .info {
-      display: flex;
-      justify-content: space-between;
-      font-size: 14px;
-      color: #555;
-    }
+        .btn-primary {
+            background-color: var(--primary-purple);
+            color: var(--white);
+        }
 
-    .rating {
-      color: #f59e0b;
-    }
+        .btn-primary:hover {
+            background-color: var(--dark-purple);
+            transform: translateY(-3px);
+        }
 
-    .price {
-      font-weight: bold;
-      color: #3b82f6;
-    }
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary-purple);
+            border: 2px solid var(--primary-purple);
+        }
 
-    /* Footer */
-    footer {
-      background: #ffffff;
-      color: #252522;
-      padding: 40px 20px;
-    }
+        .btn-secondary:hover {
+            background-color: var(--primary-purple);
+            color: var(--white);
+        }
 
-    .footer-content {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-      max-width: 1200px;
-      margin: auto;
-    }
+        /* Header Styles */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
 
-    .footer-column h3 {
-      color: #111110;
-      margin-bottom: 15px;
-    }
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
 
-    .footer-column ul {
-      list-style: none;
-      padding: 0;
-    }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark-gray);
+        }
 
-    .footer-column ul li {
-      margin-bottom: 8px;
-    }
+        .logo span {
+            color: var(--primary-purple);
+        }
 
-    .footer-column ul li a {
-      text-decoration: none;
-      color: #363631;
-    }
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
 
-    .footer-column ul li a:hover {
-      color: #181716;
-    }
+        .nav-links li {
+            margin-left: 25px;
+        }
 
-    .btn {
-      padding: 10px;
-      color: #252521;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-gray);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
 
-    .copyright {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 14px;
-      color: #161615;
-    }
-  </style>
+        .nav-links a:hover {
+            color: var(--primary-purple);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark-gray);
+        }
+
+        /* Hero Section */
+        .hero {
+            background-color: var(--light-gray);
+            padding-top: 150px;
+            padding-bottom: 80px;
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 22px;
+        }
+
+        .hero-text {
+            flex: 1;
+        }
+
+        .hero-image {
+            flex: 1;
+            position: relative;
+        }
+
+        .hero-image img {
+            width: 115%;   /* fit inside the container */
+    height: auto;  /* maintain aspect ratio */
+    display: block;
+    margin: 0 auto; /* center image horizontally */
+    
+           
+            
+        
+        }
+
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .floating-element {
+            position: absolute;
+            background-color: var(--white);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .element-1 {
+            top: 10%;
+            left: 10%;
+            background-color: var(--light-pink);
+        }
+
+        .element-2 {
+            top: 20%;
+            right: 15%;
+            background-color: var(--light-purple);
+        }
+
+        .element-3 {
+            bottom: 30%;
+            left: 5%;
+            background-color: var(--primary-purple);
+        }
+
+        .partners {
+            margin-top: 40px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .partner-logo {
+            height: 40px;
+            filter: grayscale(100%);
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .partner-logo:hover {
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+
+        /* Search Section */
+        .search-section {
+            padding: 40px 0;
+            background-color: var(--white);
+        }
+
+        .search-container {
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 50px;
+            overflow: hidden;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 15px 25px;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .search-btn {
+            background-color: var(--primary-purple);
+            color: var(--white);
+            border: none;
+            padding: 0 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background-color: var(--dark-purple);
+        }
+
+        /* Categories Section */
+        .categories-section {
+            background-color: var(--white);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .categories-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .category-card {
+            text-align: center;
+            padding: 30px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .category-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 20px;
+            border: 3px solid var(--light-purple);
+        }
+
+        /* Benefits Section */
+        .benefits-section {
+            background-color: var(--light-gray);
+        }
+
+        .benefits-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .benefit-icon {
+            background-color: var(--light-purple);
+            color: var(--white);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* Popular Courses Section */
+        .popular-courses {
+            background: linear-gradient(135deg, var(--primary-purple), var(--pink));
+            color: var(--white);
+        }
+
+        .popular-courses .section-title {
+            color: var(--white);
+        }
+
+        .courses-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .course-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            text-decoration: none;
+        }
+
+        .course-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .course-img {
+            width: 100%;
+            height: 290px;
+            object-fit: cover;
+        }
+
+        .course-content {
+            padding: 20px;
+            color: var(--dark-gray);
+        }
+
+        .course-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .course-price {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: var(--medium-gray);
+        }
+
+        .discounted-price {
+            color: var(--pink);
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .course-stats {
+            display: flex;
+            justify-content: space-between;
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Instructor Section */
+        .instructor-section {
+            background-color: var(--white);
+        }
+
+        .instructor-container {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .instructor-image {
+            flex: 1;
+        }
+
+        .instructor-image img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .instructor-content {
+            flex: 1;
+        }
+
+        .perks-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .perks-list li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .perks-list i {
+            color: var(--primary-purple);
+        }
+
+        /* Testimonials Section */
+        .testimonials-section {
+            background: linear-gradient(135deg, var(--primary-purple), var(--pink));
+            color: var(--white);
+        }
+
+        .testimonials-section .section-title {
+            color: var(--white);
+        }
+
+        .testimonials-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonial-content {
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-gray);
+            color: var(--white);
+            padding: 60px 0 30px;
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: var(--light-gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-purple);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .hero-content {
+                flex-direction: column;
+            }
+            
+            .instructor-container {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background-color: var(--white);
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .nav-links li {
+                margin: 10px 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
 </head>
-
 <body>
-
-  <!-- Banner -->
-  <div class="banner">
-    <img src="st.png" alt="Website Banner">
-  </div>
-
-  <!-- Section -->
-  <h2>Explore Top Destinations</h2>
-
-  <div class="card-container">
-
-    <!-- 1 -->
-    <a href="video.html" class="card">
-      <img src="vvideo.jpg" alt="Floating Islands">
-      <div class="card-content">
-        <div class="card-title">🎓 Video → Quiz Course (8 Lesson)</div>
-        <div class="location">📍 Somaliland, Hargiasa</div>
-        <div class="info">
-          <div class="rating">⭐ 5.0 Superb</div>
-          <div class="price">⭐⭐⭐</div>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">Face<span>tech</span></div>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links">
+                <li><a href="#">Develop</a></li>
+                <li><a href="#">Video</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#" class="btn btn-primary">Sign Up</a></li>
+            </ul>
         </div>
-      </div>
-    </a>
+    </header>
 
-    <!-- 2 -->
-    <a href="price table.html" class="card">
-      <img src="memorise88.jpg" alt="Kayak">
-      <div class="card-content">
-        <div class="card-title">🧠 Memorise → Video Course (8 lesson)</div>
-        <div class="location">📍Somaliland, Hargiasa</div>
-        <div class="info">
-          <div class="rating">⭐ 4.5 Good</div>
-          <div class="price">⭐⭐⭐</div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Safarka Aqoonta Online Wuu Ku Sugayaa — Bilow Hadda!</h1>
+                    <p>Baro si madadaalo leh oo aad fahmi karto, adigoo gurigaaga jooga 💻✨.</p>
+                    <a href="books.html" class="btn btn-primary">Bilow Hadda!</a>
+                    
+                    <div class="partners">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYYEmILB5U5br8tMGNBd0b-itIQqyRYFNbPw&s" alt="Duolingo" class="partner-logo" style="height: 30px;">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTf717bvCS864FcAGKaj3AndcLLltPngwJ5KA&s" alt="Magic Leap" class="partner-logo" style="height: 30px;">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwTA6M3IHsGw52LRzqEThKNsWruNQnESXEKA&s" alt="Microsoft" class="partner-logo" style="height: 30px;">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6fjrPMs77H9pGhjbEjhHTiHBJS4tCk7XUIg&s" alt="Codecov" class="partner-logo" style="height: 30px;">
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="Adobe_Express_-_file-removebg-preview.png" alt="Student learning">
+                    <div class="floating-elements">
+                        
+                            
+                        </div>
+                        
+                            
+                        </div>
+                        
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </a>
+    </section>
 
-    <!-- 3 -->
-    <a href="exam.html" class="card">
-      <img src="exm.jpg" alt="Desert">
-      <div class="card-content">
-        <div class="card-title">✏️ Exam→ Video Course (8 lesson )</div>
-        <div class="location">📍 Somaliland, Hargiasa</div>
-        <div class="info">
-          <div class="rating">⭐ 4.0 Good</div>
-          <div class="price">⭐⭐⭐</div>
+    <!-- Search Section -->
+    <section class="search-section">
+        <div class="container">
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search Courses">
+                <button class="search-btn">Search</button>
+            </div>
         </div>
-      </div>
-    </a>
+    </section>
 
-  </div>
+    <!-- Categories Section -->
+    <section class="categories-section">
+        <div class="container">
+            <h2 class="section-title">Ardayda Ka Faa'idaystay Facetech </h2>
+            <div class="categories-container">
+                <div class="category-card">
+                    <img src="Screenshot 2025-10-20 115901.png" alt="Student" class="category-img">
+                    <h3>Xasan Axmed</h3>
+                    <p>"Video Facetech waxay i caawiyeen inaan si fiican u fahmo math oo aan kalsooni ku yeesho"</p>
+                </div>
+                <div class="category-card">
+                    <img src="Screenshot 2025-10-20 114647.png" alt="Student" class="category-img">
+                    <h3>Xasba Jaamac</h3>
+                    <p>"Graan maayo meel ka fiican oo wax sidaan wax u bari kara."</p>
+                </div>
+                <div class="category-card">
+                    <img src="Screenshot 2025-10-20 114826.png" alt="Student" class="category-img">
+                    <h3>ismaacil Isaaq</h3>
+                    <p>"Aydhbaan ahay Facetech ma"aaqon, kaama yeelayo."</p>
+                </div>
+                <div class="category-card">
+                    <img src="Screenshot 2025-10-20 114918.png" alt="Student" class="category-img">
+                    <h3>Suhayb Cabdi</h3>
+                    <p>"Aradayga faslka mar kasta ka muuqda ayaad nogni, maxad qabanyasaa?!, dhqaaq."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+ 
+    <!-- Benefits Section -->
+    <section class="benefits-section">
+        <div class="container">
+            <h2 class="section-title">Faa’iidooyinka Waxbarashadayada Online-ka</h2>
+            <div class="benefits-container">
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div>
+                        <h3>Video</h3>
+                        <p>Dhamaan ku dawo casharaabta school ka maaqal iyo muuqaal.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <div>
+                        <h3>Memorize</h3>
+                        <p>wax aad ku baarani doonta sida ugu fuduu ee aad cashar walba uu qaybi laahyd.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div>
+                        <h3>Imtaaxano </h3>
+                        <p>Imtixaano kal duwaan, iyo habaabka looga shaqaynayo imtixaanda.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <div>
+                        <h3>Abaal-marino</h3>
+                        <p>Abaal-marin ay ka miid yihiin saacado,mobilo iyo laptob-yo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <!-- Footer -->
-  <footer>
-    <div class="footer-content">
-      <div class="footer-column">
-        <h3>About E-PORA</h3>
-        <p>Dramatically supply transparent deliverables before backward comp internal or organic sources.</p>
-      </div>
-      <div class="footer-column">
-        <h3>Quick Links</h3>
-        <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Pages</a></li>
-          <li><a href="#">Instruction</a></li>
-          <li><a href="#">Course</a></li>
-          <li><a href="#">Blog</a></li>
-        </ul>
-      </div>
-      <div class="footer-column">
-        <h3>Contact Us</h3>
-        <ul>
-          <li>📍 hargaisa </li>
-          <li>📞 063-3383378</li>
-          <li>✉ info@epora.com</li>
-        </ul>
-      </div>
-      <div class="footer-column">
-        <h3>Newsletter</h3>
-        <p>Subscribe to our newsletter for updates</p>
-        <form>
-          <input type="email" placeholder="Your Email"
-            style="padding:10px; width:100%; margin-bottom:10px; border-radius:5px; border:none;">
-          <button type="submit" class="btn" style="width:100%; background-color:#4a6cf7;">Subscribe</button>
-        </form>
-      </div>
+   <!-- Popular Courses Section -->
+<section class="popular-courses">
+    <div class="container">
+        <h2 class="section-title">Dooro Fasalkaga</h2>
+        <div class="courses-container">
+
+            <!-- Grade 8 -->
+            <a href="books.html" class="course-card">
+                <img src="garde8.jpg" alt="Web Development" class="course-img">
+                <div class="course-content">
+                    <h3 class="course-title">Grade 8</h3>
+                    <div class="course-price">
+                        <span class="original-price"></span>
+                        <span class="discounted-price"></span>
+                    </div>
+                    <div class="course-stats">
+                        <span><i class="fas fa-users"></i> 5.8K Students</span>
+                        <span><i class="fas fa-clock"></i> 100 Video</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Grade 7 -->
+            <a href="book7.html" class="course-card">
+                <img src="grade7.jpg" alt="Photoshop" class="course-img">
+                <div class="course-content">
+                    <h3 class="course-title">Grade 7</h3>
+                    <div class="course-price">
+                        <span class="original-price"></span>
+                        <span class="discounted-price"></span>
+                    </div>
+                    <div class="course-stats">
+                        <span><i class="fas fa-users"></i> 4.2K Students</span>
+                        <span><i class="fas fa-clock"></i> 100 Video</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Grade 6 -->
+            <a href="book6.html" class="course-card">
+                <img src="garde 6.jpg" alt="Python" class="course-img">
+                <div class="course-content">
+                    <h3 class="course-title">Grade 6</h3>
+                    <div class="course-price">
+                        <span class="original-price"></span>
+                        <span class="discounted-price"></span>
+                    </div>
+                    <div class="course-stats">
+                        <span><i class="fas fa-users"></i> 6.5K Students</span>
+                        <span><i class="fas fa-clock"></i> 100 Video</span>
+                    </div>
+                </div>
+            </a>
+
+        </div>
     </div>
-    <div class="copyright">
-      <p>&copy; 2023 E-PORA. All Rights Reserved.</p>
-    </div>
-  </footer>
+</section>
 
+    <!-- Instructor Section -->
+    <section class="instructor-section">
+        <div class="container">
+            <div class="instructor-container">
+                <div class="instructor-content">
+                    <h2>"Haddii Aad Macallin Shahaado Leh Tahay, Noqo Macallin Baraya"</h2>
+                    <p>Ku biir kooxdayada macallimiinta khibradda leh oo la wadaag aqoontaada kumannaan arday oo xiiseynaya barashada onlinka ah.</p>
+                    <ul class="perks-list">
+                        <li><i class="fas fa-check-circle"></i> Saacado shaqo oo dabacsan</li>
+                        <li><i class="fas fa-check-circle"></i> Tababar & taageero bilaash ah</li>
+                        <li><i class="fas fa-check-circle"></i> Adigu go’aami wakhtihaad doonto</li>
+                        <li><i class="fas fa-check-circle"></i> iyo Faa’iidooyin kalo Badan</li>
+                    </ul>
+                    <a href="tel:0633383378" class="btn btn-secondary">Hada Isdiwaanali</a>
+                </div>
+                <div class="instructor-image">
+                    <img src="job.jpg" alt="Instructor">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section">
+        <div class="container">
+            <h2 class="section-title"></h2>
+            <div class="testimonials-container">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        "Facetech waxay si buuxda u beddeshay waxbarshada somaliland. video si nidaamsan ayay u dhisan yihiin, macallimiintuna waa kuwo cajiib ah!"
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="Screenshot 2025-10-22 095641.png" alt="Alexia V." class="author-img">
+                        <div>
+                            <h4>Maxamed x.</h4>
+                            <p>Teacher </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        "Waxaan awooday inaan si fuduud uu fahamo casharaanta. Video daa wax-ku-oolka ah ayaa iga caawiyay inaan noqdo aradya adag."
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="xasan.png" alt="Michael T." class="author-img">
+                        <div>
+                            <h4>Farxan T.</h4>
+                            <p>Teacher</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        "Caajiib Facetech!, Waaba macalinkoo ku yidh adoo jiifa manhajkaba leef."
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="Screenshot 2025-10-22 095440.png" alt="Sarah J." class="author-img">
+                        <div>
+                            <h4>Maxamuud J.</h4>
+                            <p>Teacher</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>Facetech</h3>
+                    <p>Waxaan awood siinaynaa ardayda Somaliland oo dhan annagoo siinayna waxbarasho online ah oo tayo sare leh.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Video</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Categories</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Science</a></li>
+                        <li><a href="#">Social</a></li>
+                        <li><a href="#">Math</a></li>
+                        <li><a href="#">English</a></li>
+                        <li><a href="#">Arabic</a></li>
+                        <li><a href="#">Trabiya</a></li>
+                        <li><a href="#">Somali</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-envelope"></i> hamzze.mohammed@gmail.com</li>
+                        <li><i class="fas fa-phone"></i>+25263-3383378</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Somaliland, Hrgayiesa</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Facetech. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+
+        // Simple animation on scroll
+        window.addEventListener('scroll', function() {
+            const elements = document.querySelectorAll('.category-card, .benefit-item, .course-card, .testimonial-card');
+            
+            elements.forEach(element => {
+                const position = element.getBoundingClientRect();
+                
+                // If element is in viewport
+                if(position.top < window.innerHeight - 100) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        // Initialize elements with initial styles for animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.category-card, .benefit-item, .course-card, .testimonial-card');
+            
+            elements.forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(20px)';
+                element.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            });
+            
+            // Trigger scroll event to check initial positions
+            window.dispatchEvent(new Event('scroll'));
+        });
+    </script>
 </body>
 </html>
