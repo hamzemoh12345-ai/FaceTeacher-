@@ -112,7 +112,7 @@
 
         .billing {
             color: #718096;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             font-size: 0.9rem;
         }
 
@@ -152,6 +152,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            text-decoration: none;
         }
 
         .select-btn:hover {
@@ -199,7 +200,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>Choose Your Plan</h1>
+            <h1>Bixi hadda</h1>
             <p class="subtitle">Select the perfect plan for your needs with our flexible pricing options</p>
         </header>
 
@@ -208,17 +209,20 @@
             <!-- Standard Plan -->
             <div class="pricing-card popular">
                 <div class="popular-badge">MOST POPULAR</div>
-                <div class="price">$0.5</div>
+                <div class="price">$0.25</div>
                 <h2 class="plan-name">STANDARD</h2>
-                <p class="billing">USD/Month</p>
+                <p class="billing">USD/Year</p>
                 <ul class="features">
-                    <li><i class="fas fa-check"></i> Video maqal iyo muuqaal</li>
-                    <li><i class="fas fa-check"></i> Lorem ipsum dolor sit amet</li>
-                    <li><i class="fas fa-check"></i> Lorem ipsum dolor sit amet</li>
-                    <li><i class="fas fa-check"></i> Lorem ipsum dolor sit amet</li>
-                    <li><i class="fas fa-check"></i> Lorem ipsum dolor sit amet</li>
-                </ul>
-                <a class="select-btn call-btn" href="tel:*220*3383378*5000#">Select</a>
+     <li><i class="fas fa-check"></i>Casharo muuqaal iyo cod leh</li>
+    <li><i class="fas fa-check"></i> Baro si fudud oo degdeg ah</li>
+    <li><i class="fas fa-check"></i> Ku celceli mar kasta </li>
+    <li><i class="fas fa-check"></i> Xooji fahamkaaga</li>
+    <li><i class="fas fa-check"></i> Baro xirfado cusub</li>
+</ul>
+                <a class="select-btn call-btn" href="tel:*220*3383378*2500#">Select</a>
+
+
+
 
 
                  
@@ -243,7 +247,7 @@
                 const price = this.closest('.pricing-card').querySelector('.price').textContent;
                 
                 // Show a confirmation message
-                alert(`Thank you for selecting the ${planName} plan at ${price}/month!`);
+                alert(`Thank you! Wixii aad fahamiwaydo wax aad nagal soo hadali lanbarkaa 063-3383378. ${planName} plan at ${price}!`);
                 
                 // Add a temporary visual feedback
                 this.style.background = 'linear-gradient(135deg, #38a169 0%, #2f855a 100%)';
