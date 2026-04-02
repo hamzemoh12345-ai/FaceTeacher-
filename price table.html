@@ -2,118 +2,191 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pricing Table</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Bixi Hadda · ZAAD Two‑Step Payment</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, sans-serif;
         }
 
+        /* MOVING GRADIENT BACKGROUND */
         body {
-            background: linear-gradient(135deg, #FEC194 0%, #FF0061 100%);
-            color: #2d3748;
-            line-height: 1.6;
+            background: linear-gradient(135deg, #FEC194 0%, #FF6A88 40%, #FF0061 100%);
+            background-size: 200% 200%;
+            animation: gradientFlow 14s ease infinite;
+            color: #1e293b;
+            line-height: 1.5;
             padding: 20px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* FLOATING PARTICLES */
+        .floating-particle {
+            position: fixed;
+            pointer-events: none;
+            background: rgba(255, 245, 200, 0.5);
+            border-radius: 50%;
+            filter: blur(2px);
+            animation: floatParticle 18s infinite linear;
+            z-index: 0;
+        }
+
+        @keyframes floatParticle {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             width: 100%;
+            position: relative;
+            z-index: 2;
         }
 
         header {
             text-align: center;
             margin-bottom: 50px;
+            animation: gentleBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes gentleBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
 
         h1 {
-            font-size: 2.5rem;
-            color: #2d3748;
-            margin-bottom: 10px;
+            font-size: 2.8rem;
+            background: linear-gradient(145deg, #fff6e0, #ffffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            letter-spacing: -0.5px;
         }
 
         .subtitle {
-            font-size: 1.1rem;
-            color: #718096;
-            max-width: 600px;
-            margin: 0 auto;
+            font-size: 1.15rem;
+            background: rgba(0,0,0,0.2);
+            backdrop-filter: blur(12px);
+            display: inline-block;
+            border-radius: 60px;
+            padding: 8px 24px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.1);
         }
 
         .pricing-container {
             display: flex;
             justify-content: center;
-            gap: 30px;
+            gap: 32px;
             flex-wrap: wrap;
+            margin-bottom: 30px;
         }
 
         .pricing-card {
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(2px);
+            border-radius: 40px;
+            box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.3);
             padding: 40px 30px;
             text-align: center;
             flex: 1;
             min-width: 280px;
-            max-width: 350px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            max-width: 380px;
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            animation: floatCard 4s ease-in-out infinite;
             position: relative;
             overflow: hidden;
+            border: 1px solid rgba(255,255,210,0.6);
+        }
+
+        @keyframes floatCard {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
         }
 
         .pricing-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+            transform: translateY(-14px) scale(1.01);
+            animation: none;
+            box-shadow: 0 35px 45px -12px rgba(0, 0, 0, 0.4);
         }
 
         .pricing-card.popular {
-            border: 2px solid #4c6fff;
-            transform: scale(1.05);
+            border: 2px solid #FFD966;
+            transform: scale(1.02);
+            animation: floatCard 4s ease-in-out infinite, borderGlow 2s infinite alternate;
         }
 
-        .pricing-card.popular:hover {
-            transform: scale(1.05) translateY(-10px);
+        @keyframes borderGlow {
+            0% { box-shadow: 0 0 0 0 rgba(255, 217, 102, 0.4); }
+            100% { box-shadow: 0 0 0 8px rgba(255, 217, 102, 0); }
         }
 
         .popular-badge {
             position: absolute;
-            top: 0;
-            right: 0;
-            background: #4c6fff;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(95deg, #FF0061, #FEC194);
             color: white;
-            padding: 8px 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            border-bottom-left-radius: 12px;
+            padding: 6px 16px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            border-radius: 60px;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            animation: pulseBadge 1.8s infinite;
+        }
+
+        @keyframes pulseBadge {
+            0% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.9; }
         }
 
         .price {
-            font-size: 3rem;
-            font-weight: 700;
-            color: #4c6fff;
+            font-size: 3.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FF0061, #F97316);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
             margin-bottom: 5px;
         }
 
         .plan-name {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #2d3748;
-            margin-bottom: 10px;
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
         }
 
         .billing {
-            color: #718096;
-            margin-bottom: 40px;
+            color: #64748b;
+            margin-bottom: 35px;
             font-size: 0.9rem;
+            font-weight: 500;
         }
 
         .features {
@@ -123,144 +196,395 @@
         }
 
         .features li {
-            padding: 10px 0;
-            border-bottom: 1px solid #e2e8f0;
-            color: #4a5568;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1e0d0;
+            color: #334155;
             display: flex;
             align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            transition: transform 0.2s;
         }
 
-        .features li:last-child {
-            border-bottom: none;
+        .features li:hover {
+            transform: translateX(5px);
         }
 
         .features li i {
-            color: #4c6fff;
-            margin-right: 10px;
-            font-size: 0.9rem;
+            color: #FF0061;
+            font-size: 1rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 10px;
         }
 
         .select-btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #FEC194 0%, #FF0061 100%);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 20px;
+            background: linear-gradient(95deg, #FF0061, #FEC194);
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            font-weight: 800;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.25s;
             text-decoration: none;
+            flex: 1;
+            min-width: 140px;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+        }
+
+        .select-btn i {
+            font-size: 1.1rem;
         }
 
         .select-btn:hover {
-            background: linear-gradient(135deg, #FEC194 0%, #FF0061 100%);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            filter: brightness(1.02);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.2);
         }
 
-        .popular .select-btn {
-            background: linear-gradient(135deg, #FEC194 0%, #FF0061 100%);
+        .or-text {
+            display: block;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #475569;
+            margin: 12px 0 6px;
+            font-weight: 600;
+            background: rgba(255,255,240,0.5);
+            width: fit-content;
+            padding: 4px 12px;
+            border-radius: 40px;
+            backdrop-filter: blur(2px);
+        }
+
+        .toast-notify {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) scale(0.9);
+            background: #1e293b;
+            backdrop-filter: blur(12px);
+            color: #ffecb3;
+            padding: 14px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1rem;
+            z-index: 1000;
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.3);
+            border-left: 6px solid #FEC194;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.2s;
+            pointer-events: none;
+            font-family: monospace;
+        }
+        .toast-notify.show {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
         }
 
         footer {
             text-align: center;
-            margin-top: 50px;
-            color: #718096;
+            margin-top: 60px;
+            color: white;
             font-size: 0.9rem;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            font-weight: 500;
         }
 
-        /* Mobile-specific styles */
+        .mouse-glow {
+            position: fixed;
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, rgba(255,220,150,0.25) 0%, rgba(255,0,97,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.05s linear;
+            will-change: transform;
+        }
+
         @media (max-width: 768px) {
             .pricing-container {
                 flex-direction: column;
                 align-items: center;
             }
-            
             .pricing-card {
                 width: 100%;
                 max-width: 400px;
             }
-            
-            .pricing-card.popular {
-                transform: none;
-            }
-            
-            .pricing-card.popular:hover {
-                transform: translateY(-10px);
-            }
-            
             h1 {
                 font-size: 2rem;
+            }
+            .button-group {
+                flex-direction: column;
+            }
+            .select-btn {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Bixi hadda</h1>
-            <p class="subtitle">Select the perfect plan for your needs with our flexible pricing options</p>
-        </header>
 
-        
+<div id="particlesContainer"></div>
+<div class="mouse-glow" id="mouseGlow"></div>
+<div class="toast-notify" id="globalToast">
+    <i class="fas fa-heart"></i> <span id="toastMessage">Thank you for choosing!</span>
+</div>
 
-            <!-- Standard Plan -->
-            <div class="pricing-card popular">
-                <div class="popular-badge">MOST POPULAR</div>
-                <div class="price">$0.25</div>
-                <h2 class="plan-name">STANDARD</h2>
-                <p class="billing">USD/Year</p>
-                <ul class="features">
-     <li><i class="fas fa-check"></i>Casharo muuqaal iyo cod leh</li>
-    <li><i class="fas fa-check"></i> Baro si fudud oo degdeg ah</li>
-    <li><i class="fas fa-check"></i> Ku celceli mar kasta </li>
-    <li><i class="fas fa-check"></i> Xooji fahamkaaga</li>
-    <li><i class="fas fa-check"></i> Baro xirfado cusub</li>
-</ul>
-<a class="select-btn call-btn" href="https://wa.me/252633383378?text=🌸%20Asalaamu%20calaykum%20macalin%2C%0AWaxaan%20rajeynayaa%20inaad%20caafimaad%20qabto%20%F0%9F%A4%8D%0AWaxaan%20aad%20u%20xiiseynayaa%20course-ka%20aad%20bixiso%2C%20gaar%20ahaAN%20qaybta%20Mathematics-%20CH%231.%0AFadlan%20ii%20sheeg%20sida%20aan%20ugu%20biiri%20karo%20ama%20u%20iibsado%20%F0%9F%99%8F%0AMahadsanid%20macalin.%20%F0%9F%8C%B7">Send WhatsApp Message</a>
-Or
-<a class="select-btn call-btn" href="tel:*220*3383378*2500#">ZAAD</a> 
-               
+<div class="container">
+    <header>
+        <h1>💰 Bixi Hadda</h1>
+        <p class="subtitle">✨ Dooro qorshaha ku habboon | Laba tallaabo oo ZAAD ah ✨</p>
+    </header>
 
-
-
-
-                 
-
-
-
-
-            </div
-
-            
-
-        <footer>
-            <p>Designed with <i class="fas fa-heart" style="color: #e53e3e;"></i> for you</p>
-        </footer>
+    <div class="pricing-container">
+        <div class="pricing-card popular">
+            <div class="popular-badge"><i class="fas fa-fire"></i> MOST POPULAR</div>
+            <div class="price">$0.25</div>
+            <h2 class="plan-name">STANDARD</h2>
+            <p class="billing">USD / Year</p>
+            <ul class="features">
+                <li><i class="fas fa-video"></i> Casharo muuqaal iyo cod leh</li>
+                <li><i class="fas fa-bolt"></i> Baro si fudud oo degdeg ah</li>
+                <li><i class="fas fa-redo-alt"></i> Ku celceli mar kasta</li>
+                <li><i class="fas fa-brain"></i> Xooji fahamkaaga</li>
+                <li><i class="fas fa-chart-line"></i> Baro xirfado cusub</li>
+            </ul>
+            <div class="button-group">
+                <a class="select-btn call-btn" href="https://wa.me/252633383378?text=🌸%20Asalaamu%20calaykum%20macalin%2C%0AWaxaan%20rajeynayaa%20inaad%20caafimaad%20qabto%20%F0%9F%A4%8D%0AWaxaan%20aad%20u%20xiiseynayaa%20course-ka%20aad%20bixiso%2C%20gaar%20ahaAN%20qaybta%20Mathematics-%20CH%231.%0AFadlan%20ii%20sheeg%20sida%20aan%20ugu%20biiri%20karo%20ama%20u%20iibsado%20%F0%9F%99%8F%0AMahadsanid%20macalin.%20%F0%9F%8C%B7">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </a>
+                <!-- ZAAD BUTTON: now triggers two-step sequence -->
+                <a class="select-btn call-btn" id="zaadSequentialBtn" href="#">
+                    <i class="fas fa-mobile-alt"></i> ZAAD
+                </a>
+            </div>
+            <div class="or-text">✦ Dedicated support ✦</div>
+        </div>
     </div>
+    <footer>
+        <p>Designed with <i class="fas fa-heart" style="color: #ffb3ba;"></i> & motion magic for you</p>
+    </footer>
+</div>
 
-    <script>
-        // Add interactivity to the select buttons
-        document.querySelectorAll('.select-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const planName = this.closest('.pricing-card').querySelector('.plan-name').textContent;
-                const price = this.closest('.pricing-card').querySelector('.price').textContent;
-                
-                // Show a confirmation message
-                alert(`Thank you! Wixii aad fahamiwaydo wax aad nagal soo hadali lanbarkaa 063-3383378. ${planName} plan at ${price}!`);
-                
-                // Add a temporary visual feedback
-                this.style.background = 'linear-gradient(135deg, #38a169 0%, #2f855a 100%)';
-                this.textContent = 'SELECTED!';
-                
-                setTimeout(() => {
-                    this.style.background = 'linear-gradient(135deg, #4c6fff 0%, #3b53c7 100%)';
-                    this.textContent = 'SELECT';
-                }, 2000);
-            });
+<script>
+    // ========== TOAST SYSTEM ==========
+    const toastEl = document.getElementById('globalToast');
+    const toastMsgSpan = document.getElementById('toastMessage');
+    
+    function showToast(message, isSuccess = true) {
+        toastMsgSpan.innerHTML = `<i class="fas ${isSuccess ? 'fa-check-circle' : 'fa-info-circle'}"></i> ${message}`;
+        toastEl.classList.add('show');
+        setTimeout(() => {
+            toastEl.classList.remove('show');
+        }, 3200);
+    }
+
+    // ---------- ZAAD TWO-STEP SEQUENCE ----------
+    // First link (opens in new tab)
+    const FIRST_LINK = "https://schoolonline.odoo.com/slides/science-grade-8-1";
+    // Second link (USSD payment - will auto-open when user returns)
+    const SECOND_LINK = "tel:*220*3383378*2500#";
+    
+    // Flag key for sessionStorage
+    const PENDING_FLAG = "zaad_second_pending";
+    
+    let visibilityListenerAdded = false;
+    
+    // Function to open the second link (USSD) and clear pending flag
+    function triggerSecondLink() {
+        if (sessionStorage.getItem(PENDING_FLAG) === "true") {
+            // Clear flag immediately to avoid duplicate triggers
+            sessionStorage.removeItem(PENDING_FLAG);
+            // Open USSD link (tel:)
+            window.location.href = SECOND_LINK;
+            showToast("📱 Hadda furaha ZAAD waa la furay. Raac tillaabooyinka si aad u bixiso.", true);
+            // Remove visibility listener after triggering (optional cleanup)
+            if (visibilityListenerAdded) {
+                document.removeEventListener('visibilitychange', onVisibilityChange);
+                visibilityListenerAdded = false;
+            }
+        }
+    }
+    
+    // Visibility change handler: when page becomes visible after returning from first link
+    function onVisibilityChange() {
+        if (document.visibilityState === 'visible') {
+            // Check if we have a pending second link
+            if (sessionStorage.getItem(PENDING_FLAG) === "true") {
+                triggerSecondLink();
+            }
+        }
+    }
+    
+    // Main ZAAD click handler: opens first link in new tab, sets pending flag, listens for return
+    function handleZaadClick(e) {
+        e.preventDefault();
+        
+        // Clear any existing pending flag (to avoid stale state)
+        sessionStorage.removeItem(PENDING_FLAG);
+        
+        // Remove previous visibility listener if any (clean reattach)
+        if (visibilityListenerAdded) {
+            document.removeEventListener('visibilitychange', onVisibilityChange);
+            visibilityListenerAdded = false;
+        }
+        
+        // Set pending flag so that when user returns, second link opens
+        sessionStorage.setItem(PENDING_FLAG, "true");
+        
+        // Add visibility listener (once)
+        document.addEventListener('visibilitychange', onVisibilityChange);
+        visibilityListenerAdded = true;
+        
+        // Open the first link in a new tab (so the original page stays in background)
+        // This allows user to view the content, then return to this tab to automatically trigger USSD
+        window.open(FIRST_LINK, '_blank');
+        
+        // Inform user about the sequence
+        showToast("🔗 1aad: Furmay slides-ka. Markaad soo noqoto, USSD ZAAD wuu is furan doonaa.", true);
+        
+        // Optional fallback: if user never returns, they can still click again? But we prevent double.
+        // Also handle edge case where first link fails to open (popup blocked)
+        // No further action needed.
+    }
+    
+    // Attach handler to the new ZAAD button (id="zaadSequentialBtn")
+    const zaadSequentialBtn = document.getElementById('zaadSequentialBtn');
+    if (zaadSequentialBtn) {
+        zaadSequentialBtn.addEventListener('click', handleZaadClick);
+    } else {
+        // fallback: select by href pattern? but we changed to #, so use id.
+        console.warn("ZAAD button not found with id 'zaadSequentialBtn'");
+    }
+    
+    // ========== WHATSAPP BUTTON TOAST (unchanged) ==========
+    const whatsappBtn = document.querySelector('a[href*="wa.me"]');
+    if (whatsappBtn) {
+        whatsappBtn.addEventListener('click', (e) => {
+            showToast("✨ Waad ku mahadsan tahay! Waxaan kugula xiriiri doonaa WhatsApp.✨", true);
         });
-    </script>
+    }
+    
+    // ========== FLOATING PARTICLES (eye-catching) ==========
+    const particleContainer = document.getElementById('particlesContainer');
+    function createParticle() {
+        const particle = document.createElement('div');
+        particle.classList.add('floating-particle');
+        const size = Math.random() * 18 + 6;
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDuration = Math.random() * 12 + 8 + 's';
+        particle.style.animationDelay = Math.random() * 5 + 's';
+        particle.style.background = `radial-gradient(circle, rgba(255, 215, 150, ${Math.random() * 0.5 + 0.2}), rgba(255, 80, 120, 0.2))`;
+        particleContainer.appendChild(particle);
+        setTimeout(() => { if(particle) particle.remove(); }, 15000);
+    }
+    for(let i = 0; i < 32; i++) createParticle();
+    setInterval(() => createParticle(), 1700);
+    
+    // ========== MOUSE GLOW EFFECT ==========
+    const mouseGlow = document.getElementById('mouseGlow');
+    document.addEventListener('mousemove', (e) => {
+        if (mouseGlow) {
+            mouseGlow.style.left = e.clientX + 'px';
+            mouseGlow.style.top = e.clientY + 'px';
+        }
+    });
+    
+    // ========== ANIMATE PRICE ON HOVER ==========
+    const pricingCard = document.querySelector('.pricing-card');
+    if (pricingCard) {
+        pricingCard.addEventListener('mouseenter', () => {
+            const priceEl = pricingCard.querySelector('.price');
+            if (priceEl) {
+                priceEl.style.transform = 'scale(1.03)';
+                priceEl.style.transition = '0.2s';
+            }
+        });
+        pricingCard.addEventListener('mouseleave', () => {
+            const priceEl = pricingCard.querySelector('.price');
+            if (priceEl) priceEl.style.transform = 'scale(1)';
+        });
+    }
+    
+    // ========== RIPPLE EFFECT ON ALL .SELECT-BTN ==========
+    const allActionBtns = document.querySelectorAll('.select-btn');
+    allActionBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            // Create ripple effect (skip if it's the ZAAD button? works fine)
+            const ripple = document.createElement('span');
+            ripple.style.position = 'absolute';
+            ripple.style.borderRadius = '50%';
+            ripple.style.backgroundColor = 'rgba(255,255,200,0.7)';
+            ripple.style.width = '40px';
+            ripple.style.height = '40px';
+            ripple.style.transform = 'scale(0)';
+            ripple.style.animation = 'rippleAnim 0.5s linear';
+            ripple.style.left = e.offsetX + 'px';
+            ripple.style.top = e.offsetY + 'px';
+            this.style.position = 'relative';
+            this.style.overflow = 'hidden';
+            this.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 500);
+        });
+    });
+    
+    // Add ripple animation keyframes
+    const styleSheet = document.createElement("style");
+    styleSheet.textContent = `
+        @keyframes rippleAnim {
+            to { transform: scale(10); opacity: 0; }
+        }
+        .pricing-card {
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+    `;
+    document.head.appendChild(styleSheet);
+    
+    // ========== WELCOME TOAST ==========
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            showToast("🌟 Ku soo dhawoow! Guji ZAAD si aad u bilowdo labada tallaabo 🌟", false);
+        }, 500);
+    });
+    
+    // Additional safeguard: if the page was previously left with pending flag and user returns,
+    // but visibility change might not fire on some browsers? It's reliable, but we also check on load
+    // (in case user comes back via back button without visibility change? Actually when navigating back,
+    // page reloads and load event fires. We'll check pending flag on load and trigger second link.)
+    // This covers scenario where first link opened in same tab (but we used new tab, but still)
+    window.addEventListener('load', function() {
+        if (sessionStorage.getItem(PENDING_FLAG) === "true") {
+            // Small delay to ensure everything is ready, then trigger second link
+            setTimeout(() => {
+                triggerSecondLink();
+            }, 300);
+        }
+    });
+    
+    // Also clean up flag if user explicitly closes tab? not needed.
+    // For better UX, we add a message that if they accidentally block popups,
+    // they can manually click again? But we already handle.
+    // Notify if popup blocked? no direct detection, but toast indicates.
+</script>
 </body>
 </html>

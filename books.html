@@ -2,376 +2,666 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dooro Casharka</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Dooro Casharka · Coming Soon Updates</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #FEC194 0%, #FF0061 100%);
-            color: #2d3748;
-            line-height: 1.6;
+            background: linear-gradient(135deg, #FEC194 0%, #FF6A88 40%, #FF0061 100%);
+            background-size: 200% 200%;
+            animation: gradientFlow 14s ease infinite;
+            color: #1e293b;
+            line-height: 1.5;
             padding: 20px;
             min-height: 100vh;
         }
 
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .floating-particle {
+            position: fixed;
+            pointer-events: none;
+            background: rgba(255, 245, 200, 0.5);
+            border-radius: 50%;
+            filter: blur(2px);
+            animation: floatParticle 18s infinite linear;
+            z-index: 0;
+        }
+
+        @keyframes floatParticle {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+        }
+
         .container {
-            max-width: 1200px;
+            max-width: 1280px;
             margin: 0 auto;
+            position: relative;
+            z-index: 2;
         }
 
         header {
             text-align: center;
             margin-bottom: 40px;
             padding: 20px 0;
+            animation: gentleBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes gentleBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
 
         h1 {
-            font-size: 2.5rem;
-            color: #2d3748;
-            margin-bottom: 10px;
+            font-size: 2.8rem;
+            background: linear-gradient(145deg, #fff6e0, #ffffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .subtitle {
-            font-size: 1.1rem;
-            color: #718096;
-            max-width: 600px;
-            margin: 0 auto;
+            font-size: 1.15rem;
+            background: rgba(0,0,0,0.2);
+            backdrop-filter: blur(12px);
+            display: inline-block;
+            border-radius: 60px;
+            padding: 8px 24px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.1);
         }
 
         .cards-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
+            gap: 32px;
+            margin-bottom: 50px;
         }
 
         .card {
-            background-color: white;
-            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(2px);
+            border-radius: 32px;
             overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.3);
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            animation: floatCard 4s ease-in-out infinite;
+            border: 1px solid rgba(255,255,210,0.6);
+        }
+
+        .card:nth-child(1) { animation-delay: 0s; }
+        .card:nth-child(2) { animation-delay: 0.6s; }
+        .card:nth-child(3) { animation-delay: 1.2s; }
+        .card:nth-child(4) { animation-delay: 0.3s; }
+        .card:nth-child(5) { animation-delay: 0.9s; }
+        .card:nth-child(6) { animation-delay: 1.5s; }
+        .card:nth-child(7) { animation-delay: 0.4s; }
+
+        @keyframes floatCard {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
         }
 
         .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+            transform: translateY(-14px) scale(1.01);
+            animation: none;
+            box-shadow: 0 35px 45px -12px rgba(0, 0, 0, 0.4);
         }
 
         .card-image {
-            width: 105%;
-            height: 126px;
+            width: 100%;
+            height: 148px;
             object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .card:hover .card-image {
+            transform: scale(1.05);
         }
 
         .card-content {
-            padding: 25px;
+            padding: 22px 22px 26px;
         }
 
         .card-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
         }
 
         .card-title {
             font-size: 1.8rem;
-            font-weight: 700;
-            color: #2d3748;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FF0061, #F97316);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
         }
 
         .card-price {
-            font-size: 1.5rem;
+            font-size: 0.9rem;
             font-weight: 700;
-            color: #3182ce;
+            background: #FEF9C3;
+            padding: 4px 14px;
+            border-radius: 40px;
+            color: #B45309;
         }
 
         .card-description {
-            color: #718096;
-            margin-bottom: 20px;
-            line-height: 1.6;
+            color: #334155;
+            margin-bottom: 18px;
+            font-size: 0.9rem;
         }
 
         .card-features {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 25px;
+            margin-bottom: 22px;
         }
 
         .feature {
             display: flex;
             align-items: center;
             gap: 8px;
-            color: #4a5568;
-            font-size: 0.9rem;
+            color: #2c3e50;
+            font-weight: 500;
+            font-size: 0.85rem;
         }
 
         .feature i {
-            color: #3182ce;
+            color: #FF0061;
+            transition: transform 0.2s;
+        }
+        .card:hover .feature i {
+            transform: rotate(5deg) scale(1.1);
+        }
+
+        .coming-badge {
+            background: #fef3c7;
+            padding: 4px 10px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: #b45309;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .card-button {
             display: block;
             width: 100%;
             padding: 12px;
-            background: linear-gradient(135deg, #FEC194 0%, #FF0061 100%);
+            background: linear-gradient(95deg, #FF0061, #FEC194);
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
+            border-radius: 60px;
+            font-weight: 800;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.25s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-button.coming-soon-btn {
+            background: linear-gradient(95deg, #a0a0a0, #c0b9a8);
+            cursor: pointer;
         }
 
         .card-button:hover {
-            background: linear-gradient(135deg, #FEC194 0%, #FF0061 100%);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            filter: brightness(1.02);
         }
 
-        .view-all {
+        /* Toast notification */
+        .toast-notify {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) scale(0.9);
+            background: #1e293b;
+            backdrop-filter: blur(12px);
+            color: #ffecb3;
+            padding: 14px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1rem;
+            z-index: 1000;
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.3);
+            border-left: 6px solid #FEC194;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.2s;
+            pointer-events: none;
+            font-family: monospace;
+        }
+        .toast-notify.show {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
+
+        .amazing-wrapper {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border-radius: 56px;
+            padding: 2.2rem;
+            margin: 2rem 0 2.5rem;
+            box-shadow: 0 25px 40px -15px black;
+            border: 1px solid rgba(255,215,150,0.7);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 1.8rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 38px;
+            padding: 1.4rem 0.5rem;
             text-align: center;
-            margin-top: 20px;
+            transition: all 0.3s;
+            animation: statGlow 3s infinite alternate;
+        }
+
+        @keyframes statGlow {
+            0% { box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+            100% { box-shadow: 0 8px 25px rgba(255, 0, 97, 0.2); }
+        }
+
+        .stat-number {
+            font-size: 2.7rem;
+            font-weight: 800;
+            color: #FF0061;
+        }
+
+        .tip-section {
+            margin-top: 2rem;
+            background: linear-gradient(115deg, #fff1e5, #ffffff);
+            border-radius: 50px;
+            padding: 1.6rem 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            border: 2px solid transparent;
+            animation: borderFlow 3s infinite alternate;
+        }
+
+        @keyframes borderFlow {
+            0% { border-color: #FEC194; }
+            100% { border-color: #FF0061; }
+        }
+
+        .tip-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            background: #fdf4ed;
+            padding: 0.9rem 1.7rem;
+            border-radius: 80px;
+            color: #2d2f36;
+        }
+
+        .tip-button {
+            background: linear-gradient(95deg, #FF0061, #F97316);
+            border: none;
+            padding: 12px 32px;
+            border-radius: 50px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
         }
 
         .view-all-button {
             display: inline-block;
-            padding: 12px 30px;
+            padding: 14px 38px;
             background: white;
-            color: #3182ce;
-            border: 2px solid #3182ce;
-            border-radius: 8px;
-            font-weight: 600;
+            color: #FF0061;
+            border-radius: 80px;
+            font-weight: 800;
             text-decoration: none;
-            transition: all 0.3s ease;
+            transition: 0.3s;
+            box-shadow: 0 10px 18px rgba(0,0,0,0.1);
+            animation: pulseButton 1.8s infinite;
         }
 
-        .view-all-button:hover {
-            background: #3182ce;
-            color: white;
+        @keyframes pulseButton {
+            0% { transform: scale(1);}
+            50% { transform: scale(1.03); box-shadow: 0 12px 25px rgba(255,0,97,0.3);}
+            100% { transform: scale(1);}
         }
 
-        @media (max-width: 768px) {
-            .cards-container {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
+        @media (max-width: 760px) {
+            .card-title { font-size: 1.5rem; }
+            .tip-text { font-size: 1rem; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Dooro Maaddada </h1>
-            <p class="subtitle">Dooro maaddada aad jeceshahay, kuna bilow safarka aqoonta!
-Barashada waxay ka bilaabataa halka xiisahaagu ku jiro.</p>
-        </header>
 
-        <div class="cards-container">
-            <!-- Card 1 -->
-            <div class="card">
-                <img src="science.png" alt="Swiss Alps Retreat" class="card-image">
-                <div class="card-content">
-                    <div class="card-header">
-                        <h2 class="card-title"> Science</h2>
-                        <div class="card-price">Garde 8</div>
-                    </div>
-                    <p class="card-description">Bar sirta dunida iyo waxa ka hooseeya muuqaalka aan aragno.
-Saynisku waa furaha hal-abuurka iyo horumarka bani’aadamka.
-Fahamka cilmigu wuxuu kaa caawiyaa inaad xaliso dhibaatooyinka adduunka. </p>
-                    <div class="card-features">
-                        <div class="feature">
-                            <i class="fas fa-crown"></i>
-                            <span>Video</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-calendar-day"></i>
-                            <span>13 Chapters</span>
-                        </div>
-                    </div>
-                    <button class="card-button" onclick="window.location.href='chapters science.html'">Bilow hadda!</button>
+<div id="particlesContainer"></div>
+<div class="toast-notify" id="globalToast">
+    <i class="fas fa-hourglass-half"></i> <span id="toastMessage">Coming soon...</span>
+</div>
+
+<div class="container">
+    <header>
+        <h1>📘 Dooro Casharka</h1>
+        <p class="subtitle">✨ Waxbarasho heersare ah | Only Science waa diyaar, kuwa kale soon ✨</p>
+    </header>
+
+    <div class="cards-container">
+        <!-- CARD 1: SCIENCE (ACTIVE, 5 VIDEOS) -->
+        <div class="card" data-subject="science">
+            <img src="science.png" alt="Science" class="card-image" onerror="this.src='https://placehold.co/400x150?text=🧪+Science'">
+            <div class="card-content">
+                <div class="card-header"><h2 class="card-title">Science</h2><div class="card-price">Grade 8</div></div>
+                <p class="card-description">Bar sirta dunida iyo waxa ka hooseeya muuqaalka aan aragno. Saynisku waa furaha hal-abuurka.</p>
+                <div class="card-features">
+                    <div class="feature"><i class="fas fa-video"></i><span>5 Videos</span></div>
+                    <div class="feature"><i class="fas fa-flask"></i><span>5 Chapters Ready</span></div>
                 </div>
+                <button class="card-button active-science" data-url="price table.html">Bilow hadda! 🚀</button>
             </div>
-
-            <!-- Card 2 -->
-            <div class="card">
-                <img src="social.png" alt="Austrian Mountain Lodge" class="card-image">
-                <div class="card-content">
-                    <div class="card-header">
-                        <h2 class="card-title">Social</h2>
-                        <div class="card-price">Garde 8</div>
-                    </div>
-                    <p class="card-description">Bulshadu waa nolosha — bar sida dadka, dalalka iyo dhaqamadu u wada noolyihiin.
-Maaddadani waxay kaa dhigaysaa qof fahma xiriirka bulshada iyo taariikhda.
-Faham dadka si aad u dhisto adduun nabad iyo isfahan leh.</p>
-                    <div class="card-features">
-                        <div class="feature">
-                            <i class="fas fa-fireplace"></i>
-                            <span>Video</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-hiking"></i>
-                            <span>6 Chapters</span>
-                        </div>
-                    </div>
-                    <button class="card-button" onclick="window.location.href='chapters social.html'">Bilow hadda!</button>
-                </div>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="card">
-                <img src="mathmatics.png" alt="French Chalet Escape" class="card-image">
-                <div class="card-content">
-                    <div class="card-header">
-                        <h2 class="card-title">Mathmatics</h2>
-                        <div class="card-price">Garde 8</div>
-                    </div>
-                    <p class="card-description">Xisaabtu waa luqadda caqliga iyo cilmiga dhabta ah.
-Waxay baraysaa sida loo fikiro si nidaamsan oo sax ah.
-Marka aad xalliso tirooyinka, waxaad dhisaysaa maskax xooggan oo nadiif ah.</p>
-                    <div class="card-features">
-                        <div class="feature">
-                            <i class="fas fa-utensils"></i>
-                            <span>Video</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-spa"></i>
-                            <span>6 Chapers</span>
-                        </div>
-                    </div>
-                    <button class="card-button" onclick="window.location.href='chapters math.html'">Bilow hadda!</button>
-                </div>
-            </div>
-
-            <!-- Card 4 -->
-            <div class="card">
-                <img src="english.png" alt="Italian Dolomites Hideaway" class="card-image">
-                <div class="card-content">
-                    <div class="card-header">
-                        <h2 class="card-title">English</h2>
-                        <div class="card-price">Garde 8</div>
-                    </div>
-                    <p class="card-description">Luqadda fursadaha, safarka, iyo isdhexgalka caalamka.
-Ku hadal Ingiriisi si aad u barato, u safarto, oo adduunka ula xiriirto.
-Waa luqadda suugaanta, filimada, iyo riyooyinka mustaqbalka.</p>
-                    <div class="card-features">
-                        <div class="feature">
-                            <i class="fas fa-mountain"></i>
-                            <span>Video</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-hot-tub"></i>
-                            <span>23 Unit</span>
-                        </div>
-                    </div>
-                    <button class="card-button" onclick="window.location.href='chapters englush.html'">Bilow hadda!</button>
-                </div>
-            </div>
-
-            <!-- Card 5 -->
-            <div class="card">
-                <img src="arabic.png" alt="Bavarian Forest Cabin" class="card-image">
-                
-                <div class="card-content">
-                    <div class="card-header">
-                        <h2 class="card-title">Arabic</h2>
-                        <div class="card-price">Garde 8</div>
-                    </div>
-                    <p class="card-description">Luqadda Qur’aanka Kariimka iyo xikmadda Islaamka.
-Bar Carabi si aad u fahamto diintaada iyo dhaqanka Islaamka.
-Waa luqad hodan ah oo quruxdeeda laga dareemo erey kasta.</p>
-                    <div class="card-features">
-                        <div class="feature">
-                            <i class="fas fa-tree"></i>
-                            <span>Video</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-swimmer"></i>
-                            <span>______</span>
-                        </div>
-                    </div>
-                    <button class="card-button" onclick="window.location.href='chapters arabic.html'">Bilow hadda!</button>
-                </div>
-            </div>
-
-            <!-- Card 6 -->
-            <div class="card">
-                <img src="tarabiya.png" alt="Pyrenees Mountain Retreat" class="card-image">
-                <div class="card-content">
-                    <div class="card-header">
-                        <h2 class="card-title">Islamic</h2>
-                        <div class="card-price">Garde 8</div>
-                    </div>
-                    <p class="card-description">Tarbiyadu waa nolosha wanaagsan iyo dabeecadda suuban.
-Waxay baraysaa ixtiraam, samir, iyo jacayl dadka kale.
-Qofka leh tarbiyo fiican, waa iftiin bulshada dhexdeeda.</p>
-                    <div class="card-features">
-                        <div class="feature">
-                            <i class="fas fa-snowflake"></i>
-                            <span>Video</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-wifi"></i>
-                            <span>____</span>
-                        </div>
-                    </div>
-                    <button class="card-button" onclick="window.location.href='chapters tarbiya.html'">Bilow hadda!</button>
-                </div>
-            </div>
-
-            <!-- Card 7 -->
-            <div class="card">
-                <img src="somali.png" alt="Scandinavian Fjord Cabin" class="card-image">
-                <div class="card-content">
-                    <div class="card-header">
-                        <h2 class="card-title">Somali</h2>
-                        <div class="card-price">Garde 8</div>
-                    </div>
-                    <p class="card-description">Af-Soomaaligu waa astaanta aqoonsiga iyo dhaqankaaga.
-Bar oo ku faan luqaddaada, waa hanti aan lumin karin.
-Luqadda hooyo waa xididka aqoonta iyo isfahanka bulshada.</p>
-                    <div class="card-features">
-                        <div class="feature">
-                            <i class="fas fa-water"></i>
-                            <span>video</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-sun"></i>
-                            <span>7 Cuttub</span>
-                        </div>
-                    </div>
-                    <button class="card-button" onclick="window.location.href='chapters somali.html'">Bilow hadda!</button>
-                </div>
-            </div>
-
-            
         </div>
-        
 
-        <div class="view-all">
-            <a href="#" class="view-all-button">Soo bilaw hadda!</a>
+        <!-- CARD 2: SOCIAL (COMING SOON) -->
+        <div class="card" data-subject="social">
+            <img src="social.png" alt="Social" class="card-image" onerror="this.src='https://placehold.co/400x150?text=🌍+Social'">
+            <div class="card-content">
+                <div class="card-header"><h2 class="card-title">Social</h2><div class="card-price">Grade 8</div></div>
+                <p class="card-description">Bulshadu waa nolosha — bar sida dadka, dalalka iyo dhaqamadu u wada noolyihiin.</p>
+                <div class="card-features">
+                    <div class="feature"><i class="fas fa-video"></i><span>Soon</span></div>
+                    <div class="feature"><i class="fas fa-calendar-week"></i><span class="coming-badge"><i class="fas fa-code-branch"></i> I will prepare</span></div>
+                </div>
+                <button class="card-button coming-soon-btn" data-coming="true">🔜 Coming Soon</button>
+            </div>
+        </div>
+
+        <!-- CARD 3: MATHEMATICS (COMING SOON) -->
+        <div class="card" data-subject="math">
+            <img src="mathmatics.png" alt="Math" class="card-image" onerror="this.src='https://placehold.co/400x150?text=📐+Math'">
+            <div class="card-content">
+                <div class="card-header"><h2 class="card-title">Mathematics</h2><div class="card-price">Grade 8</div></div>
+                <p class="card-description">Xisaabtu waa luqadda caqliga iyo cilmiga dhabta ah. Maskax xooggan oo nadiif ah.</p>
+                <div class="card-features">
+                    <div class="feature"><i class="fas fa-video"></i><span>Preparing</span></div>
+                    <div class="feature"><i class="fas fa-chalkboard"></i><span class="coming-badge"><i class="fas fa-spinner"></i> Coming soon</span></div>
+                </div>
+                <button class="card-button coming-soon-btn" data-coming="true">📖 I will prepare</button>
+            </div>
+        </div>
+
+        <!-- CARD 4: ENGLISH (COMING SOON) -->
+        <div class="card" data-subject="english">
+            <img src="english.png" alt="English" class="card-image" onerror="this.src='https://placehold.co/400x150?text=🇬🇧+English'">
+            <div class="card-content">
+                <div class="card-header"><h2 class="card-title">English</h2><div class="card-price">Grade 8</div></div>
+                <p class="card-description">Luqadda fursadaha, safarka, iyo isdhexgalka caalamka. Waa luqadda suugaanta.</p>
+                <div class="card-features">
+                    <div class="feature"><i class="fas fa-video"></i><span>Soon</span></div>
+                    <div class="feature"><i class="fas fa-language"></i><span class="coming-badge">📚 Diyaarinaysaa</span></div>
+                </div>
+                <button class="card-button coming-soon-btn" data-coming="true">✍️ I will prepare</button>
+            </div>
+        </div>
+
+        <!-- CARD 5: ARABIC (COMING SOON) -->
+        <div class="card" data-subject="arabic">
+            <img src="arabic.png" alt="Arabic" class="card-image" onerror="this.src='https://placehold.co/400x150?text=📖+Arabic'">
+            <div class="card-content">
+                <div class="card-header"><h2 class="card-title">Arabic</h2><div class="card-price">Grade 8</div></div>
+                <p class="card-description">Luqadda Qur’aanka Kariimka iyo xikmadda Islaamka. Bar Carabi si aad u fahamto diintaada.</p>
+                <div class="card-features">
+                    <div class="feature"><i class="fas fa-video"></i><span>Upcoming</span></div>
+                    <div class="feature"><i class="fas fa-mosque"></i><span class="coming-badge">🕋 Soon</span></div>
+                </div>
+                <button class="card-button coming-soon-btn" data-coming="true">🤲 Soon available</button>
+            </div>
+        </div>
+
+        <!-- CARD 6: ISLAMIC (COMING SOON) -->
+        <div class="card" data-subject="islamic">
+            <img src="tarabiya.png" alt="Islamic" class="card-image" onerror="this.src='https://placehold.co/400x150?text=🕌+Islamic'">
+            <div class="card-content">
+                <div class="card-header"><h2 class="card-title">Islamic</h2><div class="card-price">Grade 8</div></div>
+                <p class="card-description">Tarbiyadu waa nolosha wanaagsan iyo dabeecadda suuban. Waxay baraysaa ixtiraam, samir.</p>
+                <div class="card-features">
+                    <div class="feature"><i class="fas fa-video"></i><span>Preparing</span></div>
+                    <div class="feature"><i class="fas fa-hands-praying"></i><span class="coming-badge">⭐ I will prepare</span></div>
+                </div>
+                <button class="card-button coming-soon-btn" data-coming="true">🌟 Soon</button>
+            </div>
+        </div>
+
+        <!-- CARD 7: SOMALI (COMING SOON) -->
+        <div class="card" data-subject="somali">
+            <img src="somali.png" alt="Somali" class="card-image" onerror="this.src='https://placehold.co/400x150?text=🇸🇴+Somali'">
+            <div class="card-content">
+                <div class="card-header"><h2 class="card-title">Somali</h2><div class="card-price">Grade 8</div></div>
+                <p class="card-description">Af-Soomaaligu waa astaanta aqoonsiga iyo dhaqankaaga. Bar oo ku faan luqaddaada.</p>
+                <div class="card-features">
+                    <div class="feature"><i class="fas fa-video"></i><span>Soon</span></div>
+                    <div class="feature"><i class="fas fa-star"></i><span class="coming-badge">📖 La soo diyaarin</span></div>
+                </div>
+                <button class="card-button coming-soon-btn" data-coming="true">⌛ Coming soon</button>
+            </div>
         </div>
     </div>
 
-    <script>
-        // Add interactivity to the reserve buttons
-        document.querySelectorAll('.card-button').forEach(button => {
-            button.addEventListener('click', function() {
-                const cardTitle = this.closest('.card').querySelector('.card-title').textContent;
-                
-            });
+    <!-- AMAZING STATS SECTION -->
+    <div class="amazing-wrapper">
+        <div style="text-align: center;">
+            <span class="section-badge" style="background:#FF0061; display:inline-block; margin-bottom:1rem;"><i class="fas fa-eye"></i> Waxbarasho cusub</span>
+            <h2 class="amazing-title" style="background: linear-gradient(125deg,#1e1e2f,#FF0061); background-clip:text; -webkit-background-clip:text; color:transparent;">🎯 Hadda Science diyaar, kuwa kale soon!</h2>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-video"></i></div><div class="stat-number" data-target="5">0</div><div class="stat-label">Science Videos</div></div>
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-hourglass-half"></i></div><div class="stat-number" data-target="6">0</div><div class="stat-label">Mawduucyo Soon</div></div>
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-chalkboard-user"></i></div><div class="stat-number" data-target="18">0</div><div class="stat-label">Casharro (preparing)</div></div>
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-smile"></i></div><div class="stat-number" data-target="100">0</div><div class="stat-label">Arday helaya</div></div>
+        </div>
+
+        <div class="tip-section">
+            <div class="tip-content">
+                <div class="tip-headline"><i class="fas fa-lightbulb" style="font-size: 2rem; color:#FF0061;"></i><h3 style="display: inline-block; margin-left: 12px;">Talo Maalinleed</h3></div>
+                <div class="tip-text" id="dailyTipText">"Science waa diyaar! Hadda bilaab 5 cutub oo faa'iido leh, kuwa kale waan soo diyaarin doonaa!"</div>
+            </div>
+            <button class="tip-button" id="newTipBtn"><i class="fas fa-sync-alt"></i> Talo Cusub</button>
+        </div>
+    </div>
+
+    <div class="view-all">
+        <a href="#" class="view-all-button" id="scrollToScienceBtn">🌟 Bilow Science hadda 🌟</a>
+    </div>
+</div>
+
+<script>
+    // ========== TOAST SYSTEM ==========
+    const toastEl = document.getElementById('globalToast');
+    const toastMsgSpan = document.getElementById('toastMessage');
+    function showComingSoonMessage(subjectName) {
+        const message = `🔔 "${subjectName}" — I will prepare these chapters soon! Please wait. ✨`;
+        toastMsgSpan.innerText = message;
+        toastEl.classList.add('show');
+        setTimeout(() => {
+            toastEl.classList.remove('show');
+        }, 2800);
+    }
+
+    // ========== BUTTON HANDLERS ==========
+    // Science button: navigate to chapters (real)
+    const scienceBtn = document.querySelector('.card[data-subject="science"] .card-button');
+    if (scienceBtn) {
+        scienceBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            // navigate to science chapters page (you have 5 videos there)
+            window.location.href = 'price table.html';
         });
-    </script>
+    }
+
+    // All other "coming-soon" buttons
+    const comingButtons = document.querySelectorAll('.card-button.coming-soon-btn');
+    comingButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const parentCard = btn.closest('.card');
+            let subject = "Mawduucan";
+            if (parentCard) {
+                const titleElem = parentCard.querySelector('.card-title');
+                if (titleElem) subject = titleElem.innerText;
+            }
+            showComingSoonMessage(subject);
+            // also add a little animation
+            btn.style.transform = 'scale(0.97)';
+            setTimeout(() => { btn.style.transform = ''; }, 150);
+        });
+    });
+
+    // ========== ANIMATED COUNTERS ==========
+    const statNumbers = document.querySelectorAll('.stat-number');
+    let animatedStats = false;
+    const amazingDiv = document.querySelector('.amazing-wrapper');
+    
+    function startCounters() {
+        if (animatedStats) return;
+        animatedStats = true;
+        statNumbers.forEach(counter => {
+            const target = parseInt(counter.getAttribute('data-target'));
+            if (isNaN(target)) return;
+            let current = 0;
+            const increment = target / 45;
+            const updateCounter = () => {
+                current += increment;
+                if (current < target) {
+                    counter.innerText = Math.floor(current);
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    counter.innerText = target;
+                }
+            };
+            updateCounter();
+        });
+    }
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !animatedStats) startCounters();
+        });
+    }, { threshold: 0.4 });
+    if (amazingDiv) observer.observe(amazingDiv);
+    
+    // ========== DAILY TIPS (with preparation theme) ==========
+    const tipsList = [
+        "🧪 Science waa diyaar! 5 videos oo cajiib ah. Ku bilow hadda!",
+        "📚 Mawduucyada kale sida Social, Math, English waan soo diyaarin doonaa — ha ka welwelin.",
+        "🎯 Hal tusaale: saynisku wuxuu ku baraa sida ugu macquulsan. Faisal cutubyada 5-aad.",
+        "🌟 'I will prepare' macneheedu waa in aan kuu keenayo tayo sare. Sug oo daawo science.",
+        "📖 Barashadu waa tallaabo. Marka science dhamayso, kuwa kale way imanayaan.",
+        "💡 Hadda waxaad fursad u heshay inaad barato 5 cutub oo saynis ah. Ha seegin!"
+    ];
+    const tipEl = document.getElementById('dailyTipText');
+    const tipBtn = document.getElementById('newTipBtn');
+    function randomTip() { return tipsList[Math.floor(Math.random() * tipsList.length)]; }
+    tipEl.innerText = randomTip();
+    tipBtn.addEventListener('click', () => {
+        tipEl.style.transform = 'scale(0.96)';
+        tipEl.style.opacity = '0.7';
+        setTimeout(() => {
+            tipEl.innerText = randomTip();
+            tipEl.style.transform = 'scale(1)';
+            tipEl.style.opacity = '1';
+        }, 120);
+    });
+    
+    // ========== FLOATING PARTICLES ==========
+    const particleContainer = document.getElementById('particlesContainer');
+    function createParticle() {
+        const particle = document.createElement('div');
+        particle.classList.add('floating-particle');
+        const size = Math.random() * 18 + 6;
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDuration = Math.random() * 12 + 8 + 's';
+        particle.style.animationDelay = Math.random() * 5 + 's';
+        particle.style.background = `radial-gradient(circle, rgba(255, 215, 150, ${Math.random() * 0.5 + 0.2}), rgba(255, 80, 120, 0.2))`;
+        particleContainer.appendChild(particle);
+        setTimeout(() => { if(particle) particle.remove(); }, 15000);
+    }
+    for(let i=0;i<28;i++) createParticle();
+    setInterval(() => createParticle(), 1800);
+    
+    // ========== SCROLL TO SCIENCE CARD ==========
+    const scrollBtn = document.getElementById('scrollToScienceBtn');
+    if (scrollBtn) {
+        scrollBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const scienceCard = document.querySelector('.card[data-subject="science"]');
+            if (scienceCard) {
+                scienceCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                scienceCard.style.transform = 'scale(1.01)';
+                setTimeout(() => { scienceCard.style.transform = ''; }, 500);
+                // subtle toast reminder
+                toastMsgSpan.innerText = "✨ Science waa diyaar! 5 chapters oo faa'iido leh ✨";
+                toastEl.classList.add('show');
+                setTimeout(() => toastEl.classList.remove('show'), 2000);
+            }
+        });
+    }
+    
+    // small ripple effect for all buttons
+    const allBtns = document.querySelectorAll('.card-button');
+    allBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            if (!this.classList.contains('coming-soon-btn') && !this.classList.contains('active-science')) return;
+            let ripple = document.createElement('span');
+            ripple.style.position = 'absolute';
+            ripple.style.borderRadius = '50%';
+            ripple.style.backgroundColor = 'rgba(255,255,200,0.6)';
+            ripple.style.width = '40px';
+            ripple.style.height = '40px';
+            ripple.style.transform = 'scale(0)';
+            ripple.style.animation = 'rippleAnim 0.5s linear';
+            ripple.style.left = e.offsetX + 'px';
+            ripple.style.top = e.offsetY + 'px';
+            this.style.position = 'relative';
+            this.style.overflow = 'hidden';
+            this.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 500);
+        });
+    });
+    const styleSheet = document.createElement("style");
+    styleSheet.textContent = `@keyframes rippleAnim { to { transform: scale(8); opacity: 0; } } .section-badge { animation: pulseBadge 2s infinite; } @keyframes pulseBadge { 0% { box-shadow: 0 0 0 0 rgba(255, 0, 97, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(255, 0, 97, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 0, 97, 0); } }`;
+    document.head.appendChild(styleSheet);
+    
+    console.log("✅ Science active (5 chapters). Other subjects show 'I will prepare / coming soon' notification.");
+</script>
 </body>
 </html>
