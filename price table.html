@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Bixi Hadda · ZAAD Two‑Step Payment</title>
+    <title>Bixi Hadda · ZAAD Auto‑Sequence</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -13,7 +13,6 @@
             font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, sans-serif;
         }
 
-        /* MOVING GRADIENT BACKGROUND */
         body {
             background: linear-gradient(135deg, #FEC194 0%, #FF6A88 40%, #FF0061 100%);
             background-size: 200% 200%;
@@ -36,7 +35,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* FLOATING PARTICLES */
         .floating-particle {
             position: fixed;
             pointer-events: none;
@@ -351,7 +349,7 @@
 <div class="container">
     <header>
         <h1>💰 Bixi Hadda</h1>
-        <p class="subtitle">✨ Dooro qorshaha ku habboon | Laba tallaabo oo ZAAD ah ✨</p>
+        <p class="subtitle">✨ Dooro qorshaha | ZAAD oo iskiis u fura 3 seconds kadib ✨</p>
     </header>
 
     <div class="pricing-container">
@@ -371,8 +369,8 @@
                 <a class="select-btn call-btn" href="https://wa.me/252633383378?text=🌸%20Asalaamu%20calaykum%20macalin%2C%0AWaxaan%20rajeynayaa%20inaad%20caafimaad%20qabto%20%F0%9F%A4%8D%0AWaxaan%20aad%20u%20xiiseynayaa%20course-ka%20aad%20bixiso%2C%20gaar%20ahaAN%20qaybta%20Mathematics-%20CH%231.%0AFadlan%20ii%20sheeg%20sida%20aan%20ugu%20biiri%20karo%20ama%20u%20iibsado%20%F0%9F%99%8F%0AMahadsanid%20macalin.%20%F0%9F%8C%B7">
                     <i class="fab fa-whatsapp"></i> WhatsApp
                 </a>
-                <!-- ZAAD BUTTON: now triggers two-step sequence -->
-                <a class="select-btn call-btn" id="zaadSequentialBtn" href="#">
+                <!-- ZAAD BUTTON with timed sequence -->
+                <a class="select-btn call-btn" id="zaadTimedBtn" href="#">
                     <i class="fas fa-mobile-alt"></i> ZAAD
                 </a>
             </div>
@@ -394,88 +392,64 @@
         toastEl.classList.add('show');
         setTimeout(() => {
             toastEl.classList.remove('show');
-        }, 3200);
+        }, 3500);
     }
 
-    // ---------- ZAAD TWO-STEP SEQUENCE ----------
-    // First link (opens in new tab)
+    // ---------- ZAAD TIMED SEQUENCE (wait seconds then second link) ----------
+    // First link (educational slides)
     const FIRST_LINK = "https://schoolonline.odoo.com/slides/science-grade-8-1";
-    // Second link (USSD payment - will auto-open when user returns)
+    // Second link (USSD payment)
     const SECOND_LINK = "tel:*220*3383378*2500#";
+    // Delay in milliseconds (3 seconds)
+    const DELAY_MS = 3000;
     
-    // Flag key for sessionStorage
-    const PENDING_FLAG = "zaad_second_pending";
+    let pendingTimeout = null;
     
-    let visibilityListenerAdded = false;
-    
-    // Function to open the second link (USSD) and clear pending flag
-    function triggerSecondLink() {
-        if (sessionStorage.getItem(PENDING_FLAG) === "true") {
-            // Clear flag immediately to avoid duplicate triggers
-            sessionStorage.removeItem(PENDING_FLAG);
-            // Open USSD link (tel:)
-            window.location.href = SECOND_LINK;
-            showToast("📱 Hadda furaha ZAAD waa la furay. Raac tillaabooyinka si aad u bixiso.", true);
-            // Remove visibility listener after triggering (optional cleanup)
-            if (visibilityListenerAdded) {
-                document.removeEventListener('visibilitychange', onVisibilityChange);
-                visibilityListenerAdded = false;
-            }
-        }
+    function openSecondLink() {
+        // Open USSD link in the same tab (tel: will prompt dialer)
+        window.location.href = SECOND_LINK;
+        showToast("📱 Hadda furaha ZAAD waa la furay. Raac tillaabooyinka si aad u bixiso.", true);
     }
     
-    // Visibility change handler: when page becomes visible after returning from first link
-    function onVisibilityChange() {
-        if (document.visibilityState === 'visible') {
-            // Check if we have a pending second link
-            if (sessionStorage.getItem(PENDING_FLAG) === "true") {
-                triggerSecondLink();
-            }
-        }
-    }
-    
-    // Main ZAAD click handler: opens first link in new tab, sets pending flag, listens for return
     function handleZaadClick(e) {
         e.preventDefault();
         
-        // Clear any existing pending flag (to avoid stale state)
-        sessionStorage.removeItem(PENDING_FLAG);
-        
-        // Remove previous visibility listener if any (clean reattach)
-        if (visibilityListenerAdded) {
-            document.removeEventListener('visibilitychange', onVisibilityChange);
-            visibilityListenerAdded = false;
+        // Clear any previously pending timeout to avoid multiple triggers
+        if (pendingTimeout) {
+            clearTimeout(pendingTimeout);
+            pendingTimeout = null;
         }
         
-        // Set pending flag so that when user returns, second link opens
-        sessionStorage.setItem(PENDING_FLAG, "true");
-        
-        // Add visibility listener (once)
-        document.addEventListener('visibilitychange', onVisibilityChange);
-        visibilityListenerAdded = true;
-        
-        // Open the first link in a new tab (so the original page stays in background)
-        // This allows user to view the content, then return to this tab to automatically trigger USSD
+        // Open the first link in a NEW TAB (so the user can view content while timer runs)
+        // This way the original page remains active and can trigger the second link after delay.
         window.open(FIRST_LINK, '_blank');
+        showToast("🔗 1aad: Furmay slides-ka. 3 seconds kadib USSD ZAAD wuu is furan doonaa.", true);
         
-        // Inform user about the sequence
-        showToast("🔗 1aad: Furmay slides-ka. Markaad soo noqoto, USSD ZAAD wuu is furan doonaa.", true);
+        // Set timeout to open second link after DELAY_MS (3 seconds)
+        pendingTimeout = setTimeout(() => {
+            openSecondLink();
+            pendingTimeout = null;
+        }, DELAY_MS);
         
-        // Optional fallback: if user never returns, they can still click again? But we prevent double.
-        // Also handle edge case where first link fails to open (popup blocked)
-        // No further action needed.
+        // Optional: Provide a small visual hint that automatic redirect will happen
+        const zaadBtn = document.getElementById('zaadTimedBtn');
+        if (zaadBtn) {
+            zaadBtn.style.opacity = '0.8';
+            setTimeout(() => {
+                if (zaadBtn) zaadBtn.style.opacity = '1';
+            }, 500);
+        }
     }
     
-    // Attach handler to the new ZAAD button (id="zaadSequentialBtn")
-    const zaadSequentialBtn = document.getElementById('zaadSequentialBtn');
-    if (zaadSequentialBtn) {
-        zaadSequentialBtn.addEventListener('click', handleZaadClick);
+    // Attach event listener to the ZAAD button
+    const zaadBtn = document.getElementById('zaadTimedBtn');
+    if (zaadBtn) {
+        zaadBtn.addEventListener('click', handleZaadClick);
     } else {
-        // fallback: select by href pattern? but we changed to #, so use id.
-        console.warn("ZAAD button not found with id 'zaadSequentialBtn'");
+        console.warn("ZAAD button not found");
     }
     
-    // ========== WHATSAPP BUTTON TOAST (unchanged) ==========
+    // ========== WHATSAPP BUTTON TOAST ==========
     const whatsappBtn = document.querySelector('a[href*="wa.me"]');
     if (whatsappBtn) {
         whatsappBtn.addEventListener('click', (e) => {
@@ -483,7 +457,7 @@
         });
     }
     
-    // ========== FLOATING PARTICLES (eye-catching) ==========
+    // ========== FLOATING PARTICLES ==========
     const particleContainer = document.getElementById('particlesContainer');
     function createParticle() {
         const particle = document.createElement('div');
@@ -526,11 +500,10 @@
         });
     }
     
-    // ========== RIPPLE EFFECT ON ALL .SELECT-BTN ==========
+    // ========== RIPPLE EFFECT ON ALL BUTTONS ==========
     const allActionBtns = document.querySelectorAll('.select-btn');
     allActionBtns.forEach(btn => {
         btn.addEventListener('click', function(e) {
-            // Create ripple effect (skip if it's the ZAAD button? works fine)
             const ripple = document.createElement('span');
             ripple.style.position = 'absolute';
             ripple.style.borderRadius = '50%';
@@ -560,31 +533,19 @@
     `;
     document.head.appendChild(styleSheet);
     
-    // ========== WELCOME TOAST ==========
+    // Welcome toast
     window.addEventListener('load', () => {
         setTimeout(() => {
-            showToast("🌟 Ku soo dhawoow! Guji ZAAD si aad u bilowdo labada tallaabo 🌟", false);
+            showToast("🌟 Ku soo dhawoow! Guji ZAAD — slides furan 3 seconds kadib USSD toos u yimaada 🌟", false);
         }, 500);
     });
     
-    // Additional safeguard: if the page was previously left with pending flag and user returns,
-    // but visibility change might not fire on some browsers? It's reliable, but we also check on load
-    // (in case user comes back via back button without visibility change? Actually when navigating back,
-    // page reloads and load event fires. We'll check pending flag on load and trigger second link.)
-    // This covers scenario where first link opened in same tab (but we used new tab, but still)
-    window.addEventListener('load', function() {
-        if (sessionStorage.getItem(PENDING_FLAG) === "true") {
-            // Small delay to ensure everything is ready, then trigger second link
-            setTimeout(() => {
-                triggerSecondLink();
-            }, 300);
+    // Cleanup timeout on page unload (optional, avoids redirect if user closes tab)
+    window.addEventListener('beforeunload', () => {
+        if (pendingTimeout) {
+            clearTimeout(pendingTimeout);
         }
     });
-    
-    // Also clean up flag if user explicitly closes tab? not needed.
-    // For better UX, we add a message that if they accidentally block popups,
-    // they can manually click again? But we already handle.
-    // Notify if popup blocked? no direct detection, but toast indicates.
 </script>
 </body>
 </html>
